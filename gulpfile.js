@@ -10,15 +10,15 @@ var paths = {
 // ------------------------------------------------------------------------------------------ Dependencies
 
 var gulp = require('gulp');
-var clean = require('gulp-clean');
 var filter = require('gulp-filter');
 var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
+var del = require('del');
 var browserify = require('browserify');
-var watchify = require('watchify');
 var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
+var vinylPaths = require('vinyl-paths');
 var runSequence = require('run-sequence').use(gulp);
 
 // ------------------------------------------------------------------------------------------ Tasks
@@ -42,7 +42,7 @@ gulp.task('watch', ['dist'], function() {
 
 function cleanTask() {
 	return gulp.src('dist/*', {read: false})
-	 		   .pipe(clean());
+	 		   .pipe(vinylPaths(del));
 };
 
 function browserifyAppTask() {

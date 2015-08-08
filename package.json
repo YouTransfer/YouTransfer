@@ -29,8 +29,8 @@
   "devDependencies": {
     "bootstrap": "^3.3.5",
     "browserify": "^11.0.1",
+    "del": "^1.2.0",
     "gulp": "^3.9.0",
-    "gulp-clean": "^0.3.1",
     "gulp-cssmin": "^0.1.7",
     "gulp-filter": "^3.0.0",
     "gulp-less": "^3.0.3",
@@ -38,6 +38,7 @@
     "jquery": "^2.1.4",
     "run-sequence": "^1.1.2",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
+    "vinyl-paths": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
