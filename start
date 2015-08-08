@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo PORT=80 node app.js
+PORT=80 node app.js
