@@ -1,0 +1,44 @@
+{
+  "name": "youtransfer.io",
+  "version": "0.0.1",
+  "description": "YouTransfer, the self-hosted file transfer solution",
+  "main": "app.js",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "dependencies": {
+    "compression": "^1.5.2",
+    "lodash": "^3.10.1",
+    "md5": "^2.0.0",
+    "nconf": "^0.6.9",
+    "node-static": "^0.7.5",
+    "restify": "^2.8.2",
+    "restify-cookies": "^0.1.1"
+  },
+  "scripts": {
+    "postinstall": "gulp dist",
+    "dist": "gulp dist",
+    "dev": "gulp watch"
+  },
+  "author": "Collabsoft",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "github.com/remie/YouTransfer.git"
+  },
+  "devDependencies": {
+    "bootstrap": "^3.3.5",
+    "browserify": "^11.0.1",
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-filter": "^3.0.0",
+    "gulp-less": "^3.0.3",
+    "gulp-uglify": "^1.2.0",
+    "jquery": "^2.1.4",
+    "run-sequence": "^1.1.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-paths": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
