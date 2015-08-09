@@ -2,5 +2,6 @@
 
 module.exports = [
     'jquery',
-    'bootstrap'
+    'bootstrap',
+    'dropzone'
 ];

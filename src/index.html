@@ -1,7 +1,5 @@
 <html>
 	<head>
-		<script type="text/javascript" src="js/vendor.js"></script>
-		<script type="text/javascript" src="js/app.js"></script>
 		<link rel="stylesheet" href="css/styles.css" />
 	</head>
 	<body>
@@ -21,11 +19,11 @@
 		<div class="container">
 			<div class="row">
 
-				<form method="POST" action="/upload" class="form" enctype="multipart/form-data">
-
-					<input type="file" name="payload" />
+				<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
+					<div class="fallback">
+						<input type="file" name="payload" multiple="multiple" />
 					<button type="submit" name="submit" class="btn btn-primary">Upload</button>
-
+					</div>
 				</form>
 
 				<div class="separator text-center">
@@ -41,5 +39,7 @@
 				</form>
 			</div>
 		</div>
+		<script type="text/javascript" src="js/vendor.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
 	</body>
 </html>
