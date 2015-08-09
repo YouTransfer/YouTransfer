@@ -1,6 +1,6 @@
 {
   "name": "youtransfer.io",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "YouTransfer, the self-hosted file transfer solution",
   "main": "app.js",
   "engines": {
@@ -30,6 +30,7 @@
     "bootstrap": "^3.3.5",
     "browserify": "^11.0.1",
     "del": "^1.2.0",
+    "dropzone": "^4.0.1",
     "gulp": "^3.9.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-filter": "^3.0.0",
