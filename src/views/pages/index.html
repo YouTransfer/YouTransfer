@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
+	<div class="fallback">
+		<input type="file" name="payload" multiple="multiple" />
+	<button type="submit" name="submit" class="btn btn-primary">Upload</button>
+	</div>
+</form>
+
+<div class="separator text-center">
+	<h6 class="separator-text"><em>or</em></h6>
+	<hr class="separator-ruler" />
+</div>
+
+<form method="POST" action="/download" class="form">
+
+	<input type="text" name="token" />
+	<button type="submit" name="submit" class="btn btn-primary">Download</button>
+
+</form>
+{% endblock %}

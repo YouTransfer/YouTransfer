@@ -14,6 +14,7 @@ nconf.argv()
 // Restify + node-static + proxy
 var nstatic = require('node-static');
 var compression = require('compression')
+var nunjucks = require("nunjucks");
 var restify = require('restify');
 restify.cookieParser = require('restify-cookies');
 
@@ -32,6 +33,21 @@ app.use(function(req,res,next) {
 		res.header('Location', addr); 
 		res.send(302); 
 	} 
+	next();
+});
+
+// Initializing Nunjucks template engine + adding it to Restify
+nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages'], {
+	autoescape: true,
+	watch: (nconf.get('NODE_ENV') != "production")
+});
+app.use(function(req, res, next) {
+	res.render = function(name, context, callback) {
+		res.setHeader('Server', 'youtransfer.io');
+		res.setHeader('Content-type', 'text/html');
+		res.writeHead(200);
+        res.end(nunjucks.render(name, context, callback));
+	};
 	next();
 });
 
