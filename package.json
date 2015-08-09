@@ -10,6 +10,7 @@
     "compression": "^1.5.2",
     "lodash": "^3.10.1",
     "md5": "^2.0.0",
+    "mime": "^1.3.4",
     "nconf": "^0.6.9",
     "node-static": "^0.7.5",
     "restify": "^2.8.2",
