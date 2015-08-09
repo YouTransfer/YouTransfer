@@ -18,9 +18,8 @@
     "restify-cookies": "^0.1.1"
   },
   "scripts": {
-    "postinstall": "gulp dist",
-    "dist": "gulp dist",
-    "dev": "gulp watch"
+    "dist": "gulp clean && gulp dist",
+    "dev": "gulp clean && gulp watch"
   },
   "author": "Collabsoft",
   "license": "Apache-2.0",

@@ -29,8 +29,9 @@ gulp.task('browserifyVendorTask', browserifyVendorTask);
 gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
 
+gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
-gulp.task('dist', runSequence(['cleanTask', 'build']));
+gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {
 	gulp.watch(paths.src + '/**/js/**', ['browserifyAppTask', 'browserifyVendorTask']);
@@ -68,7 +69,7 @@ function browserifyVendorTask() {
 };
 
 function copyStaticTask() {
-	return gulp.src(paths.src + '/*', {base: paths.src})
+	return gulp.src(paths.src + '/**/*', {base: paths.src})
 			   .pipe(filter(['**/*', '!**/js/**', '!**/css/**']))
 			   .pipe(gulp.dest(paths.dist));
 };
