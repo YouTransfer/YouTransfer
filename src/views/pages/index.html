@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="hp jumbotron">
-	<h1>YouTransfer</h1>
-	<h2>The self-hosted file sharing solution</h2>
-	<br />	
+	<h1>{{ title }}</h1>
+	<h2>{{ subtitle }}</h2>
+
 	<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
 		<div class="fallback">
 			<input type="file" name="payload" multiple="multiple" />
@@ -17,11 +17,17 @@
 		<hr class="separator-ruler" />
 	</div>
 
-	<form method="POST" action="/download" class="form">
+	<div class="text-center">
+		<p>Submit token to retrieve your file</p>
 
-		<input type="text" name="token" />
-		<button type="submit" name="submit" class="btn btn-primary">Download</button>
+		<form method="POST" action="/download" class="form-inline">
 
-	</form>
+			<div class="form-group">
+				<input type="text" class="form-control" name="token" />
+				<button type="submit" name="submit" class="btn btn-primary">Download</button>
+			</div>
+
+		</form>
+	</div>
 </div>
 {% endblock %}

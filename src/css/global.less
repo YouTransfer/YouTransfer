@@ -11,15 +11,31 @@ body {
 
 /*// ------------------------------------------------------------------------------------------ Header */
 
-.navbar-brand {
+.navbar {
+	background-color: transparent;
+	border-bottom: inherit;
+}
+
+.navbar-default .navbar-brand {
 	font-style: italic;
+	color: #eee;
+}
+
+.navbar-default .navbar-brand:focus,
+.navbar-default .navbar-brand:hover {
+	color: #000;
 }
 
 /*// ------------------------------------------------------------------------------------------ Homepage */
 
 .hp {
-	margin-top: 50px;
+	margin: 20px 5px 0 5px;
 	min-height: 450px;
+	padding: 5px;
+}
+
+.hp .dropzone {
+	margin-top: 20px;
 }
 
 /*// ------------------------------------------------------------------------------------------ Separator */

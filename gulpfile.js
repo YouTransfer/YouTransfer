@@ -5,6 +5,7 @@
 var paths = {
 	src: 'src',
 	dist: 'dist',
+	bootstrap: 'node_modules/bootstrap/dist'
 };
 
 // ------------------------------------------------------------------------------------------ Dependencies
@@ -69,6 +70,10 @@ function browserifyVendorTask() {
 };
 
 function copyStaticTask() {
+	gulp.src(paths.bootstrap + '/**/*', {base: paths.bootstrap})
+		.pipe(filter(['**/fonts/**']))
+		.pipe(gulp.dest(paths.dist));
+
 	return gulp.src(paths.src + '/**/*', {base: paths.src})
 			   .pipe(filter(['**/*', '!**/js/**', '!**/css/**']))
 			   .pipe(gulp.dest(paths.dist));
