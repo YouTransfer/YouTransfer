@@ -1,22 +1,33 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
-	<div class="fallback">
-		<input type="file" name="payload" multiple="multiple" />
-	<button type="submit" name="submit" class="btn btn-primary">Upload</button>
+<div class="hp jumbotron">
+	<h1>{{ title }}</h1>
+	<h2>{{ subtitle }}</h2>
+
+	<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
+		<div class="fallback">
+			<input type="file" name="payload" multiple="multiple" />
+		<button type="submit" name="submit" class="btn btn-primary">Upload</button>
+		</div>
+	</form>
+
+	<div class="separator text-center">
+		<h6 class="separator-text"><em>or</em></h6>
+		<hr class="separator-ruler" />
 	</div>
-</form>
 
-<div class="separator text-center">
-	<h6 class="separator-text"><em>or</em></h6>
-	<hr class="separator-ruler" />
+	<div class="text-center">
+		<p>Submit token to retrieve your file</p>
+
+		<form method="POST" action="/download" class="form-inline">
+
+			<div class="form-group">
+				<input type="text" class="form-control" name="token" />
+				<button type="submit" name="submit" class="btn btn-primary">Download</button>
+			</div>
+
+		</form>
+	</div>
 </div>
-
-<form method="POST" action="/download" class="form">
-
-	<input type="text" name="token" />
-	<button type="submit" name="submit" class="btn btn-primary">Download</button>
-
-</form>
 {% endblock %}

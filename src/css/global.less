@@ -1,14 +1,44 @@
 
 body { 
+	background-color: #000000;
+	background-image: url("../assets/204H.jpg");
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	background-size: 100%;
 	padding-top: 60px; 
 	font-family: "kulturista-web"; 
 }
 
 /*// ------------------------------------------------------------------------------------------ Header */
 
-.navbar-brand {
-	font-style: italic;
+.navbar {
+	background-color: transparent;
+	border-bottom: inherit;
 }
+
+.navbar-default .navbar-brand {
+	font-style: italic;
+	color: #eee;
+}
+
+.navbar-default .navbar-brand:focus,
+.navbar-default .navbar-brand:hover {
+	color: #000;
+}
+
+/*// ------------------------------------------------------------------------------------------ Homepage */
+
+.hp {
+	margin: 20px 5px 0 5px;
+	min-height: 450px;
+	padding: 5px;
+}
+
+.hp .dropzone {
+	margin-top: 20px;
+}
+
+/*// ------------------------------------------------------------------------------------------ Separator */
 
 .separator {
 	margin: 10px 0 30px;
@@ -16,10 +46,11 @@ body {
 
 .separator-text {
 	display: inline-block;
-	background-color: white;
+	background-color: #eee;
 	width: 50px;
 }
 
 .separator-ruler {
-	margin: -16px auto 10px;	
+	margin: -16px auto 10px;
+	border-top: 1px solid #ddd;
 }
