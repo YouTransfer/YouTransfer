@@ -32,7 +32,7 @@ function Fileupload(element) {
 	component.dropzone = new Dropzone(element, {
 		url: '/upload',
 		paramName: 'payload',
-		dictDefaultMessage: 'Drop files here or click to upload',
+		dictDefaultMessage: 'Drop files here or click to select',
 
 		autoQueue: false,
 		thumbnailWidth: 80,
