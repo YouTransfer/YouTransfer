@@ -1,7 +1,45 @@
 
-
 .dropzone {
 	background: white none repeat scroll 0 0;
     border: 2px dashed #0087f7;
     border-radius: 5px;
- }
+}
+
+/* Mimic table appearance */
+.dz-preview-template.table {
+	display: table;
+}
+
+.dz-preview-template.table .file-row {
+	display: table-row;
+}
+
+.dz-preview-template.table .file-row > div {
+	display: table-cell;
+	vertical-align: top;
+	border-top: 1px solid #ddd;
+	padding: 8px;
+}
+
+.dz-preview-template.table .file-row:nth-child(odd) {
+	background: #f9f9f9;
+}
+
+/* Hide the delete button initially */
+.dz-preview-template .file-row .dz-action-delete {
+	display: none;
+}
+
+/* Hide the progress bar when finished */
+.dz-preview-template .file-row.dz-success .progress {
+	display: none;
+}
+
+/* Hide the start and cancel buttons and show the delete button */
+.dz-preview-template .file-row.dz-success .dz-action-start,
+.dz-preview-template .file-row.dz-success .dz-action-cancel {
+	display: none;
+}
+.dz-preview-template .file-row.dz-success .dz-action-delete {
+	display: block;
+}
