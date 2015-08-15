@@ -7,8 +7,15 @@
 
 	<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
 		<div class="fallback">
-			<input type="file" name="payload" multiple="multiple" />
-		<button type="submit" name="submit" class="btn btn-primary">Upload</button>
+			<label class="btn btn-default" for="payload">
+				<input type="file" id="payload" name="payload" multiple="multiple" style="display:none;" />
+				Browse
+			</label>
+			<button type="submit" name="submit" class="btn btn-primary">Upload</button>
+			<span class="help-block">
+				Click browse to select file(s). <br />
+				Afterwards press upload to transfer.
+			</span>
 		</div>
 	</form>
 
