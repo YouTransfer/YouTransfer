@@ -5,36 +5,19 @@
 	<h1>{{ title }}</h1>
 	<h2>{{ subtitle }}</h2>
 
-	<form method="POST" action="/upload" class="form" enctype="multipart/form-data" data-fileupload>
-		<div class="fallback">
-			<label class="btn btn-default" for="payload">
-				<input type="file" id="payload" name="payload" multiple="multiple" style="display:none;" />
-				Browse
-			</label>
-			<button type="submit" name="submit" class="btn btn-primary">Upload</button>
-			<span class="help-block">
-				Click browse to select file(s). <br />
-				Afterwards press upload to transfer.
-			</span>
-		</div>
-	</form>
+	{%if isPostback %}
+
+	{% else %}
+
+	{% include "fileupload.html" %}
 
 	<div class="separator text-center">
 		<h6 class="separator-text"><em>or</em></h6>
 		<hr class="separator-ruler" />
 	</div>
 
-	<div class="text-center">
-		<p>Submit token to retrieve your file</p>
+	{% include "download.html" %}
 
-		<form method="POST" action="/download" class="form-inline">
-
-			<div class="form-group">
-				<input type="text" class="form-control" name="token" />
-				<button type="submit" name="submit" class="btn btn-primary">Download</button>
-			</div>
-
-		</form>
-	</div>
+	{% endif %}
 </div>
 {% endblock %}
