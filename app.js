@@ -46,16 +46,22 @@ nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages'], {
 });
 app.use(function(req, res, next) {
 	res.render = function(name, context, callback) {
+		res.setHeader('Server', 'youtransfer.io');
 
 		try {
 			var settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8')) || {};
 			context = _.assign(settings, context);
 		} catch (exp) {	}
 
-		res.setHeader('Server', 'youtransfer.io');
-		res.setHeader('Content-type', 'text/html');
-		res.writeHead(200);
-        res.end(nunjucks.render(name, context, callback));
+		try {
+        	var output = nunjucks.render(name, context, callback);
+			res.setHeader('Content-type', 'text/html');
+			res.writeHead(200);
+			res.end(output);
+		} catch (exp) {
+			res.writeHead(404);
+			res.end();
+		}
 	};
 	next();
 });
