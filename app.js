@@ -40,7 +40,7 @@ app.use(function(req,res,next) {
 });
 
 // Initializing Nunjucks template engine + adding it to Restify
-nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages'], {
+nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages', 'src/views/errors'], {
 	autoescape: true,
 	watch: (nconf.get('NODE_ENV') != "production")
 });
@@ -51,16 +51,28 @@ app.use(function(req, res, next) {
 		try {
 			var settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8')) || {};
 			context = _.assign(settings, context);
-		} catch (exp) {	}
+		} catch (err) {	}
 
 		try {
-        	var output = nunjucks.render(name, context, callback);
+			var output = nunjucks.render(name, context, callback);
 			res.setHeader('Content-type', 'text/html');
 			res.writeHead(200);
 			res.end(output);
-		} catch (exp) {
-			res.writeHead(404);
-			res.end();
+		} catch (err) {
+			if(err.message.match(/template not found/)) {
+				try {
+					var output = nunjucks.render("404.html");
+					res.setHeader('Content-type', 'text/html');
+					res.writeHead(404);
+					res.end(output);
+				} catch(err) {
+					res.writeHead(404);
+					res.end("Resource not found");
+				}
+			} else {
+				res.writeHead(500);
+				res.end(err.message);
+			}
 		}
 	};
 	next();
