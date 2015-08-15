@@ -15,6 +15,7 @@ var filter = require('gulp-filter');
 var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
+var gutil = require('gulp-util');
 var del = require('del');
 var browserify = require('browserify');
 var buffer = require('vinyl-buffer');
@@ -36,7 +37,7 @@ gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {
 	gulp.watch(paths.src + '/**/js/**', ['browserifyAppTask', 'browserifyVendorTask']);
-	gulp.watch(paths.src + '/**/css/*', ['lessTask']);
+	gulp.watch(paths.src + '/**/*.less', ['lessTask']);
 	gulp.watch([paths.src + '/*','!**/js/**', '!**/css/**'], ['copyStaticTask']);
 });
 
@@ -52,6 +53,7 @@ function browserifyAppTask() {
     bundler.external(require('./src/js/vendor.js'));
 
     return bundler.bundle()
+				  .on('error', log)
 				  .pipe(source('app.js'))
 				  .pipe(buffer())
 				  .pipe(uglify())
@@ -63,6 +65,7 @@ function browserifyVendorTask() {
     bundler.require(require('./src/js/vendor.js'));
 
     return bundler.bundle()
+				  .on('error', log)
 				  .pipe(source('vendor.js'))
 				  .pipe(buffer())
 				  .pipe(uglify())
@@ -72,10 +75,12 @@ function browserifyVendorTask() {
 function copyStaticTask() {
 	gulp.src(paths.bootstrap + '/**/*', {base: paths.bootstrap})
 		.pipe(filter(['**/fonts/**']))
+		.on('error', gutil.log)
 		.pipe(gulp.dest(paths.dist));
 
 	return gulp.src(paths.src + '/**/*', {base: paths.src})
 			   .pipe(filter(['**/*', '!**/js/**', '!**/css/**']))
+			   .on('error', log)
 			   .pipe(gulp.dest(paths.dist));
 };
 
@@ -83,6 +88,13 @@ function lessTask() {
 	return gulp.src(paths.src + '/css/styles.less')
 			   .pipe(less())
 			   .pipe(cssmin())
+			   .on('error', log)
 			   .pipe(gulp.dest(paths.dist + '/css'));
 };
 
+// ------------------------------------------------------------------------------------------ Functions
+
+function log(err) {
+	gutil.log(gutil.colors.red('Error'), err.message);
+	return this;
+}
