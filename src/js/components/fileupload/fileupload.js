@@ -26,14 +26,16 @@ function Fileupload(element) {
 
 	component.previewTemplate = component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).html();
 	component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).empty();
-	component.previewContainer = component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).get(0);
+	component.$previewContainer = component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR);
+	component.$previewContainer.removeClass('hidden');
+	component.previewContainer = component.$previewContainer.get(0);
 
 	component.$element.addClass(DROPZONE_CLASS);
 	component.$element.append('<input type="hidden" name="xhr-fileupload" value="true" />');
 	
 	component.dropzone = new Dropzone(element, {
 		url: '/upload',
-		paramName: 'payload',
+		paramName: 'dz-payload',
 		dictDefaultMessage: 'Drop files here or click to select',
 
 		autoQueue: false,
@@ -70,7 +72,8 @@ function Fileupload(element) {
 	});
 
 	component.dropzone.on("complete", function(result) {
-		console.log(result);
+		var response = JSON.parse(result.xhr.response);
+		$(result.previewElement).find('[data-dz-link]').append('Token: <a href="' + response.link + '">' + response.id + '</a>');
 	});
 
 	component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
