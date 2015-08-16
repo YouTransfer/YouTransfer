@@ -14,36 +14,54 @@
 	display: table;
 }
 
-.dz-preview-template.table .file-row {
+.dz-preview-template.table .dz-preview-item {
 	display: table-row;
 }
 
-.dz-preview-template.table .file-row > div {
+.dz-preview-template.table .dz-preview-item > div {
 	display: table-cell;
 	vertical-align: top;
 	border-top: 1px solid #ddd;
 	padding: 8px;
 }
 
-.dz-preview-template.table .file-row:nth-child(odd) {
+.dz-preview-template.table .dz-preview-item:nth-child(odd) {
 	background: #f9f9f9;
 }
 
 /* Hide the delete button initially */
-.dz-preview-template .file-row .dz-action-delete {
+.dz-preview-template .dz-preview-item .dz-action-delete {
 	display: none;
 }
 
 /* Hide the progress bar when finished */
-.dz-preview-template .file-row.dz-success .progress {
+.dz-preview-template .dz-preview-item.dz-success .progress {
 	display: none;
 }
 
 /* Hide the start and cancel buttons and show the delete button */
-.dz-preview-template .file-row.dz-success .dz-action-start,
-.dz-preview-template .file-row.dz-success .dz-action-cancel {
+.dz-preview-template .dz-preview-item.dz-success .dz-action-start,
+.dz-preview-template .dz-preview-item.dz-success .dz-action-cancel {
 	display: none;
 }
-.dz-preview-template .file-row.dz-success .dz-action-delete {
+.dz-preview-template .dz-preview-item.dz-success .dz-action-delete {
 	display: block;
+}
+
+.dz-preview-template.table .dz-preview-item .dz-preview-progress {
+	vertical-align: middle;
+	min-width: 75px;
+	max-width: 100px;
+}
+
+.dz-preview-progress .progress {
+	margin-bottom: 0;
+}
+
+.dz-preview-actions {
+	max-width: 65px;	
+}
+
+.dz-preview-actions .btn {
+	font-size: 10px;
 }
