@@ -40,10 +40,11 @@ app.use(function(req,res,next) {
 });
 
 // Initializing Nunjucks template engine + adding it to Restify
-nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages', 'src/views/errors'], {
+app.viewEngine = nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages', 'src/views/errors'], {
 	autoescape: true,
 	watch: (nconf.get('NODE_ENV') != "production")
 });
+
 app.use(function(req, res, next) {
 	res.render = function(name, context, callback) {
 		res.setHeader('Server', 'youtransfer.io');
@@ -54,10 +55,15 @@ app.use(function(req, res, next) {
 		} catch (err) {	}
 
 		try {
-			var output = nunjucks.render(name, context, callback);
-			res.setHeader('Content-type', 'text/html');
-			res.writeHead(200);
-			res.end(output);
+			var template = app.viewEngine.getTemplate(name);
+			if(template.path.match(/\/views\/pages\//)) {
+				var output = nunjucks.render(name, context, callback);
+				res.setHeader('Content-type', 'text/html');
+				res.writeHead(200);
+				res.end(output);
+			} else {
+				throw new Error("The selected template is not a page, throwing 'template not found' error for proper handling");
+			}
 		} catch (err) {
 			if(err.message.match(/template not found/)) {
 				try {
