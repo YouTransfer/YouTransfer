@@ -76,5 +76,6 @@ require('./lib/routes.js')(app, nconf);
 // Start the server
 var port = Number(nconf.get('PORT'));
 app.listen(port, function() {
+	nconf.defaults({ baseUrl: app.url });
 	console.log('%s listening at %s', app.name, app.url);
 });
