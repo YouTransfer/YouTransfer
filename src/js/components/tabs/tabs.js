@@ -37,6 +37,12 @@ $(COMPONENT_SELECTOR).each(function(index, element) {
 	return new Tabs(element);
 });
 
+$(document).on('xhrform-success', function(event, element) {
+	$(element).find(COMPONENT_SELECTOR).each(function(index, element) {
+		return new Tabs(element);
+	});
+});
+
 // ------------------------------------------------------------------------------------------ Component Exposure
 
 module.exports = Tabs;

@@ -1,3 +1,4 @@
+{% if not isXmlHtppRequest %}
 <html>
 	<head>
 		<link rel="stylesheet" href="css/styles.css" />
@@ -22,3 +23,7 @@
 		<script type="text/javascript" src="js/app.js"></script>
 	</body>
 </html>
+{% else %}
+{% block content %}
+{% endblock %}
+{% endif %}
