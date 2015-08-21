@@ -73,7 +73,7 @@ function Fileupload(element) {
 
 	component.dropzone.on("complete", function(result) {
 		var response = JSON.parse(result.xhr.response);
-		$(result.previewElement).find('[data-dz-link]').append('Token: <a href="' + response.link + '">' + response.id + '</a>');
+		$(result.previewElement).find('[data-dz-link]').append('Token: ' + response.id + ' | <a href="' + response.link + '">Download file</a>');
 	});
 
 	component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
