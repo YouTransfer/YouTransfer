@@ -17,6 +17,10 @@ function Alerts(element) {
 	var component = this;
 	component.$element = $(element);
 	component.$element.find('button.close').removeClass('hidden');
+
+	setTimeout(function() {
+		component.$element.fadeOut();
+	}, 5000);
 }
 
 // ------------------------------------------------------------------------------------------ Component Initialization
