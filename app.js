@@ -8,11 +8,14 @@ nconf.argv()
 	 .env()
 	 .file('local', { file: 'local.json' })
 	 .file({ file: 'config.json' });
+nconf.set('basedir', __dirname);
 
 // ------------------------------------------------------------------------------------------ App Dependencies
 
 var fs = require("fs");
+var path = require("path");
 var _ = require("lodash");
+var youtransfer = require('./lib/youtransfer.js');
 
 // Restify + node-static + proxy
 var nstatic = require('node-static');
@@ -50,7 +53,15 @@ app.use(function(req, res, next) {
 		res.setHeader('Server', 'youtransfer.io');
 
 		try {
-			var settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8')) || {};
+			var settings = youtransfer.settings.get();
+			if(settings && !settings.localstoragepath) {
+				settings.localstoragepath = path.join(nconf.get('basedir'), 'uploads');
+			}
+
+			if(!path.isAbsolute(settings.localstoragepath)) {
+				settings.localstoragepath = path.resolve(nconf.get('basedir'), settings.localstoragepath);
+			}
+
 			context = _.assign(settings, context);
 		} catch (err) {	}
 
@@ -94,6 +105,7 @@ require('./lib/routes.js')(app, nconf);
 // Start the server
 var port = Number(nconf.get('PORT'));
 app.listen(port, function() {
+	var settings = youtransfer.settings.get();
 	settings.baseUrl = app.url;
 	youtransfer.settings.push(settings);
 	console.log('%s listening at %s', app.name, app.url);
