@@ -1,0 +1,39 @@
+<h1>General</h1>
+
+{%if isPostback %}
+	{%if success %}
+	<div class="alert alert-success alert-dismissible fade in" role="alert">
+		<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<strong>Success!</strong> Your changes have been saved.
+	</div>
+	{% else %}
+	<div class="alert alert-danger alert-dismissible fade in" role="alert">
+		<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<strong>Error!</strong> Your changes could not be saved.
+	</div>
+	{% endif %}
+{% endif %}
+
+<form class="form-horizontal" method="post" data-xhrform data-xhrform-target=".settings" data-xhrform-replace="true">
+	<div class="form-group">
+		<label for="title" class="col-sm-3 control-label">Title</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="settings[title]" id="title" placeholder="{{ title }}">
+		</div>
+		<div class="col-sm-3"></div>
+	</div>
+	<div class="form-group">
+		<label for="subtitle" class="col-sm-3 control-label">Tagline</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="settings[subtitle]" id="subtitle" placeholder="{{ subtitle }}">
+		</div>
+		<div class="col-sm-3"></div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-offset-3 col-sm-6 text-right">
+			<button type="submit" class="btn btn-primary">Save</button>
+		</div>
+		<div class="col-sm-3"></div>
+	</div>					
+</form>		

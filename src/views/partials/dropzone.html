@@ -6,7 +6,7 @@
 			<p>
 				<span class="text-success" data-dz-link>
 					{%if isPostback %}
-						Token: <a href="{{ link }}">{{ id }}</a>
+						Token: {{ id }} | <a href="{{ link }}">Download file</a>
 					{% endif %}
 				</span>
 				<span class="text-danger" data-dz-errormessage></span>
@@ -21,7 +21,6 @@
 		<div class="dz-preview-actions text-right">
 			<button class="btn btn-primary dz-action-start"><span class="glyphicon glyphicon-upload"></span> Start</button>
 			<button data-dz-remove class="btn btn-warning dz-action-cancel"><span class="glyphicon glyphicon-ban-circle"></span> Cancel</button>
-			<button data-dz-remove class="btn btn-success dz-action-delete"><span class="glyphicon glyphicon-ok"></span> Done</button>
 		</div>
 		{% endif %}
 	</div>

@@ -21,6 +21,14 @@ function Tabs(element) {
 		e.preventDefault()
 		$(this).tab('show')
 	});
+
+	component.$element.find("li > a").on("shown.bs.tab", function (e) {
+		var hash = $(e.target).attr("href").substr(1);
+		window.location.hash = hash;
+    });
+
+	var hash = window.location.hash;
+	component.$element.find('a[href="' + hash + '"]').tab('show');
 }
 
 // ------------------------------------------------------------------------------------------ Component Initialization
