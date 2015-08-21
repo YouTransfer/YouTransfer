@@ -33,55 +33,61 @@ function Fileupload(element) {
 	component.$element.addClass(DROPZONE_CLASS);
 	component.$element.append('<input type="hidden" name="xhr-fileupload" value="true" />');
 	
-	component.dropzone = new Dropzone(element, {
-		url: '/upload',
-		paramName: 'dz-payload',
-		dictDefaultMessage: 'Drop files here or click to select',
+	$.getJSON('/settings/dropzone').done(function(settings) {
+		$.extend(settings, {
+			url: '/upload',
+			paramName: 'dz-payload',
+			dictDefaultMessage: 'Drop files here or click to select',
+			dictFallbackMessage: '',
 
-		autoQueue: false,
-		thumbnailWidth: 80,
-		thumbnailHeight: 80,
-		parallelUploads: 20,
-		previewTemplate: component.previewTemplate,
-		previewsContainer: component.previewContainer,
-		clickable: DROPZONE_ACTIONS_ADD_SELECTOR
-	});
-
-	component.dropzone.on("reset", function(progress) {
-		component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).addClass('hidden');
-	});
-
-	component.dropzone.on("addedfile", function(file) {
-		component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).removeClass('hidden');
-		$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).click(function() { 
-			component.dropzone.enqueueFile(file); 
+			autoQueue: false,
+			thumbnailWidth: 80,
+			thumbnailHeight: 80,
+			previewTemplate: component.previewTemplate,
+			previewsContainer: component.previewContainer,
+			clickable: DROPZONE_ACTIONS_ADD_SELECTOR
 		});
-	});
 
-	component.dropzone.on("totaluploadprogress", function(progress) {
-		component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).find(".progress-bar").width(progress + "%");
-	});
+		component.dropzone = new Dropzone(element, settings);
+		
+		if(!settings.forceFallback) {
+			component.dropzone.on("reset", function(progress) {
+				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).addClass('hidden');
+			});
 
-	component.dropzone.on("sending", function(file) {
-		component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).removeClass('hidden');
-		$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).attr("disabled", "disabled");
-	});
+			component.dropzone.on("addedfile", function(file) {
+				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).removeClass('hidden');
+				$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).click(function() { 
+					component.dropzone.enqueueFile(file); 
+				});
+			});
 
-	component.dropzone.on("queuecomplete", function(progress) {
-		component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).addClass('hidden');
-	});
+			component.dropzone.on("totaluploadprogress", function(progress) {
+				component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).find(".progress-bar").width(progress + "%");
+			});
 
-	component.dropzone.on("complete", function(result) {
-		var response = JSON.parse(result.xhr.response);
-		$(result.previewElement).find('[data-dz-link]').append('Token: ' + response.id + ' | <a href="' + response.link + '">Download file</a>');
-	});
+			component.dropzone.on("sending", function(file) {
+				component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).removeClass('hidden');
+				$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).attr("disabled", "disabled");
+			});
 
-	component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
-		component.dropzone.enqueueFiles(component.dropzone.getFilesWithStatus(Dropzone.ADDED));
-	});
+			component.dropzone.on("queuecomplete", function(progress) {
+				component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).addClass('hidden');
+			});
 
-	component.$element.find(DROPZONE_ACTIONS_CANCEL_SELECTOR).click(function() {
-		component.dropzone.removeAllFiles(true);
+			component.dropzone.on("complete", function(result) {
+				var response = JSON.parse(result.xhr.response);
+				$(result.previewElement).find('[data-dz-link]').append('Token: ' + response.id + ' | <a href="' + response.link + '">Download file</a>');
+			});
+
+			component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
+				component.dropzone.enqueueFiles(component.dropzone.getFilesWithStatus(Dropzone.ADDED));
+			});
+
+			component.$element.find(DROPZONE_ACTIONS_CANCEL_SELECTOR).click(function() {
+				component.dropzone.removeAllFiles(true);
+			});
+		}
 	});
 }
 

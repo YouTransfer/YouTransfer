@@ -33,7 +33,7 @@
 		<div class="form-group">
 			<label for="localstoragepath" class="col-sm-3 control-label">Path</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[localstoragepath]" id="localstoragepath" placeholder="{{ localstoragepath }}">
+				<input type="text" class="form-control" name="settings[localstoragepath]" id="localstoragepath" value="{{ localstoragepath }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -44,14 +44,14 @@
 		<div class="form-group">
 			<label for="S3AccessKeyId" class="col-sm-3 control-label">Access Key ID</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[S3AccessKeyId]" id="S3AccessKeyId" placeholder="{{ S3AccessKeyId }}">
+				<input type="text" class="form-control" name="settings[S3AccessKeyId]" id="S3AccessKeyId" value="{{ S3AccessKeyId }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
 		<div class="form-group">
 			<label for="S3SecretAccessKey" class="col-sm-3 control-label">Secret Access Key</label>
 			<div class="col-sm-6">
-				<input type="password" class="form-control" name="settings[S3SecretAccessKey]" id="S3SecretAccessKey" placeholder="{{ S3SecretAccessKey }}">
+				<input type="password" class="form-control" name="settings[S3SecretAccessKey]" id="S3SecretAccessKey" value="{{ S3SecretAccessKey }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -60,14 +60,14 @@
 		<div class="form-group">
 			<label for="S3Bucket" class="col-sm-3 control-label">Bucket</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[S3Bucket]" id="S3Bucket" placeholder="{{ S3Bucket }}">
+				<input type="text" class="form-control" name="settings[S3Bucket]" id="S3Bucket" value="{{ S3Bucket }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>	
 		<div class="form-group">
 			<label for="S3Region" class="col-sm-3 control-label">Region</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[S3Region]" id="S3Region" placeholder="{{ S3Region }}">
+				<input type="text" class="form-control" name="settings[S3Region]" id="S3Region" value="{{ S3Region }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -75,7 +75,7 @@
 			<div class="col-sm-offset-3 col-sm-9">
 				<div class="checkbox">
 					<label for="S3SSLEnabled">
-						<input type="checkbox" value="true" name="settings[S3SSLEnabled]" id="S3SSLEnabled" placeholder="{{ S3SSLEnabled }}">
+						<input type="checkbox" value="true" name="settings[S3SSLEnabled]" id="S3SSLEnabled" {{ "checked='checked'" if S3SSLEnabled == "true" }}>
 						SSL Enabled (https)
 					</label>
 				</div>
