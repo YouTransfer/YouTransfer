@@ -15,6 +15,9 @@
 			<li role="presentation">
 				<a href="#storage" aria-controls="storage" role="tab">Storage</a>
 			</li>
+			<li role="presentation">
+				<a href="#transfer" aria-controls="transfer" role="tab">Transfer</a>
+			</li>
 		</ul>
 	</div>
 
@@ -25,6 +28,9 @@
 			</div>
 			<div role="tabpanel" class="tab-pane" id="storage">
 				{% include "settings.storage.html" %}
+			</div>
+			<div role="tabpanel" class="tab-pane" id="transfer">
+				{% include "settings.dropzone.html" %}
 			</div>
 		</div>
 	</div>
