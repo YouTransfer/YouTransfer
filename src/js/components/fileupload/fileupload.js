@@ -37,7 +37,7 @@ function Fileupload(element) {
 		$.extend(settings, {
 			url: '/upload',
 			paramName: 'dz-payload',
-			dictDefaultMessage: 'Drop files here or click to select',
+			dictDefaultMessage: '<span class="glyphicon glyphicon-download-alt" style="font-size: 3em;"></span><br /><br /> Drop files here or click to select',
 			dictFallbackMessage: '',
 
 			autoQueue: false,
@@ -49,7 +49,7 @@ function Fileupload(element) {
 		});
 
 		component.dropzone = new Dropzone(element, settings);
-		
+
 		if(!settings.forceFallback) {
 			component.dropzone.on("reset", function(progress) {
 				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).addClass('hidden');
