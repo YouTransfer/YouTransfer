@@ -27,6 +27,18 @@ After installation, start YouTransfer using `PORT=[port] node app.js`.
 
 You can now connect to YouTransfer by browsing to http://localhost:[port]/
 
+### NPM
+
+YouTransfer is also available as an NPM package. This allows you to start a new [NodeJS](http://nodejs.org) project, edit the source and customize the experience for your users.
+
+You can install the NPM package by running `npm install youtransfer -g`.
+
+Create a new empty directory for your project, e.g. '~/meTransfer'. Run `youtransfer init` in your project directory, which will copy all necessary files. Finalise the project setup by running `npm init` and `npm install`.
+
+Once your project is ready you can run `npm start` to start the application. Your project will now be available in your browser (http://localhost:5000). You can change the default port in the `config.json` file.
+
+For local development, the `npm run dev` command which will start 'gulp-watch' to automatically regenerate the static content upon change.
+
 ## Usage
 
 ### Hosting
