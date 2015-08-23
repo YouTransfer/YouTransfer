@@ -40,9 +40,6 @@ function Fileupload(element) {
 			dictDefaultMessage: '<span class="glyphicon glyphicon-download-alt" style="font-size: 3em;"></span><br /><br /> Drop files here or click to select',
 			dictFallbackMessage: '',
 
-			autoQueue: false,
-			thumbnailWidth: 80,
-			thumbnailHeight: 80,
 			previewTemplate: component.previewTemplate,
 			previewsContainer: component.previewContainer,
 			clickable: DROPZONE_ACTIONS_ADD_SELECTOR
@@ -52,10 +49,12 @@ function Fileupload(element) {
 
 		if(!settings.forceFallback) {
 			component.dropzone.on("reset", function(progress) {
+				component.$element.removeClass("dz-files-added");
 				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).addClass('hidden');
 			});
 
 			component.dropzone.on("addedfile", function(file) {
+				component.$element.addClass("dz-files-added");
 				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).removeClass('hidden');
 				$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).click(function() { 
 					component.dropzone.enqueueFile(file); 
@@ -77,7 +76,8 @@ function Fileupload(element) {
 
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
-				$(result.previewElement).find('[data-dz-link]').append('Token: ' + response.id + ' | <a href="' + response.link + '">Download file</a>');
+				$(result.previewElement).find('.dz-preview-description').removeClass('col-md-7');
+				$(result.previewElement).find('[data-dz-link]').append(response.id);
 			});
 
 			component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
