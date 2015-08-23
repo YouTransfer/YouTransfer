@@ -10,6 +10,10 @@
 		"forceFallback": false
 	},
 
+	"email": {
+		"subject": "YouTransfer"
+	},
+
 	"StorageLocation": "local",
 
 	"localstoragepath": "./uploads",
