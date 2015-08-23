@@ -3,8 +3,9 @@
 	{% include "dropzone.html" %}
 
 	<div class="dz-upload-complete hidden">
-		<h2>Share with a friend!</h2>
+		<h2>Email a friend!</h2>
 		<form class="form form-group-sm" action="/send" method="POST">
+			<input type="hidden" name="email[tokens]" value="" dz-tokens />
 			<div class="form-group">
 				<input type="text" id="from" name="email[from]" class="form-control" placeholder="Your email">
 			</div>
@@ -18,7 +19,7 @@
 			</div>
 
 			<div class="form-group">
-				<button type="submit" name="submit" class="btn btn-default">Share</button>
+				<button type="submit" name="submit" class="btn btn-default">Send</button>
 			</div>
 		</form>
 	</div>
