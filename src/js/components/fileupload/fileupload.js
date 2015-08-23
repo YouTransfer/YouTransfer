@@ -31,7 +31,7 @@ function Fileupload(element) {
 	component.previewContainer = component.$previewContainer.get(0);
 
 	component.completeTemplate = component.$element.find('.dz-upload-complete');
-	component.completeTemplate = component.completeTemplate.html();
+	component.completeTemplate = component.completeTemplate.detach().html();
 
 	component.$element.addClass(DROPZONE_CLASS);
 	component.$element.append('<input type="hidden" name="xhr-fileupload" value="true" />');
@@ -82,8 +82,11 @@ function Fileupload(element) {
 				$(result.previewElement).find('.dz-preview-description').removeClass('col-md-7');
 				$(result.previewElement).find('[data-dz-link]').append(response.id);
 
-				$('.dz-completed-container').html(component.completeTemplate);
-				$('.dz-completed-container').addClass('dz-upload-complete');
+				if($('.dz-upload-complete').length == 0) {
+					$('.dz-completed-container').html(component.completeTemplate);
+					$('.dz-completed-container').addClass('dz-upload-complete');
+				};
+				$('.dz-completed-container form').append('<input type="hidden" name="token[]" value="' + response.id + '" />');
 			});
 
 			component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
