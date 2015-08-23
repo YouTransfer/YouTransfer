@@ -78,6 +78,9 @@ function Fileupload(element) {
 				var response = JSON.parse(result.xhr.response);
 				$(result.previewElement).find('.dz-preview-description').removeClass('col-md-7');
 				$(result.previewElement).find('[data-dz-link]').append(response.id);
+
+				$('.dz-completed-container').empty();
+				component.$element.find('.dz-upload-complete').detach().appendTo('.dz-completed-container').removeClass('hidden');
 			});
 
 			component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
