@@ -54,10 +54,6 @@ app.use(function(req, res, next) {
 
 		try {
 			var settings = youtransfer.settings.get();
-			if(settings && !settings.localstoragepath) {
-				settings.localstoragepath = path.join(nconf.get('basedir'), 'uploads');
-			}
-
 			if(!path.isAbsolute(settings.localstoragepath)) {
 				settings.localstoragepath = path.resolve(nconf.get('basedir'), settings.localstoragepath);
 			}
@@ -105,8 +101,5 @@ require('./lib/routes.js')(app, nconf);
 // Start the server
 var port = Number(nconf.get('PORT'));
 app.listen(port, function() {
-	var settings = youtransfer.settings.get();
-	settings.baseUrl = app.url;
-	youtransfer.settings.push(settings);
 	console.log('%s listening at %s', app.name, app.url);
 });
