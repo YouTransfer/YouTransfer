@@ -2,9 +2,35 @@
 /*// ------------------------------------------------------------------------------------------ Homepage */
 
 .hp {
-	margin: 40px 5px 80px 5px;
+	margin: 80px 5px 80px 5px;
 	min-height: 450px;
-	padding: 5px;
+	background-color: #fff;
+}
+
+.hp::after, 
+.hp::before {
+    content: " ";
+    display: table;
+}
+
+.hp::after {
+    clear: both;
+}
+
+.hp header {
+	margin-bottom: 20px;
+}
+
+@media (min-width: @screen-md-min) {
+	.hp.jumbotron {
+		padding: 40px 80px;
+	}
+}
+
+@media (max-width: @screen-xs-min) {
+	.hp.jumbotron {
+		padding: 20px;
+	}
 }
 
 .hp .dropzone {
@@ -14,6 +40,25 @@
 .hp .fallback {
 	margin-top: 40px;
 	text-align: center;
+}
+
+.hp .download {
+	margin-bottom: 20px;
+}
+
+.hp .separator {
+	margin: 30px 0 10px;
+}
+
+.hp .separator-text {
+	display: inline-block;
+	background-color: #fff;
+	width: 50px;
+}
+
+.hp .separator-ruler {
+	margin: -16px auto 10px;
+	border-top: 1px solid #ddd;
 }
 
 /*// ------------------------------------------------------------------------------------------ Settings */

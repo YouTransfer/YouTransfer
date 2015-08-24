@@ -49,15 +49,24 @@ app.viewEngine = nunjucks.configure(['src/views/', 'src/views/partials', 'src/vi
 });
 
 app.use(function(req, res, next) {
+	res.renderTemplate = function(name, context, callback) {
+		try {
+			var settings = youtransfer.settings.get();
+			if(!path.isAbsolute(settings.localstoragepath)) {
+				settings.localstoragepath = path.resolve(nconf.get('basedir'), settings.localstoragepath);
+			}
+
+			context = _.assign(settings, context);
+		} catch (err) {	}
+
+		nunjucks.render(name, context, callback);
+	};
+
 	res.render = function(name, context, callback) {
 		res.setHeader('Server', 'youtransfer.io');
 
 		try {
 			var settings = youtransfer.settings.get();
-			if(settings && !settings.localstoragepath) {
-				settings.localstoragepath = path.join(nconf.get('basedir'), 'uploads');
-			}
-
 			if(!path.isAbsolute(settings.localstoragepath)) {
 				settings.localstoragepath = path.resolve(nconf.get('basedir'), settings.localstoragepath);
 			}
@@ -105,8 +114,5 @@ require('./lib/routes.js')(app, nconf);
 // Start the server
 var port = Number(nconf.get('PORT'));
 app.listen(port, function() {
-	var settings = youtransfer.settings.get();
-	settings.baseUrl = app.url;
-	youtransfer.settings.push(settings);
 	console.log('%s listening at %s', app.name, app.url);
 });

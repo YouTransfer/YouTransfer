@@ -33,17 +33,6 @@
 	</div>
 
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
-			<div class="checkbox">
-				<label for="uploadMultiple">
-					<input type="checkbox" value="true" name="settings[dropzone][uploadMultiple]" id="uploadMultiple" {{ "checked='checked'" if dropzone.uploadMultiple == "true" }}>
-					Allow multiple files
-				</label>
-			</div>
-		</div>
-	</div>
-
-	<div class="form-group">
 		<label for="parallelUploads" class="col-sm-3 control-label">Parallel uploads</label>
 		<div class="col-sm-6">
 			<input type="text" class="form-control" name="settings[dropzone][parallelUploads]" id="parallelUploads" value="{{ dropzone.parallelUploads }}">
@@ -55,7 +44,7 @@
 		<div class="col-sm-offset-3 col-sm-9">
 			<div class="checkbox">
 				<label for="forceFallback">
-					<input type="checkbox" value="true" name="settings[dropzone][forceFallback]" id="forceFallback" {{ "checked='checked'" if dropzone.forceFallback == "true" }}>
+					<input type="checkbox" value="true" name="settings[dropzone][forceFallback]" id="forceFallback" {{ "checked='checked'" if dropzone.forceFallback }}>
 					Simplified interface
 				</label>
 			</div>
