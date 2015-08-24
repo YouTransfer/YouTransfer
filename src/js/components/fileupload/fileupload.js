@@ -86,7 +86,14 @@ function Fileupload(element) {
 					$('.dz-completed-container').html(component.completeTemplate);
 					$('.dz-completed-container').addClass('dz-upload-complete');
 				};
-				$('.dz-completed-container form').append('<input type="hidden" name="token[]" value="' + response.id + '" />');
+
+				var file = JSON.stringify({
+					id: response.id,
+					name: response.name,
+					size: response.filesize
+				});
+
+				$('.dz-completed-container form').append('<input type="hidden" name="files[]" value="' + encodeURIComponent(file) + '" />');
 			});
 
 			component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
