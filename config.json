@@ -12,7 +12,9 @@
 
 	"email": {
 		"subject": "YouTransfer",
-		"sendmail": "/usr/sbin/sendmail"
+		"sendmail": "/usr/sbin/sendmail",
+		"region": "eu-west-1",
+		"rateLimit": 1
 	},
 
 	"StorageLocation": "local",
