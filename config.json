@@ -11,7 +11,8 @@
 	},
 
 	"email": {
-		"subject": "YouTransfer"
+		"subject": "YouTransfer",
+		"sendmail": "/usr/sbin/sendmail"
 	},
 
 	"StorageLocation": "local",
