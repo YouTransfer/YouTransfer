@@ -13,10 +13,13 @@
 				<a href="#general" aria-controls="general" role="tab">General</a>
 			</li>
 			<li role="presentation">
-				<a href="#storage" aria-controls="storage" role="tab">Storage</a>
+				<a href="#transfer" aria-controls="transfer" role="tab">Transfer</a>
 			</li>
 			<li role="presentation">
-				<a href="#transfer" aria-controls="transfer" role="tab">Transfer</a>
+				<a href="#email" aria-controls="email" role="tab">Email</a>
+			</li>
+			<li role="presentation">
+				<a href="#storage" aria-controls="storage" role="tab">Storage</a>
 			</li>
 		</ul>
 	</div>
@@ -26,11 +29,14 @@
 			<div role="tabpanel" class="tab-pane active" id="general">
 				{% include "settings.general.html" %}
 			</div>
-			<div role="tabpanel" class="tab-pane" id="storage">
-				{% include "settings.storage.html" %}
-			</div>
 			<div role="tabpanel" class="tab-pane" id="transfer">
 				{% include "settings.dropzone.html" %}
+			</div>
+			<div role="tabpanel" class="tab-pane" id="email">
+				{% include "settings.email.html" %}
+			</div>
+			<div role="tabpanel" class="tab-pane" id="storage">
+				{% include "settings.storage.html" %}
 			</div>
 		</div>
 	</div>

@@ -2,24 +2,31 @@
 
 {% block content %}
 <div class="hp jumbotron">
-	<h1>{{ title }}</h1>
-	<h2>{{ subtitle }}</h2>
+	<header class="col-md-12">
+		<h1>{{ title }}</h1>
+		<h2>{{ subtitle }}</h2>
+	</header>
 
-	{%if isPostback %}
+	<div class="col-md-6">
+		{%if isPostback %}
 
-	{% include "dropzone.html" %}
+		{% include "dropzone.html" %}
 
-	{% else %}
+		{% else %}
 
-	{% include "fileupload.html" %}
+		{% include "fileupload.html" %}
 
-	<div class="separator text-center">
-		<h6 class="separator-text"><em>or</em></h6>
-		<hr class="separator-ruler" />
+		{% endif %}
 	</div>
 
-	{% include "download.html" %}
+	<div class="col-md-6 dz-completed-container">
+		<div class="separator text-center">
+			<h6 class="separator-text"><em>or</em></h6>
+			<hr class="separator-ruler visible-xs-block visible-sm-block" />
+		</div>
 
-	{% endif %}
+		{% include "download.html" %}
+	</div>
+
 </div>
 {% endblock %}

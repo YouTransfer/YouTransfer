@@ -11,81 +11,79 @@ Dropzone.autoDiscover = false;
 var COMPONENT_ATTR = 'data-fileupload';
 var COMPONENT_SELECTOR = '[' + COMPONENT_ATTR + ']';
 var DROPZONE_CLASS = 'dropzone';
+var DROPZONE_PARAMETER = 'dz-payload';
+
 var DROPZONE_PREVIEW_TEMPLATE_SELECTOR = '.dz-preview-template';
-var DROPZONE_ACTIONS_CONTAINER_SELECTOR = '.dz-action-container';
+var DROPZONE_PREVIEW_DESCRIPTION_SELECTOR = '.dz-preview-description';
+var DROPZONE_PREVIEW_DATALINK_SELECTOR = '[data-dz-link]';
+
+var DROPZONE_UPLOAD_COMPLETE_CLASS = 'dz-upload-complete';
+var DROPZONE_UPLOAD_COMPLETE_SELECTOR = '.' + DROPZONE_UPLOAD_COMPLETE_CLASS;
+var DROPZONE_COMPLETED_CONTAINER_SELECTOR = '.dz-completed-container';
+
 var DROPZONE_ACTIONS_ADD_SELECTOR = '.dz-action-add';
-var DROPZONE_ACTIONS_START_SELECTOR = '.dz-action-start';
-var DROPZONE_ACTIONS_CANCEL_SELECTOR = '.dz-action-cancel';
-var DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR = '.dz-totaluploadprogress';
 
 // ------------------------------------------------------------------------------------------ Component Definition
 
 function Fileupload(element) {
 	var component = this;
 	component.$element = $(element);
+	component.$element.addClass(DROPZONE_CLASS);
 
 	component.previewTemplate = component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).html();
 	component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).empty();
+
 	component.$previewContainer = component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR);
 	component.$previewContainer.removeClass('hidden');
 	component.previewContainer = component.$previewContainer.get(0);
 
-	component.$element.addClass(DROPZONE_CLASS);
-	component.$element.append('<input type="hidden" name="xhr-fileupload" value="true" />');
-	
+	component.completeTemplate = component.$element.find(DROPZONE_UPLOAD_COMPLETE_SELECTOR);
+	component.completeTemplate = component.completeTemplate.detach().html();
+	component.$completedContainer = $(DROPZONE_COMPLETED_CONTAINER_SELECTOR);
+
 	$.getJSON('/settings/dropzone').done(function(settings) {
 		$.extend(settings, {
 			url: '/upload',
-			paramName: 'dz-payload',
-			dictDefaultMessage: 'Drop files here or click to select',
+			paramName: DROPZONE_PARAMETER,
+			dictDefaultMessage: '<span class="glyphicon glyphicon-download-alt" style="font-size: 3em;"></span><br /><br /> Drop files here or click to select',
 			dictFallbackMessage: '',
 
-			autoQueue: false,
-			thumbnailWidth: 80,
-			thumbnailHeight: 80,
 			previewTemplate: component.previewTemplate,
 			previewsContainer: component.previewContainer,
 			clickable: DROPZONE_ACTIONS_ADD_SELECTOR
 		});
 
 		component.dropzone = new Dropzone(element, settings);
-		
+
 		if(!settings.forceFallback) {
-			component.dropzone.on("reset", function(progress) {
-				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).addClass('hidden');
-			});
-
 			component.dropzone.on("addedfile", function(file) {
-				component.$element.find(DROPZONE_ACTIONS_CONTAINER_SELECTOR).removeClass('hidden');
-				$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).click(function() { 
-					component.dropzone.enqueueFile(file); 
-				});
-			});
-
-			component.dropzone.on("totaluploadprogress", function(progress) {
-				component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).find(".progress-bar").width(progress + "%");
-			});
-
-			component.dropzone.on("sending", function(file) {
-				component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).removeClass('hidden');
-				$(file.previewElement).find(DROPZONE_ACTIONS_START_SELECTOR).attr("disabled", "disabled");
-			});
-
-			component.dropzone.on("queuecomplete", function(progress) {
-				component.$element.find(DROPZONE_TOTALUPLOADPROGRESSBAR_SELECTOR).addClass('hidden');
+				component.$element.addClass("dz-files-added");
 			});
 
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
-				$(result.previewElement).find('[data-dz-link]').append('Token: ' + response.id + ' | <a href="' + response.link + '">Download file</a>');
+				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
+				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append(response.id);
+
+				if($(DROPZONE_UPLOAD_COMPLETE_SELECTOR).length == 0) {
+					component.$completedContainer
+							 .html(component.completeTemplate)
+							 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
+				};
+
+				var file = encodeURIComponent(JSON.stringify({
+					id: response.id,
+					name: response.name,
+					size: response.filesize
+				}));
+
+				component.$completedContainer
+						 .find('form')
+						 .append('<input type="hidden" name="files[]" value="' + file + '" />');
 			});
 
-			component.$element.find(DROPZONE_ACTIONS_START_SELECTOR).click(function() {
-				component.dropzone.enqueueFiles(component.dropzone.getFilesWithStatus(Dropzone.ADDED));
-			});
-
-			component.$element.find(DROPZONE_ACTIONS_CANCEL_SELECTOR).click(function() {
-				component.dropzone.removeAllFiles(true);
+			component.dropzone.on("reset", function(progress) {
+				component.$element.removeClass("dz-files-added");
 			});
 		}
 	});

@@ -1,0 +1,27 @@
+<html>
+	<head></head>
+	<body>
+		<h3>Hi,</h3>
+		<p>
+			{{ email.from }} wants to share file(s).
+		</p>
+		{% if message %}
+		<p>
+			{{ message }}
+		</p>
+		{% endif %}
+		<table>
+			{% for file in files %}
+				<tr>
+					<td><a href="{{ file.link }}">{{ file.name }} ({{ file.size }})</a></td>
+				</tr>
+			{% endfor %}
+		</table>
+		<p>
+			You can download them by clicking on the link of each file.
+		</p>
+		<p>
+			<em>Powered by <a href="youtransfer.io">youtransfer.io</a></em>
+		</p>
+	</body>
+</html>

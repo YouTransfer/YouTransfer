@@ -3,26 +3,31 @@
 	background: white none repeat scroll 0 0;
     border: 2px dashed #0087f7;
     border-radius: 5px;
-}
-
-.dz-action-container {
-	margin-bottom: 15px;
+    padding: 0;
 }
 
 /* Mimic table appearance */
 .dz-preview-template.table {
 	display: table;
+	border-collapse: collapse;
+}
+
+.dropzone.dz-files-added .dz-preview-template.table {
+	margin-top: 25px;
 }
 
 .dz-preview-template.table .dz-preview-item {
 	display: table-row;
+	border-top: 1px solid #ddd;
 }
 
 .dz-preview-template.table .dz-preview-item > div {
 	display: table-cell;
 	vertical-align: top;
-	border-top: 1px solid #ddd;
 	padding: 8px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .dz-preview-template.table .dz-preview-item:nth-child(odd) {
@@ -39,18 +44,18 @@
 	display: none;
 }
 
-/* Hide the progress bar when finished */
-.dz-preview-template .dz-preview-item.dz-success .progress {
+/* Hide the progress bar & action buttons when finished */
+.dz-preview-template.table .dz-preview-item.dz-success .dz-preview-progress,
+.dz-preview-template.table .dz-preview-item.dz-success .dz-preview-actions {
 	display: none;
 }
 
-/* Hide the start and cancel buttons and show the delete button */
-.dz-preview-template .dz-preview-item.dz-success .dz-action-start,
-.dz-preview-template .dz-preview-item.dz-success .dz-action-cancel {
-	display: none;
-}
-.dz-preview-template .dz-preview-item.dz-success .dz-action-delete {
+.dz-preview-template.table .dz-preview-item.dz-success .dz-preview-result {
 	display: block;
+}
+
+.dz-preview-template.table .dz-preview-item.dz-success .dz-preview-description {
+	white-space: inherit;
 }
 
 .dz-preview-template.table .dz-preview-item .dz-preview-progress {
@@ -64,9 +69,25 @@
 }
 
 .dz-preview-actions {
-	max-width: 65px;	
+	max-width: 80px;
 }
 
 .dz-preview-actions .btn {
 	font-size: 10px;
+}
+
+.dz-files-added {
+	border: none;
+}
+
+.dz-files-added .dz-message {
+	display: none;
+}
+
+.dz-upload-complete input,
+.dz-upload-complete textarea {
+	border-radius: none;
+	box-shadow: none;
+	border: none;
+	border-bottom: 1px solid #eee;
 }

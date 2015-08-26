@@ -1,3 +1,29 @@
 {
-	"PORT": 5000
+	"PORT": 5000,
+
+	"title": "YouTransfer",
+	"subtitle": "The self-hosted file sharing solution",
+	"baseUrl": "http://localhost:5000",
+
+	"dropzone": {
+		"maxFileSize": "2000",
+		"parallelUploads": 20,
+		"forceFallback": false
+	},
+
+	"email": {
+		"subject": "YouTransfer",
+		"transporter": "direct",
+		"sendmail": "/usr/sbin/sendmail",
+		"region": "eu-west-1",
+		"rateLimit": 1
+	},
+
+	"StorageLocation": "local",
+
+	"localstoragepath": "./uploads",
+
+	"S3Region": "us-east-1",
+	"S3SSLEnabled": true
+
 }
