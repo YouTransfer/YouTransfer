@@ -12,4 +12,4 @@ VOLUME /opt/youtransfer/uploads
 WORKDIR /opt/youtransfer/
 RUN npm install ; npm run dist
 
-CMD ./start.sh
+CMD npm run app

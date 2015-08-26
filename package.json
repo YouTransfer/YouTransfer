@@ -29,7 +29,8 @@
   "scripts": {
     "dist": "gulp clean && gulp dist",
     "dev": "gulp clean && gulp watch",
-    "start": "gulp clean && gulp dist && node app.js"
+    "start": "gulp clean && gulp dist && node app.js",
+    "app": "node app.js"
   },
   "author": "Collabsoft",
   "license": "Apache-2.0",
