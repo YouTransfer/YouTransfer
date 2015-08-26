@@ -17,8 +17,12 @@ function SelectSection(element) {
 	component.$element = $(element);
 
 	element.onchange = function(event) {
-		var id = component.$element.val();
-		$('[role="select-section"]').removeClass('active');
+		component.$element.closest('[data-select-content]')
+						  .find('> *[role="select-section"]')
+						  .removeClass('active');
+
+		var option = element.options[element.selectedIndex];
+		var id = option.getAttribute('data-select-target') || option.getAttribute('value');
 		$('#' + id).addClass('active');
 	};
 }
