@@ -1,5 +1,6 @@
 FROM node:0.10
 
+ADD ./bin /opt/youtransfer/bin/
 ADD ./lib /opt/youtransfer/lib/
 ADD ./src /opt/youtransfer/src/
 ADD ./*.js* /opt/youtransfer/
