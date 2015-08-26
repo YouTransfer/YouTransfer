@@ -1,4 +1,4 @@
-FROM node:0.10
+FROM node:0.12
 
 ADD ./bin /opt/youtransfer/bin/
 ADD ./lib /opt/youtransfer/lib/
