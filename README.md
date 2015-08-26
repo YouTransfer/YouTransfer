@@ -12,9 +12,11 @@ The easiest way to install YouTransfer in your own environment is to use the [Do
 
 You can run the application with the following command:
 
-`docker run -d -v [path_to_upload_folder]:/opt/youtransfer/uploads -v [path_to_settings.json]:/opt/youtransfer/settings.json -p 80:80 remie/youtransfer`
+`docker run -d -v [path_to_upload_folder]:/opt/youtransfer/uploads -v [path_to_config.json]:/opt/youtransfer/config.json -v [path_to_settings.json]:/opt/youtransfer/settings.json -p 80:5000 remie/youtransfer`
 
 You can now connect to YouTransfer by browsing to http://[docker_host_ip]/
+
+N.B. the `config.json` file is the application configuration. This is static information: it cannot be modified on runtime. In addition, it is a placeholder for default values of user settings. The `settings.json` file contains all settings that can be adjusted through the web interface. It is recommended to store this outside the Docker container for persistance.
 
 ### NodeJS
 
