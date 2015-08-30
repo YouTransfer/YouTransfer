@@ -19,6 +19,7 @@
 		"rateLimit": 1
 	},
 
+	"cleanupSchedule": "*/1 * * * *",
 	"StorageLocation": "local",
 
 	"localstoragepath": "./uploads",

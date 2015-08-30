@@ -16,6 +16,7 @@
     "md5": "^2.0.0",
     "mime": "^1.3.4",
     "nconf": "^0.6.9",
+    "node-schedule": "^0.2.9",
     "node-static": "^0.7.5",
     "nodemailer": "^1.4.0",
     "nodemailer-ses-transport": "^1.3.0",
