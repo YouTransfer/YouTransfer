@@ -15,7 +15,7 @@ nconf.set('basedir', __dirname);
 var fs = require("fs");
 var path = require("path");
 var _ = require("lodash");
-var schedule = require('node-schedule');
+var scheduler = require('./lib/scheduler.js');
 var youtransfer = require('./lib/youtransfer.js');
 
 // Restify + node-static + proxy
@@ -110,6 +110,14 @@ app.use(function(req, res, next) {
 // Initialize routes
 require('./lib/routes.js')(app, nconf);
 
+// ------------------------------------------------------------------------------------------ App Scheduling
+
+var settings = youtransfer.settings.get();
+scheduler.add('cleanup', settings.cleanupSchedule, youtransfer.cleanup);
+youtransfer.on('settings.push', function(err, data) {
+	scheduler.reschedule('cleanup', data.cleanupSchedule, youtransfer.cleanup);
+});
+
 // ------------------------------------------------------------------------------------------ App Execution
 
 // Start the server
@@ -118,5 +126,4 @@ app.listen(port, function() {
 	console.log('%s listening at %s', app.name, app.url);
 });
 
-// Start the cleanup schedule
-schedule.scheduleJob(nconf.get('cleanupSchedule'), youtransfer.cleanup);
+
