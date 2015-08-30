@@ -20,6 +20,10 @@
 	},
 
 	"cleanupSchedule": "*/1 * * * *",
+	"retention": {
+		"weeks": 1
+	},
+
 	"StorageLocation": "local",
 
 	"localstoragepath": "./uploads",
