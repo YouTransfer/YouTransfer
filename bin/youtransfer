@@ -4,20 +4,17 @@ var path = require("path");
 var fs = require("fs-extra");
 var program = require('commander');
 
-var cmdValue;
 program.version('0.0.5')
-	   .command('init', 'Initialise a YouTransfer project')
-	   .action(function (cmd) {
-			cmdValue = cmd;
-	   });
-program.parse(process.argv);
-
-if(cmdValue == "init") {
-	fs.copy(path.join(__dirname,"../"), process.cwd(), function(err) {
-		console.log('YouTransfer project initialised succesfully!');
-		console.log('Make sure to run "npm init" and "npm install" to setup your project.');
-		console.log('Afterwards, you can start the project by running "npm start"');
-	});
-} else {
-	program.help();
-}
+	   .arguments('<init>', 'Initialise a YouTransfer project')
+	   .action(function(cmd) {
+			if(cmd == "init") {
+				fs.copy(path.join(__dirname,"../"), process.cwd(), function(err) {
+					console.log('YouTransfer project initialised succesfully!');
+					console.log('Make sure to run "npm init" and "npm install" to setup your project.');
+					console.log('Afterwards, you can start the project by running "npm start"');
+				});
+			} else {
+				program.help();
+			}
+		})
+		.parse(process.argv);
