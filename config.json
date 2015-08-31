@@ -19,16 +19,12 @@
 		"rateLimit": 1
 	},
 
+	"retention": 1,
+	"retentionUnit": "weeks",
 	"cleanupSchedule": "*/1 * * * *",
-	"retention": {
-		"weeks": 1
-	},
 
 	"StorageLocation": "local",
-
 	"localstoragepath": "./uploads",
-
 	"S3Region": "us-east-1",
 	"S3SSLEnabled": true
-
 }

@@ -27,6 +27,26 @@
 		<div class="col-sm-3"></div>
 	</div>
 
+	<div class="form-group">
+		<label for="" class="col-sm-3 control-label">Retention</label>
+		<div class="col-sm-3">
+			<input type="text" class="form-control" name="settings[retention]" id="retention" value="{{ retention }}">
+		</div>
+		<div class="col-sm-3">
+			<select class="form-control" name="settings[retentionUnit]" id="retentionUnit">
+				<option value="milliseconds" {{ "selected" if retentionUnit == 'milliseconds' }}>Milliseconds</option>
+				<option value="seconds" {{ "selected" if retentionUnit == 'seconds' }}>Seconds</option>
+				<option value="minutes" {{ "selected" if retentionUnit == 'minutes' }}>Minutes</option>
+				<option value="hours" {{ "selected" if retentionUnit == 'hours' }}>Hours</option>
+				<option value="days" {{ "selected" if retentionUnit == 'days' }}>Days</option>
+				<option value="weeks" {{ "selected" if retentionUnit == 'weeks' }}>Weeks</option>
+				<option value="months" {{ "selected" if retentionUnit == 'months' }}>Months</option>
+				<option value="years" {{ "selected" if retentionUnit == 'years' }}>Years</option>
+			</select>
+		</div>
+		<div class="col-sm-3"></div>
+	</div>
+
 	<div id="local" role="select-section" class="select-section {{ "active" if StorageLocation == 'local' }}">
 		<h3>Local file system</h3>
 
