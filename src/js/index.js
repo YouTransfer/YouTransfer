@@ -1,6 +1,7 @@
 'use strict';
 
 require('./components/alerts/alerts.js');
+require('./components/anchor/anchor.js');
 require('./components/baseurl/baseurl.js');
 require('./components/fileupload/fileupload.js');
 require('./components/form/form.js');

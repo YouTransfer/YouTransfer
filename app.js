@@ -74,6 +74,7 @@ app.use(function(req, res, next) {
 			}
 
 			context = _.assign(settings, context);
+			context.isXmlHtppRequest = (req.headers['x-requested-with'] && req.headers['x-requested-with'] == 'XMLHttpRequest');
 		} catch (err) {	}
 
 		try {
