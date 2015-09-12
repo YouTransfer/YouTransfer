@@ -2,48 +2,47 @@
 
 // ------------------------------------------------------------------------------------------ Component Dependencies
 
-// Unfortunately, Bootstrap requires global jQuery object
-var $ = window.jQuery = require('jquery');
-var Bootstrap = require('bootstrap');
+var $ = require('jquery');
 
 // ------------------------------------------------------------------------------------------ Component Variables
 
-var COMPONENT_ATTR = 'role="tablist"';
+var COMPONENT_ATTR = 'data-async';
 var COMPONENT_SELECTOR = '[' + COMPONENT_ATTR + ']';
-var XHR_LOADED_EVENT_NAMESPACED = 'xhr.loaded.tabs';
-var TAB_ROLE = 'tab';
+var CLICK_EVENT_NAMESPACED = 'click.anchor.async';
+var TARGET_ATTRIBUTE = 'data-target';
 
 // ------------------------------------------------------------------------------------------ Component Definition
 
-function Tabs(element) {
+function Anchor(element) {
 	var component = this;
 	component.$element = $(element);
 
-	$(document).off(XHR_LOADED_EVENT_NAMESPACED);
-	$(document).on(XHR_LOADED_EVENT_NAMESPACED, function(event, element) {
-		if(element.getAttribute('role') == TAB_ROLE) {
-			var url = element.getAttribute('href');
-			if(url) {
-				component.$element.find('li').removeClass('active');
-				component.$element.find('li a[href="' + url + '"]').closest('li').addClass('active');
-				history.pushState(null, document.title, url);
-			}
-		}
+	component.$element.off(CLICK_EVENT_NAMESPACED);
+	component.$element.on(CLICK_EVENT_NAMESPACED, function (e) {
+		e.preventDefault();
+
+		var url = this.getAttribute('href');
+		var target = this.getAttribute(TARGET_ATTRIBUTE);
+
+		$.get(url).done(function(content) {
+			$('#' + target).replaceWith(content);
+			$(document).trigger('xhr.loaded', [ element, $('#' + target) ]);
+		});
 	});
 }
 
 // ------------------------------------------------------------------------------------------ Component Initialization
 
 $(COMPONENT_SELECTOR).each(function(index, element) {
-	return new Tabs(element);
+	return new Anchor(element);
 });
 
 $(document).on('xhr.loaded', function(event, element, target) {
 	$(target).find(COMPONENT_SELECTOR).each(function(index, item) {
-		return new Tabs(item);
+		return new Anchor(item);
 	});
 });
 
 // ------------------------------------------------------------------------------------------ Component Exposure
 
-module.exports = Tabs;
+module.exports = Anchor;
