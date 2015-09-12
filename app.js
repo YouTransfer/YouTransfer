@@ -90,7 +90,7 @@ app.use(function(req, res, next) {
 		} catch (err) {
 			if(err.message.match(/template not found/)) {
 				try {
-					var output = nunjucks.render("404.html");
+					var output = nunjucks.render("404.html", context);
 					res.setHeader('Content-type', 'text/html');
 					res.writeHead(404);
 					res.end(output);
