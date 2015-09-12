@@ -52,57 +52,46 @@ app.viewEngine = nunjucks.configure(['src/views/', 'src/views/partials', 'src/vi
 
 app.use(function(req, res, next) {
 	res.renderTemplate = function(name, context, callback) {
-		try {
-			var settings = youtransfer.settings.get();
-			if(!path.isAbsolute(settings.localstoragepath)) {
-				settings.localstoragepath = path.resolve(nconf.get('basedir'), settings.localstoragepath);
-			}
-
-			context = _.assign(settings, context);
-		} catch (err) {	}
-
-		nunjucks.render(name, context, callback);
+		youtransfer.settings.get(function(err, settings) {
+			context = err ? context : _.assign(settings, context);
+			nunjucks.render(name, context, callback);
+		});
 	};
 
 	res.render = function(name, context, callback) {
 		res.setHeader('Server', 'youtransfer.io');
 
-		try {
-			var settings = youtransfer.settings.get();
-			if(!path.isAbsolute(settings.localstoragepath)) {
-				settings.localstoragepath = path.resolve(nconf.get('basedir'), settings.localstoragepath);
-			}
-
-			context = _.assign(settings, context);
+		youtransfer.settings.get(function(err, settings) {
+			context = err ? context : _.assign(settings, context);
 			context.isXmlHtppRequest = (req.headers['x-requested-with'] && req.headers['x-requested-with'] == 'XMLHttpRequest');
-		} catch (err) {	}
 
-		try {
-			var template = app.viewEngine.getTemplate(name);
-			if(template.path.match(/\/views\/pages\//)) {
-				var output = nunjucks.render(name, context, callback);
-				res.setHeader('Content-type', 'text/html');
-				res.writeHead(200);
-				res.end(output);
-			} else {
-				throw new Error("The selected template is not a page, throwing 'template not found' error for proper handling");
-			}
-		} catch (err) {
-			if(err.message.match(/template not found/)) {
-				try {
-					var output = nunjucks.render("404.html", context);
+			try {
+				var template = app.viewEngine.getTemplate(name);
+				if(template.path.match(/\/views\/pages\//)) {
+					var output = nunjucks.render(name, context, callback);
 					res.setHeader('Content-type', 'text/html');
-					res.writeHead(404);
+					res.writeHead(200);
 					res.end(output);
-				} catch(err) {
-					res.writeHead(404);
-					res.end("Resource not found");
+				} else {
+					throw new Error("The selected template is not a page, throwing 'template not found' error for proper handling");
 				}
-			} else {
-				res.writeHead(500);
-				res.end(err.message);
+			} catch (err) {
+				if(err.message.match(/template not found/)) {
+					try {
+						var output = nunjucks.render("404.html", context);
+						res.setHeader('Content-type', 'text/html');
+						res.writeHead(404);
+						res.end(output);
+					} catch(err) {
+						res.writeHead(404);
+						res.end("Resource not found");
+					}
+				} else {
+					res.writeHead(500);
+					res.end(err.message);
+				}
 			}
-		}
+		});
 	};
 	next();
 });
@@ -114,10 +103,13 @@ require('./lib/routes.js')(app, nconf);
 
 // ------------------------------------------------------------------------------------------ App Scheduling
 
-var settings = youtransfer.settings.get();
-scheduler.add('cleanup', settings.cleanupSchedule, youtransfer.cleanup);
-youtransfer.on('settings.push', function(err, data) {
-	scheduler.reschedule('cleanup', data.cleanupSchedule, youtransfer.cleanup);
+youtransfer.settings.get(function(err, settings) {
+	if(!err) {
+		scheduler.add('cleanup', settings.cleanupSchedule, youtransfer.cleanup);
+		youtransfer.on('settings.push', function(err, data) {
+			scheduler.reschedule('cleanup', data.cleanupSchedule, youtransfer.cleanup);
+		});
+	}
 });
 
 // ------------------------------------------------------------------------------------------ App Execution
