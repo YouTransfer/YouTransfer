@@ -25,19 +25,9 @@
 	</div>
 
 	<div class="col-md-9">
-		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="general">
-				{% include "settings.general.html" %}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="transfer">
-				{% include "settings.dropzone.html" %}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="email">
-				{% include "settings.email.html" %}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="storage">
-				{% include "settings.storage.html" %}
-			</div>
+		<div class="tab-content" id="tab-content">
+			{% block tabcontent %}
+			{% endblock %}
 		</div>
 	</div>
 </div>

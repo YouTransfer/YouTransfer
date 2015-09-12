@@ -1,0 +1,67 @@
+{% extends "settings.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="transfer">
+	<h1>Transfer</h1>
+
+	{%if isPostback %}
+		{%if success %}
+		<div class="alert alert-success alert-dismissible fade in" role="alert">
+			<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<strong>Success!</strong> Your changes have been saved.
+		</div>
+		{% else %}
+		<div class="alert alert-danger alert-dismissible fade in" role="alert">
+			<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<strong>Error!</strong> Your changes could not be saved.
+		</div>
+		{% endif %}
+	{% endif %}
+
+<form class="form-horizontal" method="post" data-xhrform data-xhrform-target=".settings" data-xhrform-replace="true">
+
+		<div class="form-group">
+			<label for="maxFileSize" class="col-sm-3 control-label">Max. file size (MB)</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="settings[dropzone][maxFileSize]" id="maxFileSize" value="{{ dropzone.maxFileSize }}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label for="acceptedFiles" class="col-sm-3 control-label">Accepted files</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="settings[dropzone][acceptedFiles]" id="acceptedFiles" value="{{ dropzone.acceptedFiles }}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label for="parallelUploads" class="col-sm-3 control-label">Parallel uploads</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="settings[dropzone][parallelUploads]" id="parallelUploads" value="{{ dropzone.parallelUploads }}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<div class="checkbox">
+					<label for="forceFallback">
+						<input type="checkbox" value="true" name="settings[dropzone][forceFallback]" id="forceFallback" {{ "checked='checked'" if dropzone.forceFallback }}>
+						Simplified interface
+					</label>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-6 text-right">
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+	</form>
+</div>
+{% endblock %}

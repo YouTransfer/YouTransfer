@@ -29,6 +29,7 @@ restify.cookieParser = require('restify-cookies');
 
 var app = restify.createServer(); 
 app.static = new nstatic.Server('./dist');
+app.pre(restify.pre.sanitizePath());
 app.use(restify.bodyParser());
 app.use(restify.queryParser());
 app.use(restify.cookieParser.parse);
