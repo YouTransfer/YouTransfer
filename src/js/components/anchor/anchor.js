@@ -10,6 +10,7 @@ var COMPONENT_ATTR = 'data-async';
 var COMPONENT_SELECTOR = '[' + COMPONENT_ATTR + ']';
 var CLICK_EVENT_NAMESPACED = 'click.anchor.async';
 var TARGET_ATTRIBUTE = 'data-target';
+var TITLE_ATTRIBUTE = 'data-title';
 
 // ------------------------------------------------------------------------------------------ Component Definition
 
@@ -23,10 +24,15 @@ function Anchor(element) {
 
 		var url = this.getAttribute('href');
 		var target = this.getAttribute(TARGET_ATTRIBUTE);
+		var title = this.getAttribute(TITLE_ATTRIBUTE) || document.title;
 
 		$.get(url).done(function(content) {
 			$('#' + target).replaceWith(content);
 			$(document).trigger('xhr.loaded', [ element, $('#' + target) ]);
+
+			if(history.pushState) {
+				history.pushState(null, title, url);
+			}
 		});
 	});
 }

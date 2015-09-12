@@ -1,0 +1,21 @@
+{% extends "settings.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="finalise">
+	<h1>Finalise</h1>
+
+	<p>
+		If you've completed configuring your YouTransfer instance, it is recommended to finalise the settings. This will remove the 'Settings' link from the bottom-right corner. Access to the Settings pages are restricted. Changes must be done directly in the 'settings.json' file located in the root of the installation directory.
+	</p>
+
+	<form class="form-horizontal" method="post">
+		<div class="form-group">
+			<div class="col-sm-9">
+				<a href="/settings/general" role="tab" data-async data-target="tab-content" class="btn btn-default">I'm not done yet!</a>
+				<button type="submit" class="btn btn-primary">I'm ready for Lockdown</button>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>					
+	</form>
+</div>
+{% endblock %}

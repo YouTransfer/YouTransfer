@@ -64,7 +64,8 @@
 /*// ------------------------------------------------------------------------------------------ Settings */
 
 .settings {
-	margin: 40px 5px 0;
+	position: relative;
+	margin: 40px 5px 70px;
 	background-color: #eee;
 	min-height: 450px;
 	border-radius: 4px;
@@ -112,4 +113,36 @@
 .settings .tab-content h1 {
 	border-bottom: 1px solid #eee;
 	margin-top: 0px;
+}
+
+.settings .finalise {
+	position: absolute;
+	bottom: 2px;
+	padding: 10px;
+}
+
+@media (max-width: @screen-xs-min) {
+	.settings .finalise {
+		width: 100%;
+		margin-top: 40px;
+	}
+
+	.settings .tab-content {
+		margin-bottom: 20px;
+	}
+}
+
+@media (max-width: @screen-md-min) {
+	.settings .finalise {
+		width: 100%;
+		margin-top: 40px;
+	}
+
+	.settings .tab-content {
+		margin-bottom: 20px;
+	}
+}
+
+.settings .finalise a {
+	width: 100%;
 }
