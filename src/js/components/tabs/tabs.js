@@ -26,7 +26,6 @@ function Tabs(element) {
 			if(url) {
 				component.$element.find('li').removeClass('active');
 				component.$element.find('li a[href="' + url + '"]').closest('li').addClass('active');
-				history.pushState(null, document.title, url);
 			}
 		}
 	});
