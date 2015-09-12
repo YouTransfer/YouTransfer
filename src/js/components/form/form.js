@@ -20,10 +20,11 @@ function Form(element) {
 	component.$element = $(element);
 
 	component.$element.ajaxForm({
-		target: $(element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element,
+		target: $('#' + element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element,
 		replaceTarget: element.getAttribute(FORM_REPLACETARGET_ATTRIBUTE) || false,
 		success: function() {
-			$(document).trigger('xhrform-success', $(element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element)
+			var target = $('#' + element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element; 
+			$(document).trigger('xhr.loaded', [ element, target ]);
 		}
 	});
 }
@@ -34,9 +35,9 @@ $(COMPONENT_SELECTOR).each(function(index, element) {
 	return new Form(element);
 });
 
-$(document).on('xhrform-success', function(event, element) {
-	$(element).find(COMPONENT_SELECTOR).each(function(index, element) {
-		return new Form(element);
+$(document).on('xhr.loaded', function(event, element, target) {
+	$(target).find(COMPONENT_SELECTOR).each(function(index, item) {
+		return new Form(item);
 	});
 });
 

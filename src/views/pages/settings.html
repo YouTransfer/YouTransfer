@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% if not isXmlHtppRequest %}
 <div class="settings">
 	<div class="col-md-3">
 		<ul class="nav nav-tabs nav-stacked">
@@ -9,39 +10,32 @@
 			</li>
 		</ul>
 		<ul class="nav nav-tabs nav-stacked nav-pills" role="tablist">
-			<li role="presentation" class="active">
-				<a href="#general" aria-controls="general" role="tab">General</a>
+			<li role="presentation" class="{{ "active" if activeTab == 'general' }}">
+				<a href="/settings/general" aria-controls="general" role="tab" data-async data-target="tab-content">General</a>
 			</li>
-			<li role="presentation">
-				<a href="#transfer" aria-controls="transfer" role="tab">Transfer</a>
+			<li role="presentation" class="{{ "active" if activeTab == 'transfer' }}">
+				<a href="/settings/transfer" aria-controls="transfer" role="tab" data-async data-target="tab-content">Transfer</a>
 			</li>
-			<li role="presentation">
-				<a href="#email" aria-controls="email" role="tab">Email</a>
+			<li role="presentation" class="{{ "active" if activeTab == 'email' }}">
+				<a href="/settings/email" aria-controls="email" role="tab" data-async data-target="tab-content">Email</a>
 			</li>
-			<li role="presentation">
-				<a href="#storage" aria-controls="storage" role="tab">Storage</a>
+			<li role="presentation" class="{{ "active" if activeTab == 'storage' }}">
+				<a href="/settings/storage" aria-controls="storage" role="tab" data-async data-target="tab-content">Storage</a>
 			</li>
 		</ul>
 	</div>
 
 	<div class="col-md-9">
-		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="general">
-				{% include "settings.general.html" %}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="transfer">
-				{% include "settings.dropzone.html" %}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="email">
-				{% include "settings.email.html" %}
-			</div>
-			<div role="tabpanel" class="tab-pane" id="storage">
-				{% include "settings.storage.html" %}
-			</div>
+{% endif %}		
+		<div class="tab-content" id="tab-content">
+			{% block tabcontent %}
+			{% endblock %}
 		</div>
+{% if not isXmlHtppRequest %}
 	</div>
 	<div class="finalise col-md-3">
 		<a class="btn btn-primary">Finalise</a>
 	</div>
 </div>
+{% endif %}		
 {% endblock %}
