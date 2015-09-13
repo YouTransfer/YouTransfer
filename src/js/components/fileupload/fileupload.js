@@ -3,6 +3,7 @@
 // ------------------------------------------------------------------------------------------ Component Dependencies
 
 var $ = require('jquery');
+var uuid = require('uuid');
 var Dropzone = require('dropzone');
 Dropzone.autoDiscover = false;
 
@@ -29,6 +30,11 @@ function Fileupload(element) {
 	var component = this;
 	component.$element = $(element);
 	component.$element.addClass(DROPZONE_CLASS);
+
+	component.bundle = {
+		id: uuid.v4(),
+		files: []
+	};
 
 	component.previewTemplate = component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).html();
 	component.$element.find(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).empty();
@@ -60,10 +66,14 @@ function Fileupload(element) {
 				component.$element.addClass("dz-files-added");
 			});
 
+			component.dropzone.on("sending", function(file, xhr, formData) {
+				formData.append("bundle", component.bundle.id);
+			});
+
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
 				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
-				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append(response.id);
+				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/"' + response.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + response.id + '</a>');
 
 				if($(DROPZONE_UPLOAD_COMPLETE_SELECTOR).length == 0) {
 					component.$completedContainer
@@ -71,15 +81,24 @@ function Fileupload(element) {
 							 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
 				};
 
-				var file = encodeURIComponent(JSON.stringify({
+				var file = {
 					id: response.id,
 					name: response.name,
 					size: response.filesize
-				}));
+				};
 
+				component.bundle.files.push(file);
 				component.$completedContainer
 						 .find('form')
-						 .append('<input type="hidden" name="files[]" value="' + file + '" />');
+						 .append('<input type="hidden" name="files[]" value="' + encodeURIComponent(JSON.stringify(file)) + '" />');
+			});
+
+			component.dropzone.on('queuecomplete', function() {
+				$.post('/upload/bundle', {
+					bundle: JSON.stringify(component.bundle)
+				}).done(function() {
+					$(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).prepend('<div class="dz-preview-bundle"><span class="glyphicon glyphicon-download-alt"></span> <a href="/bundle/' + component.bundle.id + '/">Download all files as a zip archive (<span class="glyphicon glyphicon-compressed"></span>)</a></div>');
+				});
 			});
 
 			component.dropzone.on("reset", function(progress) {

@@ -7,6 +7,7 @@
     "node": ">0.12.x"
   },
   "dependencies": {
+    "archiver": "^0.15.1",
     "aws-sdk": "^2.1.45",
     "commander": "^2.8.1",
     "compression": "^1.5.2",
@@ -27,7 +28,8 @@
     "nunjucks": "^1.3.4",
     "restify": "^2.8.2",
     "restify-cookies": "^0.1.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "uuid": "^2.0.1"
   },
   "scripts": {
     "dist": "gulp clean && gulp dist",
