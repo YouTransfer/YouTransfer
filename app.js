@@ -45,7 +45,7 @@ app.use(function(req,res,next) {
 });
 
 // Initializing Nunjucks template engine + adding it to Restify
-app.viewEngine = nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages', 'src/views/errors'], {
+app.viewEngine = nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages', 'src/views/errors', 'src/templates/'], {
 	autoescape: true,
 	watch: (nconf.get('NODE_ENV') != "production")
 });

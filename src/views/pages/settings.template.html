@@ -1,0 +1,81 @@
+{% extends "settings.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="templates">
+	<h1>Templates</h1>
+
+	{%if isPostback %}
+		{%if success %}
+		<div class="alert alert-success alert-dismissible fade in" role="alert">
+			<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<strong>Success!</strong> Your changes have been saved.
+		</div>
+		{% else %}
+		<div class="alert alert-danger alert-dismissible fade in" role="alert">
+			<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<strong>Error!</strong> Your changes could not be saved.
+		</div>
+		{% endif %}
+	{% endif %}
+
+	<noscript>
+		<p>
+			The template editor is only available when using a modern browser (e.g. the latest version of Google Chrome, Apple Safari, Mozilla Firefox or Microsoft Edge) with javascript enabled.
+		</p>
+	</noscript>
+
+	<form class="form-horizontal" method="post" data-select-content data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true" data-js-only>
+
+		<div class="form-group">
+			<label for="template" class="col-sm-3 control-label">Select template</label>
+			<div class="col-sm-6">
+				<select class="form-control" name="template" id="template" data-select>
+					<option {{ "selected" if not template }}>Select template</option>
+					<option value="message.html" data-select-target="email" {{ "selected" if template == 'message.html' }}>Email template</option>
+				</select>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div id="email" role="select-section" class="select-section {{ "active" if template == 'message.html' }}">
+			<h3>Email template</h3>
+
+			<div class="form-group">
+				<div class="col-sm-12">
+					<textarea class="form-control" rows="15" name="body" data-template-editor data-template="/settings/template/message.html"></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-12 text-right">
+					<button type="submit" class="btn btn-primary">Save</button>
+				</div>
+			</div>
+
+			<h4>Variables</h4>
+			<p>
+				You can use the following variables in the email template:
+			</p>
+
+			<dl>
+				<dt>{% raw %}{{ email.from }}{% endraw %}</dt>
+				<dd>The email address provided in the "Your email" field. This is not the actual sender e-mail address, which can be conifured in the Email settings tab. The goal of this field is to identify the sender to the receiver.</dd>
+				<dt>{% raw %}{{ email.to }}{% endraw %}</dt>
+				<dd>The recipient's email address provided in the "Your friend's email" field. This is the actual email address that will receive the message.</dd>
+				<dt>{% raw %}{{ email.body }}{% endraw %}</dt>
+				<dd>The additional message provided in the "Message" field.</dd>
+				<dt>{% raw %}{{ files }}{% endraw %}</dt>
+				<dd>A collection with <em>{% raw %}{{ file }}{% endraw %}</em> objects.</dd>
+				<dt>{% raw %}{{ file.id }}{% endraw %}</dt>
+				<dd>The identifier or token that can be used to retrieve the file.</dd>
+				<dt>{% raw %}{{ file.name }}{% endraw %}<dt>
+				<dd>The file name.</dd>
+				<dt>{% raw %}{{ file.size }}{% endraw %}</dd>
+				<dd>The file size (with unit formatting).</dd>
+				<dt>{% raw %}{{ file.link }}{% endraw %}</dt>
+				<dd>The direct download link to retrieve the file.</dd>
+			</dl>
+		</div>
+	</form>
+</div>
+{% endblock %}
