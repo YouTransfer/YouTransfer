@@ -95,6 +95,12 @@ $(COMPONENT_SELECTOR).each(function(index, element) {
 	return new Fileupload(element);
 });
 
+$(document).on('xhr.loaded', function(event, element, target) {
+	$(target).find(COMPONENT_SELECTOR).each(function(index, item) {
+		return new Fileupload(item);
+	});
+});
+
 // ------------------------------------------------------------------------------------------ Component Exposure
 
 module.exports = Fileupload;

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="hp jumbotron">
+<div class="hp jumbotron" id="hp">
 	<header class="col-md-12">
 		<h1>{{ title }}</h1>
 		<h2>{{ subtitle }}</h2>
@@ -25,7 +25,7 @@
 			<hr class="separator-ruler visible-xs-block visible-sm-block" />
 		</div>
 
-		{% include "download.html" %}
+		{% include "gettoken.html" %}
 	</div>
 
 </div>

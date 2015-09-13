@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="dl hp jumbotron" id="hp">
+	<header class="col-md-12">
+		<h1>{{ title }}</h1>
+		<h2>{{ subtitle }}</h2>
+	</header>
+	{% include "gettoken.html" %}
+	<div class="text-center">
+		<a href="/" data-async data-target="hp">or return to homepage</a>
+	</div>
+</div>
+{% endblock %}
