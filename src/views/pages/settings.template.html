@@ -58,6 +58,8 @@
 			</p>
 
 			<dl>
+				<dt>{% raw %}{{ baseUrl }}{% endraw %}</dt>
+				<dd>The base url of your YouTransfer instance.</dd>
 				<dt>{% raw %}{{ email.from }}{% endraw %}</dt>
 				<dd>The email address provided in the "Your email" field. This is not the actual sender e-mail address, which can be conifured in the Email settings tab. The goal of this field is to identify the sender to the receiver.</dd>
 				<dt>{% raw %}{{ email.to }}{% endraw %}</dt>
@@ -74,6 +76,10 @@
 				<dd>The file size (with unit formatting).</dd>
 				<dt>{% raw %}{{ file.link }}{% endraw %}</dt>
 				<dd>The direct download link to retrieve the file.</dd>
+				<dt>{% raw %}{{ bundle.id }}{% endraw %}</dt>
+				<dd>The ZIP bundle identifier.</dd>
+				<dt>{% raw %}{{ bundle.link }}{% endraw %}</dt>
+				<dd>The direct download link to retrieve the ZIP bundle.</dd>
 			</dl>
 		</div>
 	</form>

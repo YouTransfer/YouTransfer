@@ -98,6 +98,9 @@ function Fileupload(element) {
 					bundle: JSON.stringify(component.bundle)
 				}).done(function() {
 					$(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).prepend('<div class="dz-preview-bundle"><span class="glyphicon glyphicon-download-alt"></span> <a href="/bundle/' + component.bundle.id + '/">Download all files as a zip archive (<span class="glyphicon glyphicon-compressed"></span>)</a></div>');
+					component.$completedContainer
+							 .find('form')
+							 .append('<input type="hidden" name="bundle" value="' + component.bundle.id + '" />');					
 				});
 			});
 
