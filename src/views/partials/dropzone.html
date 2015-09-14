@@ -3,7 +3,7 @@
 		<div class="dz-preview-description col-md-7">
 			<span data-dz-name>{{ name }}</span> (<span data-dz-size>{{ filesize }}</span>)
 			<div class="dz-preview-result">
-				<span class="text-success" data-dz-link>{%if isPostback %}{{ id }}{% endif %}</span>
+				<span class="text-success" data-dz-link>{%if isPostback %}<span class="glyphicon glyphicon-download-alt"></span> <a href="/download/{{ id }}/">{{ id }}</a>{% endif %}</span>
 				<span class="text-danger" data-dz-errormessage></span>
 			</div>
 		</div>
@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="dz-preview-actions col-md-1 text-right">
-			<button data-dz-remove type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>			
+			<button data-dz-remove type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		</div>
 		{% endif %}
 	</div>

@@ -44,6 +44,12 @@ app.use(function(req,res,next) {
 	next();
 });
 
+// Add XmlHttpRequest property to request object
+app.use(function(req, res, next) {
+	req.isXmlHtppRequest = (req.headers['x-requested-with'] && req.headers['x-requested-with'] == 'XMLHttpRequest');
+	next();
+});
+
 // Initializing Nunjucks template engine + adding it to Restify
 app.viewEngine = nunjucks.configure(['src/views/', 'src/views/partials', 'src/views/pages', 'src/views/errors', 'src/templates/'], {
 	autoescape: true,
@@ -63,7 +69,7 @@ app.use(function(req, res, next) {
 
 		youtransfer.settings.get(function(err, settings) {
 			context = err ? context : _.assign(settings, context);
-			context.isXmlHtppRequest = (req.headers['x-requested-with'] && req.headers['x-requested-with'] == 'XMLHttpRequest');
+			context.isXmlHtppRequest = req.isXmlHtppRequest;
 
 			try {
 				var template = app.viewEngine.getTemplate(name);
