@@ -12,8 +12,6 @@ nconf.set('basedir', __dirname);
 
 // ------------------------------------------------------------------------------------------ App Dependencies
 
-var fs = require("fs");
-var path = require("path");
 var _ = require("lodash");
 var scheduler = require('./lib/scheduler.js');
 var youtransfer = require('./lib/youtransfer.js');
@@ -105,14 +103,14 @@ app.use(function(req, res, next) {
 // ------------------------------------------------------------------------------------------ App Routing
 
 // Initialize routes
-require('./lib/routes.js')(app, nconf);
+require('./lib/routes')(app, nconf);
 
 // ------------------------------------------------------------------------------------------ App Scheduling
 
 youtransfer.settings.get(function(err, settings) {
 	if(!err) {
 		scheduler.add('cleanup', settings.cleanupSchedule, youtransfer.cleanup);
-		youtransfer.on('settings.push', function(err, data) {
+		youtransfer.settings.on('settings.push', function(err, data) {
 			scheduler.reschedule('cleanup', data.cleanupSchedule, youtransfer.cleanup);
 		});
 	}

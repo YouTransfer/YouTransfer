@@ -73,7 +73,7 @@ function Fileupload(element) {
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
 				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
-				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/"' + response.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + response.id + '</a>');
+				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + response.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + response.id + '</a>');
 
 				if($(DROPZONE_UPLOAD_COMPLETE_SELECTOR).length == 0) {
 					component.$completedContainer
