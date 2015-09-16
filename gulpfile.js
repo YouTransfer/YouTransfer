@@ -16,6 +16,7 @@ var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
+var karma = require('gulp-karma');
 var del = require('del');
 var browserify = require('browserify');
 var buffer = require('vinyl-buffer');
@@ -30,6 +31,7 @@ gulp.task('browserifyAppTask', browserifyAppTask);
 gulp.task('browserifyVendorTask', browserifyVendorTask);
 gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
+gulp.task('testComponentsTask', testComponentsTask);
 
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
@@ -90,6 +92,14 @@ function lessTask() {
 			   .pipe(cssmin())
 			   .on('error', log)
 			   .pipe(gulp.dest(paths.dist + '/css'));
+};
+
+function testComponentsTask() {
+	return gulp.src([])
+			   .pipe(karma({ configFile: './test/components/karma.conf.js', action: 'run'}))
+			   .on('error', function (err) {
+					throw err;
+			    });
 };
 
 // ------------------------------------------------------------------------------------------ Functions
