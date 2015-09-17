@@ -92,6 +92,73 @@ describe('YouTransfer Local Storage module', function() {
 		});
 	});
 
+	it('should continue with erronous callback if uploaded file cannot be read', function(done) {
+		var uploadedFile = {
+			path: path.join(__dirname, 'file.tmp'),
+			data: 'my awesome content',
+			context: {
+				path: path.join(__dirname, 'file.binary'),
+				jsonPath: path.join(__dirname, 'file.json')
+			}
+		}
+
+		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+			dir.should.equals(__dirname);
+			callback();
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, callback) {
+			file.should.equals(uploadedFile.path);
+			callback('error', null);
+		});
+
+		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
+			should.exist(err);
+			err.should.equals('error');
+			done();
+		});
+	});
+
+	it('should continue with erronous callback if uploaded file cannot be written', function(done) {
+		var uploadedFile = {
+			path: path.join(__dirname, 'file.tmp'),
+			data: 'my awesome content',
+			context: {
+				path: path.join(__dirname, 'file.binary'),
+				jsonPath: path.join(__dirname, 'file.json')
+			}
+		}
+
+		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+			dir.should.equals(__dirname);
+			callback();
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, callback) {
+			file.should.equals(uploadedFile.path);
+			callback(null, uploadedFile.data);
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			if(typeof encoding == "string") {
+				file.should.equals(uploadedFile.context.jsonPath);
+				data.should.equals(JSON.stringify(uploadedFile.context));
+				callback('error');
+			} else {
+				callback = encoding;
+				file.should.equals(uploadedFile.context.path);
+				data.should.equals(uploadedFile.data);
+				callback('error');
+			}
+		});
+
+		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
+			should.exist(err);
+			err.should.equals('error');
+			done();
+		});
+	});
+
 	// -------------------------------------------------------------------------------------- Testing bundle creation
 
 	it('should be possible to create a bundle', function(done) {
@@ -157,6 +224,38 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.archive(token, res, function(err) {
 			should.not.exist(err);
+		});
+
+	});
+
+	it('continue with erronous callback if archive token retrieval throws error', function() {
+
+		var token = 'bundle';
+		var bundle = {
+			files: [
+				{
+					id: 'file',
+					name: 'filename'
+				}
+			]
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback('error', null);
+		});
+
+		var res = {
+			setHeader: function() {},
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+
+		provider.archive(token, res, function(err) {
+			should.exist(err);
+			err.should.equals('error');
 		});
 
 	});
