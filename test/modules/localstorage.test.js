@@ -3,7 +3,7 @@
 
 var sinon = require('sinon');
 var should = require('chai').should();
-var localstorage = require('../../lib/localstorage.js');
+var localstorage = require('../../lib/localstorage');
 var provider = localstorage({ localstoragepath: __dirname });
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
@@ -30,8 +30,24 @@ describe('YouTransfer Local Storage module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing constructor
 
-	it('should be possible to set options', function() {
-		provider.localstoragepath.should.equals(__dirname);
+	it('should be possible to set options by Object', function() {
+		var instance = localstorage({ localstoragepath: __dirname });
+		instance.localstoragepath.should.equals(__dirname);
+	});
+
+	it('should be possible to set options by String', function() {
+		var instance = localstorage(__dirname);
+		instance.localstoragepath.should.equals(__dirname);
+	});
+
+	it('should throw an error when setting options by Integer', function() {
+		try {
+			var instance = localstorage(100);
+			should.not.exist(instance);
+		} catch(err) {
+			should.exist(err);
+			err.should.equals('Invalid options provided');
+		}
 	});
 
 	// -------------------------------------------------------------------------------------- Testing file upload
@@ -147,7 +163,7 @@ describe('YouTransfer Local Storage module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing file download
 
-	it('should be possible to download a file', function() {
+	it('should be possible to download a file', function(done) {
 
 		var token = 'file';
 		var context = {
@@ -181,8 +197,9 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.download(token, res, function(err) {
 			should.not.exist(err);
+			resMock.verify();
+			done();
 		});
-
 	});
 
 	// -------------------------------------------------------------------------------------- Testing file purge
