@@ -28,3 +28,4 @@ node_modules
 dist
 uploads
 settings.json
+test/unit-test-coverage

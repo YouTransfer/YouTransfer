@@ -17,6 +17,7 @@ var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
 var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
 var del = require('del');
 var browserify = require('browserify');
 var buffer = require('vinyl-buffer');
@@ -77,7 +78,7 @@ function browserifyVendorTask() {
 function copyStaticTask() {
 	gulp.src(paths.bootstrap + '/**/*', {base: paths.bootstrap})
 		.pipe(filter(['**/fonts/**']))
-		.on('error', gutil.log)
+		.on('error', log)
 		.pipe(gulp.dest(paths.dist));
 
 	return gulp.src(paths.src + '/**/*', {base: paths.src})
@@ -95,11 +96,21 @@ function lessTask() {
 };
 
 function testModulesTask() {
-	return gulp.src(['./test/modules/**/*.test.js'])
-			   .pipe(mocha({reporter: 'spec'}))
-			   .on('error', function (err) {
-					throw err;
-			    });
+	return gulp.src(['./lib/*.js'])
+			   .pipe(istanbul({includeUntested: true}))
+			   .pipe(istanbul.hookRequire())
+			   .on('finish', function () {
+					gulp.src(['./test/modules/**/*.test.js'])
+						.pipe(mocha({reporter: 'spec'}))
+						.pipe(istanbul.writeReports({ 
+							dir: './test/unit-test-coverage', 
+							reporters: [ 'html' ], 
+							reportOpts: {
+								dir: './test/unit-test-coverage'
+							}
+						}))
+						.on('error', log);
+			   });
 };
 
 // ------------------------------------------------------------------------------------------ Functions
