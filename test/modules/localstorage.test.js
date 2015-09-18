@@ -1,10 +1,10 @@
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
+require('date-utils');
 var sinon = require('sinon');
 var should = require('chai').should();
 var localstorage = require('../../lib/localstorage');
-var provider = localstorage({ localstoragepath: __dirname });
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
@@ -17,15 +17,18 @@ var mime = require('mime');
 
 describe('YouTransfer Local Storage module', function() {
 	var sandbox;
+	var provider;
 
 	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
 		sandbox = sinon.sandbox.create();
+		provider = localstorage({ localstoragepath: __dirname });
 	});
 
 	afterEach(function() {
 		sandbox.restore();
+		provider = null;
 	});
 
 	// -------------------------------------------------------------------------------------- Testing constructor
@@ -33,6 +36,16 @@ describe('YouTransfer Local Storage module', function() {
 	it('should be possible to set options by Object', function() {
 		var instance = localstorage({ localstoragepath: __dirname });
 		instance.localstoragepath.should.equals(__dirname);
+	});
+
+	it('should be possible to set options by Null Object', function() {
+		var instance = localstorage(null);
+		instance.localstoragepath.should.equals(path.resolve('./lib'));
+	});
+
+	it('should be possible to set options by empty Object', function() {
+		var instance = localstorage({});
+		instance.localstoragepath.should.equals(path.resolve('./lib'));
 	});
 
 	it('should be possible to set options by String', function() {
@@ -228,7 +241,16 @@ describe('YouTransfer Local Storage module', function() {
 
 	});
 
-	it('continue with erronous callback if archive token retrieval throws error', function() {
+	it('should continue with erronous callback if archive token is unknown', function() {
+
+		provider.archive(null, null, function(err) {
+			should.exist(err);
+			err.should.equals('Bundle identifier unknown');
+		});
+
+	});	
+
+	it('should continue with erronous callback if archive token retrieval throws error', function() {
 
 		var token = 'bundle';
 		var bundle = {
@@ -260,6 +282,38 @@ describe('YouTransfer Local Storage module', function() {
 
 	});
 
+	it('should continue with erronous callback if archive bundle retrieval throws error', function() {
+
+		var token = 'bundle';
+		var bundle = {
+			files: [
+				{
+					id: 'file',
+					name: 'filename'
+				}
+			]
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, '{}');
+		});
+
+		var res = {
+			setHeader: function() {},
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+
+		provider.archive(token, res, function(err) {
+			should.exist(err);
+			err.should.equals('Invalid bundle data');
+		});
+
+	});	
+
 	// -------------------------------------------------------------------------------------- Testing file download
 
 	it('should be possible to download a file', function(done) {
@@ -268,7 +322,7 @@ describe('YouTransfer Local Storage module', function() {
 		var context = {
 			name: 'filename',
 			size: 10,
-			mimetype: 'binary'
+			type: 'binary'
 		};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
@@ -284,7 +338,7 @@ describe('YouTransfer Local Storage module', function() {
 		streamMock.expects("pipe").once();
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
-		sandbox.stub(mime, 'lookup').returns(context.mimetype);
+		sandbox.stub(mime, 'lookup').returns(context.type);
 
 		var res = {
 			setHeader: function() {},
@@ -292,7 +346,7 @@ describe('YouTransfer Local Storage module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="' + context.name + '"');
 		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
-		resMock.expects("setHeader").once().withArgs('Content-type', context.mimetype);
+		resMock.expects("setHeader").once().withArgs('Content-type', context.type);
 
 		provider.download(token, res, function(err) {
 			should.not.exist(err);
@@ -301,11 +355,78 @@ describe('YouTransfer Local Storage module', function() {
 		});
 	});
 
+	it('should be possible to download a file even if mimetype cannot be resolved automatically', function(done) {
+
+		var token = 'file';
+		var context = {
+			name: 'filename',
+			size: 10,
+			type: 'binary'
+		};
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(context));
+		});
+
+		var stream = {
+			pipe: function() {}
+		}
+		var streamMock = sandbox.mock(stream);
+		streamMock.expects("pipe").once();
+		sandbox.stub(fs, 'createReadStream').returns(stream);
+
+		sandbox.stub(mime, 'lookup').returns(null);
+
+		var res = {
+			setHeader: function() {},
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="' + context.name + '"');
+		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
+		resMock.expects("setHeader").once().withArgs('Content-type', context.type);
+
+		provider.download(token, res, function(err) {
+			should.not.exist(err);
+			resMock.verify();
+			done();
+		});
+	});
+
+	it('continue with erronous callback if download token is unknown', function(done) {
+
+		provider.download(null, null, function(err) {
+			should.exist(err);
+			err.should.equals('invalid token exception');
+			done();
+		});
+
+	});
+
+	it('should continue with erronous callback if download token retrieval throws error', function(done) {
+
+		var token = 'file';
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback('error', null);
+		});
+
+		provider.download(token, null, function(err) {
+			should.exist(err);
+			err.should.equals('error');
+			done();
+		});
+
+	});
+
 	// -------------------------------------------------------------------------------------- Testing file purge
 
-	it('should be possible to purge files', function(done) {
+	it('should purge files with expire date in the past', function(done) {
 		sandbox.stub(fs, 'readdir', function (path, callback) {
-			callback(null, ['file.json']);
+			callback(null, ['file.json', 'file.tmp']);
 		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
@@ -316,6 +437,44 @@ describe('YouTransfer Local Storage module', function() {
 		provider.on('localstorage.purged', function(err, paths) {
 			var paths = JSON.stringify(paths);
 			paths.should.equals('["file.binary","file.json"]');
+			done();
+		});
+
+		provider.purge();
+	});
+
+	it('should not purge files if there is no expire date set', function(done) {
+		sandbox.stub(fs, 'readdir', function (path, callback) {
+			callback(null, ['file.json', 'file.tmp']);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			file.should.equals(path.join(__dirname, 'file.json'));
+			callback(null, JSON.stringify({ path: 'file.binary', jsonPath: 'file.json' }));
+		});
+
+		provider.on('localstorage.purged', function(err, paths) {
+			var paths = JSON.stringify(paths);
+			paths.should.equals('[]');
+			done();
+		});
+
+		provider.purge();
+	});
+
+	it('should not purge files if there is expire date is set in the future', function(done) {
+		sandbox.stub(fs, 'readdir', function (path, callback) {
+			callback(null, ['file.json', 'file.tmp']);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			file.should.equals(path.join(__dirname, 'file.json'));
+			callback(null, JSON.stringify({ expires: Date.tomorrow(), path: 'file.binary', jsonPath: 'file.json' }));
+		});
+
+		provider.on('localstorage.purged', function(err, paths) {
+			var paths = JSON.stringify(paths);
+			paths.should.equals('[]');
 			done();
 		});
 
