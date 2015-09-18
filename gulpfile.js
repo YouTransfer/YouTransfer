@@ -36,6 +36,7 @@ gulp.task('testModulesTask', testModulesTask);
 
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
+gulp.task('test', ['testModulesTask']);
 gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {
@@ -104,7 +105,7 @@ function testModulesTask() {
 						.pipe(mocha({reporter: 'spec'}))
 						.pipe(istanbul.writeReports({ 
 							dir: './test/unit-test-coverage', 
-							reporters: [ 'html' ], 
+							reporters: [ 'lcov' ], 
 							reportOpts: {
 								dir: './test/unit-test-coverage'
 							}

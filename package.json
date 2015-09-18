@@ -35,7 +35,8 @@
     "dist": "gulp clean && gulp dist",
     "dev": "gulp clean && gulp watch",
     "start": "gulp clean && gulp dist && node app.js",
-    "app": "node app.js"
+    "app": "node app.js",
+    "test": "gulp test"
   },
   "author": "Collabsoft",
   "license": "Apache-2.0",
