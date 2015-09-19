@@ -34,20 +34,21 @@ app.use(middleware);
 
 // ------------------------------------------------------------------------------------------ App Routing
 
-app.post('/upload', routes.upload);
-app.post('/upload/bundle', routes.uploadBundle);
-app.post(/^\/send/, routes.send);
-app.get('/download/:token', routes.downloadFile);
-app.post(/^\/download/, routes.downloadFile);
-app.get('/bundle/:token', routes.downloadBundle);
-app.get('/settings', routes.settingsRedirect);
-app.post('/settings/finalise', routes.settingsFinalise);
-app.get('/settings/template/:name', routes.settingsGetTemplateByName);
-app.post('/settings/template/', routes.settingsSaveTemplate);	
-app.get('/settings/:name', routes.settingsGetByName);
-app.post('/settings/:name', routes.settingsSaveByname);
-app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, routes.staticFiles);
-app.get(/^\/(.*)/, routes.default);
+var router = routes('./dist');
+app.post('/upload', router.upload);
+app.post('/upload/bundle', router.uploadBundle);
+app.post(/^\/send/, router.send);
+app.get('/download/:token', router.downloadFile);
+app.post(/^\/download/, router.downloadFile);
+app.get('/bundle/:token', router.downloadBundle);
+app.get('/settings', router.settingsRedirect);
+app.post('/settings/finalise', router.settingsFinalise);
+app.get('/settings/template/:name', router.settingsGetTemplateByName);
+app.post('/settings/template/', router.settingsSaveTemplate);	
+app.get('/settings/:name', router.settingsGetByName);
+app.post('/settings/:name', router.settingsSaveByName);
+app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles);
+app.get(/^\/(.*)/, router.default);
 
 // ------------------------------------------------------------------------------------------ App Execution
 
