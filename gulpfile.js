@@ -52,18 +52,19 @@ function cleanTask() {
 }
 
 function browserifyAppTask() {
-    var bundler = browserify({ entries: paths.src + '/js/index.js' });
+	var bundler = browserify({ entries: paths.src + '/js/index.js' });
     bundler.external(require('./src/js/vendor.js'));
     return browserifyTask('app.js');
 }
 
 function browserifyVendorTask() {
-    var bundler = browserify();
+	var bundler = browserify();
     bundler.require(require('./src/js/vendor.js'));
     return browserifyTask('vendor.js');
 }
 
 function browserifyTask(src) {
+	var bundler = browserify();
 	return bundler.bundle()
 				  .on('error', log)
 				  .pipe(source(src))
