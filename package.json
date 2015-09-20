@@ -48,6 +48,7 @@
     "bootstrap": "^3.3.5",
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
+    "codeclimate-test-reporter": "^0.1.1",
     "del": "^1.2.0",
     "dropzone": "^4.0.1",
     "gulp": "^3.9.0",
