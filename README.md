@@ -1,5 +1,7 @@
 # YouTransfer
 
+[![GitHub version](https://badge.fury.io/gh/remie%2Fyoutransfer.svg)](http://badge.fury.io/gh/remie%2Fyoutransfer) [![npm version](https://badge.fury.io/js/youtransfer.svg)](http://badge.fury.io/js/youtransfer) [![Build Status](https://travis-ci.org/remie/YouTransfer.svg?branch=master)](https://travis-ci.org/remie/YouTransfer) [![Code Climate](https://codeclimate.com/github/remie/YouTransfer/badges/gpa.svg)](https://codeclimate.com/github/remie/YouTransfer) [![Test Coverage](https://codeclimate.com/github/remie/YouTransfer/badges/coverage.svg)](https://codeclimate.com/github/remie/YouTransfer/coverage)
+
 YouTransfer is a simple but elegant self-hosted file transfer & sharing solution. It is an alternative to paid services like [Dropbox](http://dropbox.com) and [WeTransfer](http://wetransfer.com) by offering similar features but without limitations, price plans and a lengthy privacy policy. You remain in control of your files.
 
 ## Installation
