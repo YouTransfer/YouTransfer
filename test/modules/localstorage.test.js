@@ -33,22 +33,22 @@ describe('YouTransfer Local Storage module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing constructor
 
-	it('should be possible to set options by Object', function() {
+	it('should accept options by Object', function() {
 		var instance = localstorage({ localstoragepath: __dirname });
 		instance.localstoragepath.should.equals(__dirname);
 	});
 
-	it('should be possible to set options by Null Object', function() {
+	it('should accept options by Null Object', function() {
 		var instance = localstorage(null);
 		instance.localstoragepath.should.equals(path.resolve('./lib'));
 	});
 
-	it('should be possible to set options by empty Object', function() {
+	it('should accept options by empty Object', function() {
 		var instance = localstorage({});
 		instance.localstoragepath.should.equals(path.resolve('./lib'));
 	});
 
-	it('should be possible to set options by String', function() {
+	it('should accept options by String', function() {
 		var instance = localstorage(__dirname);
 		instance.localstoragepath.should.equals(__dirname);
 	});
@@ -65,7 +65,7 @@ describe('YouTransfer Local Storage module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing file upload
 
-	it('should be possible to upload a file', function(done) {
+	it('should implement the "upload" method and enable local storage of a file', function(done) {
 		var uploadedFile = {
 			path: path.join(__dirname, 'file.tmp'),
 			data: 'my awesome content',
@@ -434,13 +434,12 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null, JSON.stringify({ expires: 1234, path: 'file.binary', jsonPath: 'file.json' }));
 		});
 
-		provider.on('localstorage.purged', function(err, paths) {
+		provider.purge(function(err, paths) {
 			var paths = JSON.stringify(paths);
 			paths.should.equals('["file.binary","file.json"]');
 			done();
 		});
 
-		provider.purge();
 	});
 
 	it('should not purge files if there is no expire date set', function(done) {
@@ -453,13 +452,11 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null, JSON.stringify({ path: 'file.binary', jsonPath: 'file.json' }));
 		});
 
-		provider.on('localstorage.purged', function(err, paths) {
+		provider.purge(function(err, paths) {
 			var paths = JSON.stringify(paths);
 			paths.should.equals('[]');
 			done();
 		});
-
-		provider.purge();
 	});
 
 	it('should not purge files if there is expire date is set in the future', function(done) {
@@ -472,13 +469,12 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null, JSON.stringify({ expires: Date.tomorrow(), path: 'file.binary', jsonPath: 'file.json' }));
 		});
 
-		provider.on('localstorage.purged', function(err, paths) {
+		provider.purge(function(err, paths) {
 			var paths = JSON.stringify(paths);
 			paths.should.equals('[]');
 			done();
 		});
 
-		provider.purge();
 	});
 
 });
