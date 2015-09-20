@@ -39,6 +39,10 @@ describe('YouTransfer Middleware module', function() {
 			header: function() {},
 			send: function() {},
 		};
+
+		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
+		sandbox.stub(nunjucks, 'configure').returns(null);
+
 		var resMock = sandbox.mock(res);
 		resMock.expects("header").once().withArgs('Location', location);
 		resMock.expects("send").once().withArgs(302);
@@ -50,7 +54,7 @@ describe('YouTransfer Middleware module', function() {
 			done();
 		});
 	});
-
+	
 	// -------------------------------------------------------------------------------------- Testing req.isXmlHttpRequest
 
 	it('should add "isXmlHttpRequest" property to response object with value "true"', function(done) {
@@ -60,6 +64,9 @@ describe('YouTransfer Middleware module', function() {
 					'x-requested-with': 'XMLHttpRequest'
 				}
 			}
+
+		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
+		sandbox.stub(nunjucks, 'configure').returns(null);
 
 		middleware(req, res, function() {
 			should.exist(req.isXmlHtppRequest);
@@ -75,6 +82,9 @@ describe('YouTransfer Middleware module', function() {
 					'x-requested-with': ''
 				}
 			}
+
+		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
+		sandbox.stub(nunjucks, 'configure').returns(null);
 
 		middleware(req, res, function() {
 			should.exist(req.isXmlHtppRequest);
@@ -96,6 +106,9 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
+		sandbox.stub(nunjucks, 'configure').returns(null);
 
 		sandbox.stub(nunjucks, 'render', function (template, context, callback) {
 			template.should.equals(name);
@@ -122,6 +135,9 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback('error', null);
 		});
+
+		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
+		sandbox.stub(nunjucks, 'configure').returns(null);
 
 		sandbox.stub(nunjucks, 'render', function (template, context, callback) {
 			template.should.equals(name);
@@ -401,4 +417,5 @@ describe('YouTransfer Middleware module', function() {
 			done();
 		});
 	});
+
 });
