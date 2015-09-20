@@ -3,7 +3,7 @@
 
 var sinon = require('sinon');
 var should = require('chai').should();
-var settings = require('../../lib/settings.js');
+var settings = require('../../lib/settings');
 var path = require('path');
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
