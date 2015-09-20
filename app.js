@@ -20,7 +20,6 @@ restify.compression = require('compression');
 // YouTransfer
 var routes = require('./lib/routes');
 var middleware = require('./lib/middleware');
-var youtransfer = require('./lib/youtransfer');
 
 // ------------------------------------------------------------------------------------------ App Initialization
 

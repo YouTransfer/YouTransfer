@@ -283,12 +283,6 @@ describe('YouTransfer Router module', function() {
 			error: ''
 		}
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				baseUrl: ''
-			});
-		});
-
 		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
 			callback(null);
 		});
