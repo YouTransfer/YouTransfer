@@ -16,6 +16,8 @@ var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
+var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
 var del = require('del');
 var browserify = require('browserify');
 var buffer = require('vinyl-buffer');
@@ -30,9 +32,11 @@ gulp.task('browserifyAppTask', browserifyAppTask);
 gulp.task('browserifyVendorTask', browserifyVendorTask);
 gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
+gulp.task('testModulesTask', testModulesTask);
 
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
+gulp.task('test', ['testModulesTask']);
 gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {
@@ -75,7 +79,7 @@ function browserifyVendorTask() {
 function copyStaticTask() {
 	gulp.src(paths.bootstrap + '/**/*', {base: paths.bootstrap})
 		.pipe(filter(['**/fonts/**']))
-		.on('error', gutil.log)
+		.on('error', log)
 		.pipe(gulp.dest(paths.dist));
 
 	return gulp.src(paths.src + '/**/*', {base: paths.src})
@@ -90,6 +94,24 @@ function lessTask() {
 			   .pipe(cssmin())
 			   .on('error', log)
 			   .pipe(gulp.dest(paths.dist + '/css'));
+};
+
+function testModulesTask() {
+	return gulp.src(['./lib/*.js'])
+			   .pipe(istanbul({includeUntested: true}))
+			   .pipe(istanbul.hookRequire())
+			   .on('finish', function () {
+					gulp.src(['./test/modules/**/*.test.js'])
+						.pipe(mocha({reporter: 'spec'}))
+						.pipe(istanbul.writeReports({ 
+							dir: './test/unit-test-coverage', 
+							reporters: [ 'lcov' ], 
+							reportOpts: {
+								dir: './test/unit-test-coverage'
+							}
+						}))
+						.on('error', log);
+			   });
 };
 
 // ------------------------------------------------------------------------------------------ Functions
