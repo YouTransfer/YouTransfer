@@ -54,10 +54,20 @@ describe('YouTransfer Settings module', function() {
 	// -------------------------------------------------------------------------------------- Testing write
 
 	it('should be possible to set title', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			callback(null);
+		});
+
 		settings.push({ title: title }, function(err) {
 			should.not.exist(err);
 			done();
 		});
+
 	});
 
 	it('should throw an error if it is not possible to read settings file', function(done) {
