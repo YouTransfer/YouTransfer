@@ -19,6 +19,7 @@ describe('Anchor component', function() {
 
 	afterEach(function() {
 		sandbox.restore();
+		$('body').empty();
 		$(document).off('xhr.loaded.anchor');
 		$(document).off('component.anchor.success');
 	});
@@ -43,7 +44,6 @@ describe('Anchor component', function() {
 			$target.selector.should.equals('#target');
 			$target.html().should.equals('content');
 			$.get.calledOnce.should.equals(true);
-			$(document).off('xhr.loaded.anchor');
 		});
 
 		$(document).on('component.anchor.success', function() {
