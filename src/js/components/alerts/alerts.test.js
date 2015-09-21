@@ -2,9 +2,14 @@
 // Mocha and Chai are always included
 'use strict';
 
+var $ = require('jquery');
 var alerts = require('./alerts');
 
 describe('Alerts component', function() {
+
+	beforeEach(function() {
+		$('body').empty();
+	});
 
 	it('should remove the "hidden" class from the close button', function(done) {
 

@@ -7,6 +7,10 @@ var jsonly = require('./jsonly');
 
 describe('JSOnly component', function() {
 
+	beforeEach(function() {
+		$('body').empty();
+	});
+
 	it('should remove the jsonly attribute from the element', function() {
 
 		var fixture = getFixture();

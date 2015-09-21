@@ -7,11 +7,16 @@ var baseurl = require('./baseurl');
 
 describe('BaseUrl component', function() {
 
+	beforeEach(function() {
+		$('body').empty();
+	});
+
 	it('should not add warning to document.body if base URL matches window.location.href', function() {
 
 		var fixture = getFixture(window.location.href);
-		var instance = new baseurl(fixture);
+		fixture.getAttribute('value').should.equals(window.location.href);
 
+		var instance = new baseurl(fixture);
 		$('.baseurl').length.should.equals(0);
 
 	});

@@ -11,13 +11,17 @@ describe('Anchor component', function() {
 	var sandbox;
 
 	beforeEach(function() {
+		$('body').empty();
 		sandbox = sinon.sandbox.create();
+		$(document).off('xhr.loaded.anchor');
+		$(document).off('component.anchor.success');
 	});
 
 	afterEach(function() {
 		sandbox.restore();
+		$(document).off('xhr.loaded.anchor');
+		$(document).off('component.anchor.success');
 	});
-
 
 	it('should try to retrieve the url using JQuery XHR and replace target with result', function(done) {
 
@@ -33,12 +37,16 @@ describe('Anchor component', function() {
 			return d.promise();
 		});
 
-		$(document).on('xhr.loaded', function(event, element, $target) {
+		$(document).on('xhr.loaded.anchor', function(event, element, $target) {
 			should.exist(element);
 			element.should.equals(fixture);
 			$target.selector.should.equals('#target');
 			$target.html().should.equals('content');
 			$.get.calledOnce.should.equals(true);
+			$(document).off('xhr.loaded.anchor');
+		});
+
+		$(document).on('component.anchor.success', function() {
 			done();
 		})
 
