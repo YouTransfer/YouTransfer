@@ -15,14 +15,18 @@ var TIMEOUT = 5000;
 
 // ------------------------------------------------------------------------------------------ Component Definition
 
-function Alerts(element) {
+function Alerts(element, options) {
 	var component = this;
 	component.$element = $(element);
+	component.timeout = options.timeout || TIMEOUT;
+	component.callback = options.callback || function() {};
 	component.$element.find(CLOSE_BUTTON_SELECTOR).removeClass('hidden');
 
 	setTimeout(function() {
-		component.$element.fadeOut();
-	}, TIMEOUT);
+		component.$element.fadeOut('slow', function() {
+			component.callback();
+		});
+	}, component.timeout);
 }
 
 // ------------------------------------------------------------------------------------------ Component Initialization
