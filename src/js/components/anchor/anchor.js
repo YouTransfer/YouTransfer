@@ -29,6 +29,7 @@ function Anchor(element) {
 		$.get(url).done(function(content) {
 			$('#' + target).replaceWith(content);
 			$(document).trigger('xhr.loaded', [ element, $('#' + target) ]);
+			$(document).trigger('component.anchor.success');
 
 			if(history.pushState) {
 				history.pushState(null, title, url);
