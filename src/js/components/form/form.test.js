@@ -1,12 +1,16 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var sinon = require('sinon');
 var form = require('./form');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('Form component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	var sandbox;
 
@@ -20,6 +24,8 @@ describe('Form component', function() {
 		sandbox.restore();
 		$(document).off('component.form.success');
 	});
+
+	// -------------------------------------------------------------------------------------- Test features
 
 	it('should try to post to the url using JQuery XHR and replace target with result', function(done) {
 
@@ -41,6 +47,8 @@ describe('Form component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture(value) {
 	var fixture = document.createElement('form');

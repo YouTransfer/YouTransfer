@@ -1,12 +1,16 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var sinon = require('sinon');
 var tabs = require('./tabs');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('Tabs component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	var sandbox;
 
@@ -22,6 +26,8 @@ describe('Tabs component', function() {
 		$(document).off('xhr.loaded.tabs');
 	});
 
+	// -------------------------------------------------------------------------------------- Test features
+
 	it('should change the active tab after an XHR request triggered by a tablist link', function() {
 
 		var fixture = getFixture();
@@ -33,6 +39,8 @@ describe('Tabs component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture() {
 	$('body').append('<ul role="tablist"><li class="active"><a href="first" role="tab">first</li><li><a href="second" role="tab">second</a></li></ul>');

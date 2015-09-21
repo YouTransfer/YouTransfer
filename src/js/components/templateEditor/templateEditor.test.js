@@ -1,12 +1,16 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var sinon = require('sinon');
 var templateEditor = require('./templateEditor');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('TemplateEditor component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	var sandbox;
 
@@ -19,6 +23,7 @@ describe('TemplateEditor component', function() {
 		sandbox.restore();
 	});
 
+	// -------------------------------------------------------------------------------------- Test features
 
 	it('should try to retrieve the url using JQuery XHR and replace target content with result', function() {
 
@@ -39,6 +44,8 @@ describe('TemplateEditor component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture() {
 	var fixture = document.createElement('textarea');

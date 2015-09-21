@@ -1,15 +1,21 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var jsonly = require('./jsonly');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('JSOnly component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
 		$('body').empty();
 	});
+
+	// -------------------------------------------------------------------------------------- Test features
 
 	it('should remove the jsonly attribute from the element', function() {
 
@@ -23,6 +29,8 @@ describe('JSOnly component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture(value) {
 	var fixture = document.createElement('div');

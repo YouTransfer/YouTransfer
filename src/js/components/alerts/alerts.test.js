@@ -1,15 +1,21 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var alerts = require('./alerts');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('Alerts component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
 		$('body').empty();
 	});
+
+	// -------------------------------------------------------------------------------------- Test features
 
 	it('should remove the "hidden" class from the close button', function(done) {
 
@@ -39,6 +45,8 @@ describe('Alerts component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture() {
 	var fixture = document.createElement('div');

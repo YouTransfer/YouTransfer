@@ -1,15 +1,21 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var baseurl = require('./baseurl');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('BaseUrl component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
 		$('body').empty();
 	});
+
+	// -------------------------------------------------------------------------------------- Test features
 
 	it('should not add warning to document.body if base URL matches window.location.href', function() {
 
@@ -31,6 +37,8 @@ describe('BaseUrl component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture(value) {
 	var fixture = document.createElement('meta');

@@ -1,12 +1,16 @@
-// Unit test for MODULE_NAME component
-// Mocha and Chai are always included
 'use strict';
+
+// ------------------------------------------------------------------------------------------ Test Dependencies
 
 var $ = require('jquery');
 var sinon = require('sinon');
 var anchor = require('./anchor');
 
+// ------------------------------------------------------------------------------------------ Test Definition
+
 describe('Anchor component', function() {
+
+	// -------------------------------------------------------------------------------------- Test Initialization
 
 	var sandbox;
 
@@ -23,6 +27,8 @@ describe('Anchor component', function() {
 		$(document).off('xhr.loaded.anchor');
 		$(document).off('component.anchor.success');
 	});
+
+	// -------------------------------------------------------------------------------------- Test features
 
 	it('should try to retrieve the url using JQuery XHR and replace target with result', function(done) {
 
@@ -54,6 +60,8 @@ describe('Anchor component', function() {
 	});
 
 });
+
+// ------------------------------------------------------------------------------------------ Test fixture
 
 function getFixture() {
 	var fixture = document.createElement('a');
