@@ -20,9 +20,9 @@ function Tabs(element) {
 	component.$element = $(element);
 
 	$(document).off(XHR_LOADED_EVENT_NAMESPACED);
-	$(document).on(XHR_LOADED_EVENT_NAMESPACED, function(event, element) {
-		if(element.getAttribute('role') == TAB_ROLE) {
-			var url = element.getAttribute('href');
+	$(document).on(XHR_LOADED_EVENT_NAMESPACED, function(event, elm) {
+		if(elm.getAttribute('role') == TAB_ROLE) {
+			var url = elm.getAttribute('href');
 			if(url) {
 				component.$element.find('li').removeClass('active');
 				component.$element.find('li a[href="' + url + '"]').closest('li').addClass('active');

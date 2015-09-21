@@ -2,7 +2,6 @@
 
 // ------------------------------------------------------------------------------------------ Component Dependencies
 
-// Unfortunately, Bootstrap requires global jQuery object
 var $ = require('jquery');
 var $form = require('../../../../node_modules/jquery-form/jquery.form.js');
 
@@ -25,6 +24,7 @@ function Form(element) {
 		success: function() {
 			var target = $('#' + element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element; 
 			$(document).trigger('xhr.loaded', [ element, target ]);
+			$(document).trigger('component.form.success');
 		}
 	});
 }

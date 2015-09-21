@@ -16,6 +16,7 @@ var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
+var karma = require('gulp-karma');
 var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 var del = require('del');
@@ -31,11 +32,12 @@ gulp.task('browserifyAppTask', browserifyAppTask);
 gulp.task('browserifyVendorTask', browserifyVendorTask);
 gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
+gulp.task('testComponentsTask', testComponentsTask);
 gulp.task('testModulesTask', testModulesTask);
 
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
-gulp.task('test', ['testModulesTask']);
+gulp.task('test', ['testModulesTask', 'testComponentsTask']);
 gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {
@@ -110,6 +112,14 @@ function testModulesTask() {
 						.on('error', log);
 			   });
 }
+
+function testComponentsTask() {
+	return gulp.src([])
+			   .pipe(karma({ configFile: './test/components/karma.conf.js', action: 'run'}))
+			   .on('error', function (err) {
+					throw err;
+			    });
+};
 
 // ------------------------------------------------------------------------------------------ Functions
 
