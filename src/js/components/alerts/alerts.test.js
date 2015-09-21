@@ -3,7 +3,6 @@
 'use strict';
 
 var alerts = require('./alerts');
-var instance;
 
 describe('Alerts component', function() {
 
