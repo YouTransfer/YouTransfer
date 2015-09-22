@@ -14,7 +14,6 @@ module.exports = function (config) {
         //list of files / patterns to load in the browser
         files: [
             { pattern: 'src/js/components/**/*.test.js' },
-            { pattern: 'test/views/**/*.test.js' }
         ],
 
         // preprocess matching files before serving them to the browser
