@@ -42,6 +42,7 @@ gulp.task('testWebdriverTask', testWebdriverTask);
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
 gulp.task('test', ['testModulesTask', 'testComponentsTask']);
+gulp.task('it', ['testViewsTask']);
 gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {

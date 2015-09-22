@@ -37,7 +37,7 @@
     "dev": "gulp clean && gulp watch",
     "start": "gulp clean && gulp dist && node app.js",
     "app": "node app.js",
-    "test": "gulp test && codeclimate-test-reporter < ./test/unit-test-coverage/lcov.info"
+    "test": "gulp test && gulp it && codeclimate-test-reporter < ./test/unit-test-coverage/lcov.info"
   },
   "author": "Collabsoft",
   "license": "Apache-2.0",
