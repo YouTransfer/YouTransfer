@@ -56,3 +56,7 @@ var port = Number(nconf.get('PORT'));
 app.listen(port, function() {
 	console.log('%s listening at %s', app.name, app.url);
 });
+
+// ------------------------------------------------------------------------------------------ Module Exposure
+
+module.exports = app;
