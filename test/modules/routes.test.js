@@ -112,7 +112,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("json").once().withArgs(response);
 
-		router.upload(req, res, function() {
+		router.upload()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -159,7 +159,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("json").once().withArgs(response);
 
-		router.upload(req, res, function() {
+		router.upload()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -206,7 +206,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("json").once().withArgs(response);
 
-		router.upload(req, res, function() {
+		router.upload()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -253,7 +253,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("render").once().withArgs("index.html", response);
 
-		router.upload(req, res, function() {
+		router.upload()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -290,7 +290,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("json").once().withArgs(response);
 
-		router.uploadBundle(req, res, function() {
+		router.uploadBundle()(req, res, function() {
 			resMock.verify();
 			done();
 		})
@@ -332,7 +332,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("json").once().withArgs(response);
 
-		router.uploadBundle(req, res, function() {
+		router.uploadBundle()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -374,7 +374,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("render").once().withArgs('index.html', response);
 
-		router.uploadBundle(req, res, function() {
+		router.uploadBundle()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -396,7 +396,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("redirect").once().withArgs('/');
 
-		router.send(req, res);
+		router.send()(req, res);
 		resMock.verify();
 	});
 
@@ -421,7 +421,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("redirect").once().withArgs('/');
 
-		router.downloadFile(req, res);
+		router.downloadFile()(req, res);
 		resMock.verify();
 	});
 
@@ -446,7 +446,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("redirect").once().withArgs('/');
 
-		router.downloadBundle(req, res);
+		router.downloadBundle()(req, res);
 		resMock.verify();
 	});
 
@@ -461,7 +461,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("redirect").once().withArgs('/settings/general');
 
-		router.settingsRedirect(req, res);
+		router.settingsRedirect()(req, res);
 		resMock.verify();
 	});
 
@@ -482,7 +482,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects("redirect").once().withArgs('/');
 
-		router.settingsFinalise(req, res);
+		router.settingsFinalise()(req, res);
 		resMock.verify();
 	});
 
@@ -517,7 +517,7 @@ describe('YouTransfer Router module', function() {
 		resMock.expects('send').once().withArgs('source');
 		resMock.expects('end').once();
 
-		router.settingsGetTemplateByName(req, res, function() {
+		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
 			done();
 		})
@@ -547,7 +547,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsGetTemplateByName(req, res, function() {
+		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
 			done();
 		})
@@ -581,7 +581,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsGetTemplateByName(req, res, function() {
+		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
 			done();
 		})
@@ -609,7 +609,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsGetTemplateByName(req, res, function() {
+		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
 			done();
 		})
@@ -647,7 +647,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsSaveTemplate(req, res, function() {
+		router.settingsSaveTemplate()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -677,7 +677,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsSaveTemplate(req, res, function() {
+		router.settingsSaveTemplate()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -709,7 +709,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsSaveTemplate(req, res, function() {
+		router.settingsSaveTemplate()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -738,7 +738,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('render').once().withArgs('settings.' + req.params.name + '.html', response);
 
-		router.settingsGetByName(req, res, function() {
+		router.settingsGetByName()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -763,7 +763,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('render').once().withArgs('settings.general.html', response);
 
-		router.settingsGetByName(req, res, function() {
+		router.settingsGetByName()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -789,7 +789,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('json').once().withArgs(response);
 
-		router.settingsGetByName(req, res, function() {
+		router.settingsGetByName()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -815,7 +815,7 @@ describe('YouTransfer Router module', function() {
 		var resMock = sandbox.mock(res);
 		resMock.expects('render').once().withArgs('404.html');
 
-		router.settingsGetByName(req, res, function() {
+		router.settingsGetByName()(req, res, function() {
 			resMock.verify();
 			done();
 		});
@@ -844,7 +844,7 @@ describe('YouTransfer Router module', function() {
 			callback(null);
 		});
 
-		router.settingsSaveByName(req, res, function() {
+		router.settingsSaveByName()(req, res, function() {
 			done();
 		});
 
@@ -868,7 +868,7 @@ describe('YouTransfer Router module', function() {
 		var serverMock = sandbox.mock(server);
 		serverMock.expects('serveFile').once().withArgs('/' + req.params[1] + '/' + req.params[2], 200, { server: 'youtransfer.io', 'Cache-Control': 'max-age=' + nconf.get('CACHE_MAX_AGE') }, req, res);
 
-		instance.staticFiles(req, res);
+		instance.staticFiles()(req, res);
 		serverMock.verify();
 	});
 
@@ -888,7 +888,7 @@ describe('YouTransfer Router module', function() {
 		resMock.expects('setHeader').once().withArgs('Cache-Control', 'private, max-age=0, proxy-revalidate, no-store, no-cache, must-revalidate');
 		resMock.expects('render').once().withArgs(req.params[0] + '.html');
 
-		router.default(req, res);
+		router.default()(req, res);
 		resMock.verify();
 	});
 
@@ -906,7 +906,7 @@ describe('YouTransfer Router module', function() {
 		resMock.expects('setHeader').once().withArgs('Cache-Control', 'private, max-age=0, proxy-revalidate, no-store, no-cache, must-revalidate');
 		resMock.expects('render').once().withArgs('index.html');
 
-		router.default(req, res);
+		router.default()(req, res);
 		resMock.verify();
 	});	
 
