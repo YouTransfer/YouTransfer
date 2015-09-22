@@ -56,17 +56,16 @@ function cleanTask() {
 function browserifyAppTask() {
 	var bundler = browserify({ entries: paths.src + '/js/index.js' });
     bundler.external(require('./src/js/vendor.js'));
-    return browserifyTask('app.js');
+    return browserifyTask(bundler, 'app.js');
 }
 
 function browserifyVendorTask() {
 	var bundler = browserify();
     bundler.require(require('./src/js/vendor.js'));
-    return browserifyTask('vendor.js');
+    return browserifyTask(bundler, 'vendor.js');
 }
 
-function browserifyTask(src) {
-	var bundler = browserify();
+function browserifyTask(bundler, src) {
 	return bundler.bundle()
 				  .on('error', log)
 				  .pipe(source(src))
