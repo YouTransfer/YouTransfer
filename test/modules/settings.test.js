@@ -70,16 +70,21 @@ describe('YouTransfer Settings module', function() {
 
 	});
 
-	it('should throw an error if it is not possible to read settings file', function(done) {
+	it('should still be possible to set title if settings file does not exist', function(done) {
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback('error', null);
 		});
 
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			callback(null);
+		});
+
 		settings.push({ title: title }, function(err) {
-			should.exist(err);
-			err.should.equals('error');
+			should.not.exist(err);
 			done();
 		});
+
 	});
 
 	it('should throw an error if it is not possible to write settings file', function(done) {
