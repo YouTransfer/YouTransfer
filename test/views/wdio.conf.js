@@ -31,7 +31,7 @@ exports.config = {
     //
     capabilities: [{
         browserName: 'phantomjs',
-        'phantomjs.binary.path': './node_modules/phantomjs/lib/phantom/bin/phantomjs'
+        'phantomjs.binary.path': process.env.PHANTOMJS_PATH || './node_modules/phantomjs/lib/phantom/bin/phantomjs'
     }],
     //
     // ===================

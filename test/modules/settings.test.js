@@ -111,15 +111,45 @@ describe('YouTransfer Settings module', function() {
 		});
 	});
 
-	it('should not be possible to get title', function(done) {
+	it('should not be possible to get title if invalid JSON is returned', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, 'this is not JSON');
+		});
+
+		settings.get(function(err, output) {
+			should.exist(err);
+			err.message.should.equals('Unexpected token h');
+			done();
+		});
+	});
+
+	it('should still be possible to get title if settings file does not exist', function(done) {
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback('error', null);
 		});
 
+		sandbox.stub(nconf, 'get').returns({ title: 'title' });
+
 		settings.get(function(err, output) {
-			should.exist(err);
-			err.should.equals('error');
+			should.not.exist(err);
+			output.title.should.equals('title');
+			done();
+		});
+	});
+
+	it('should still be possible to get localstoragepath if settings file does not exist', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
+		});
+
+		sandbox.stub(nconf, 'get').returns({ title: 'title', localstoragepath: './somepath' });
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			output.localstoragepath.should.equals(path.join(__dirname, '../../somepath'));
 			done();
 		});
 	});

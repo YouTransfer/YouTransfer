@@ -1,2 +1,7 @@
 #!/bin/bash
-PORT=80 node app.js
+
+echo "YouTransfer - Building static assets"
+npm run dist;
+
+echo "YouTransfer - Starting application"
+npm run app &

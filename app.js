@@ -3,11 +3,12 @@
 // ------------------------------------------------------------------------------------------ App Configuration
 
 // Load configuration
+var path = require('path');
 var nconf = require('nconf');
 nconf.argv()
 	 .env()
-	 .file('local', { file: 'local.json' })
-	 .file({ file: 'config.json' });
+	 .file('local', { file: path.join(__dirname, 'local.json') })
+	 .file({ file: path.join(__dirname, 'config.json') });
 nconf.set('basedir', __dirname);
 
 // ------------------------------------------------------------------------------------------ App Dependencies
