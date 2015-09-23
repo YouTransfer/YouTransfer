@@ -37,7 +37,7 @@
     "dev": "gulp clean && gulp watch",
     "start": "gulp clean && gulp dist && node app.js",
     "app": "node app.js",
-    "test": "gulp test && gulp it && codeclimate-test-reporter < ./test/unit-test-coverage/lcov.info"
+    "test": "gulp test && codeclimate-test-reporter < ./test/unit-test-coverage/lcov.info"
   },
   "author": "Collabsoft",
   "license": "Apache-2.0",
@@ -72,7 +72,7 @@
     "mocha": "^2.3.2",
     "phantomjs": "^1.9.18",
     "proxyquireify": "^3.0.0",
-    "run-sequence": "^1.1.2",
+    "run-sequence": "^1.1.4",
     "selenium-standalone": "^4.6.0",
     "sinon": "^1.16.1",
     "vinyl-buffer": "^1.0.0",

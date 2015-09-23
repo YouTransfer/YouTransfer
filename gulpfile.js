@@ -26,6 +26,7 @@ var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
 var vinylPaths = require('vinyl-paths');
 var selenium = require('selenium-standalone');
+var runSequence = require('run-sequence');
 
 // ------------------------------------------------------------------------------------------ Tasks
 
@@ -38,10 +39,13 @@ gulp.task('testComponentsTask', testComponentsTask);
 gulp.task('testModulesTask', testModulesTask);
 gulp.task('testViewsTask', ['testWebdriverTask'], testViewsTask);
 gulp.task('testWebdriverTask', testWebdriverTask);
+gulp.task('testTerminationTask', testTerminationTask);
 
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
-gulp.task('test', ['testModulesTask', 'testComponentsTask']);
+gulp.task('test', function(callback) {
+	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback)
+});
 gulp.task('it', ['testViewsTask']);
 gulp.task('dist', ['build']);
 
@@ -132,10 +136,6 @@ function testViewsTask() {
 				.on('finish', function() {
 					selenium.app.close();
 					selenium.server.kill();
-
-					// Workaround for issue with gulp / WebdriverIO task not ending the browser session correctly
-					// This means that the testViewTask should be run stand-alone
-					process.exit(0);
 				});
 };
 
@@ -161,6 +161,12 @@ function testWebdriverTask(callback) {
 			}
 		});
 	});	
+};
+
+// Workaround for issue with gulp WebdriverIO task not ending the browser session correctly
+// This means that the test should be run stand-alone
+function testTerminationTask() {
+	process.exit(0);
 }
 
 
