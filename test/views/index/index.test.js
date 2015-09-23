@@ -51,11 +51,62 @@ describe('Index View', function() {
 
 	it('should have a link to the settings page', function *() {
 
-		var element = yield browser.element('ul.nav > li > a');
-		should.exist(element);
-		
+		var link = yield browser.isExisting('ul.nav > li > a');
+		link.should.be.equal(true);
+
 		var linkText = yield browser.getText('ul.nav > li > a')
 		linkText.should.be.equal('Settings');
+
+	});
+
+	it('should have a form to enable downloading a file', function *() {
+
+		var form = yield browser.isExisting('.download form');
+		form.should.be.equal(true);
+
+		var action = yield browser.getAttribute('.download form', 'action');
+		should.exist(action);
+		action.should.be.equal(sandbox.baseUrl + '/download');
+
+		var submit = yield browser.isExisting('.download form button[type=submit]');
+		submit.should.be.equal(true);
+
+	});
+
+	it('should have a dropzone', function *() {
+
+		var dropzone = yield browser.isExisting('.dz-action-add.dz-clickable.dropzone');
+		dropzone.should.be.equal(true);
+
+		var previewTemplate = yield browser.isExisting('.dropzone .dz-preview-template');
+		previewTemplate.should.be.equal(true);
+
+		var message = yield browser.isExisting('.dropzone .dz-default.dz-message');
+		message.should.be.equal(true);
+
+	});
+
+	it('should have a fallback to dropzone', function *() {
+
+		var currentValue = sandbox.dropzone.fallback;
+
+		var fallback = yield browser.click('ul.nav > li > a')
+									.click('a[href="/settings/transfer"]')
+									.click('input#forceFallback')
+									.submitForm('.tab-pane.active form')
+									.url('/')
+									.isExisting('.fallback');
+		fallback.should.be.equal(true);
+
+		if(!currentValue) {
+			fallback = yield browser.click('ul.nav > li > a')
+									.click('a[href="/settings/transfer"]')
+									.click('input#forceFallback')
+									.submitForm('.tab-pane.active form')
+									.url('/')
+									.isExisting('.fallback');
+			fallback.should.be.equal(false);
+		}
 
 	});
 });
