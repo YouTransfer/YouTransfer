@@ -38,16 +38,15 @@ gulp.task('lessTask', lessTask);
 gulp.task('testComponentsTask', testComponentsTask);
 gulp.task('testModulesTask', testModulesTask);
 gulp.task('testViewsTask', ['testWebdriverTask'], testViewsTask);
-gulp.task('testWebdriverTask', testWebdriverTask);
+gulp.task('testWebdriverTask', ['build'], testWebdriverTask);
 gulp.task('testTerminationTask', testTerminationTask);
 
 gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
+gulp.task('dist', ['build']);
 gulp.task('test', function(callback) {
 	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback)
 });
-gulp.task('it', ['testViewsTask']);
-gulp.task('dist', ['build']);
 
 gulp.task('watch', ['dist'], function() {
 	gulp.watch([paths.src + '/**/js/**', '!**/*.less'], ['browserifyAppTask', 'browserifyVendorTask']);
