@@ -27,8 +27,9 @@ function Anchor(element) {
 		var title = this.getAttribute(TITLE_ATTRIBUTE) || document.title;
 
 		$.get(url).done(function(content) {
+			content = $(content);
 			$('#' + target).replaceWith(content);
-			$(document).trigger('xhr.loaded', [ element, $('#' + target) ]);
+			$(document).trigger('xhr.loaded', [ element, content ]);
 			$(document).trigger('component.anchor.success');
 
 			if(history.pushState) {
