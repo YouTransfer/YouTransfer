@@ -45,7 +45,7 @@ describe('Email Settings View', function() {
 	it('should have a "Sender" field with the current value based on user settings', function *() {
 
 		var value = yield browser.getValue('input#sender')
-		value.should.be.equal(sandbox.email.sender);
+		value.should.be.equal(sandbox.email.sender || '');
 
 	});
 
@@ -61,7 +61,7 @@ describe('Email Settings View', function() {
 		var value = yield browser.selectByVisibleText('select[name="settings[email][transporter]"]', 'SMTP')
 								 .waitForVisible('div#smtp')
 								 .getValue('select[name="settings[email][service]"]');
-		value.should.be.equal(sandbox.email.service);
+		value.should.be.equal(sandbox.email.service || 'Select provider');
 
 		if(value === 'other') {
 			var other = yield browser.isVisible('div#other');
@@ -75,10 +75,10 @@ describe('Email Settings View', function() {
 		}
 
 		var username = yield browser.getValue('input#username');
-		username.should.be.equal(sandbox.email.username);
+		username.should.be.equal(sandbox.email.username || '');
 
 		var password = yield browser.getValue('input#password');
-		password.should.be.equal(sandbox.email.password);
+		password.should.be.equal(sandbox.email.password || '');
 
 	});
 
@@ -96,16 +96,16 @@ describe('Email Settings View', function() {
 		var value = yield browser.selectByVisibleText('select[name="settings[email][transporter]"]', 'Amazon SES')
 								 .waitForVisible('div#ses')
 								 .getValue('input#AccessKeyId');
-		value.should.be.equal(sandbox.email.accessKeyId);
+		value.should.be.equal(sandbox.email.accessKeyId || '');
 
 		var SecretAccessKey = yield browser.getValue('input#SecretAccessKey');
-		SecretAccessKey.should.be.equal(sandbox.email.secretAccessKey);
+		SecretAccessKey.should.be.equal(sandbox.email.secretAccessKey || '');
 
 		var region = yield browser.getValue('input#region');
 		region.should.be.equal(sandbox.email.region);
 
 		var rateLimit = yield browser.getValue('input#rateLimit');
-		rateLimit.should.be.equal(sandbox.email.rateLimit);
+		rateLimit.should.be.equal(sandbox.email.rateLimit.toString());
 
 	});
 
@@ -126,7 +126,7 @@ describe('Email Settings View', function() {
 		var alert = yield browser.isExisting('.tab-pane.active .alert strong');
 		alert.should.be.equal(false);
 
-		var currentValue = sandbox.email.sender;
+		var currentValue = sandbox.email.sender || '';
 		var newValue = currentValue + '2';
 
 		var value = yield browser.setValue('input#sender', newValue)

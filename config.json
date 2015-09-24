@@ -26,5 +26,5 @@
 	"StorageLocation": "local",
 	"localstoragepath": "./uploads",
 	"S3Region": "us-east-1",
-	"S3SSLEnabled": true
+	"S3SSLEnabled": "true"
 }
