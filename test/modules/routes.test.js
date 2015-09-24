@@ -624,14 +624,6 @@ describe('YouTransfer Router module', function() {
 					template: 'template',
 					body: 'this is my template'
 				}
-			},
-			res = {
-				json: function() {}
-			},
-			response = {
-				success: true,
-				isPostback: true,
-				template: req.params.template
 			}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -641,14 +633,31 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			should.exist(file);
+			file.should.equals('./src/templates/' + req.params.template);
+
+			should.exist(data);
+			data.should.equals(req.params.body);
+
 			callback(null);
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
 
-		router.settingsSaveTemplate()(req, res, function() {
-			resMock.verify();
+				should.exist(req.params.success);
+				req.params.success.should.equals(true);
+
+				should.exist(req.params.isPostback);
+				req.params.isPostback.should.equals(true);
+
+				next();
+			};
+		});
+
+		router.settingsSaveTemplate()(req, null, function() {
 			done();
 		});
 	});
@@ -659,13 +668,6 @@ describe('YouTransfer Router module', function() {
 				params: {
 					body: 'this is my template'
 				}
-			},
-			res = {
-				json: function() {}
-			},
-			response = {
-				success: false,
-				err: 'The settings have been finalised and cannot be modified'
 			}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -674,30 +676,32 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
 
-		router.settingsSaveTemplate()(req, res, function() {
-			resMock.verify();
+				should.exist(req.params.success);
+				req.params.success.should.equals(false);
+
+				should.exist(req.params.isPostback);
+				req.params.isPostback.should.equals(true);
+
+				next();
+			};
+		});
+
+		router.settingsSaveTemplate()(req, null, function() {
 			done();
 		});
 	});
 
-	it('should not be possible to set template source if settings have been finalised', function(done) {
+	it('should not be possible to set template source if no template name was provided', function(done) {
 
 		var req = {
 				params: {
 					body: 'this is my template'
 				}
-			},
-			res = {
-				json: function() {}
-			},
-			response = {
-				success: false,
-				isPostback: true,
-				template: req.params.template,
-				err: 'Invalid template provided'
 			}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -706,11 +710,22 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
 
-		router.settingsSaveTemplate()(req, res, function() {
-			resMock.verify();
+				should.exist(req.params.success);
+				req.params.success.should.equals(false);
+
+				should.exist(req.params.isPostback);
+				req.params.isPostback.should.equals(true);
+
+				next();
+			};
+		});
+
+		router.settingsSaveTemplate()(req, null, function() {
 			done();
 		});
 	});
