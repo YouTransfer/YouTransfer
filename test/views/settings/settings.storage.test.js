@@ -112,22 +112,22 @@ describe('Storage Settings View', function() {
 		var currentValue = sandbox.retention.toString();
 		var newValue = currentValue + '2';
 
-		var value = yield browser.setValue('input#retention', newValue)
+		var alert = yield browser.setValue('input#retention', newValue)
 								 .submitForm('.tab-pane.active form')
 								 .waitForExist('.tab-pane.active .alert strong', 5000)
 								 .getText('.tab-pane.active .alert strong');
-		value.should.be.equal('Success!');
+		alert.should.be.equal('Success!');
 
-		var title = yield browser.getValue('input#retention');
-		title.should.be.equal(newValue);
+		var value = yield browser.getValue('input#retention');
+		value.should.be.equal(newValue);
 
-		value = yield browser.setValue('input#retention', currentValue)
+		alert = yield browser.setValue('input#retention', currentValue)
 							 .submitForm('.tab-pane.active form')
 							 .waitForExist('.tab-pane.active .alert strong', 5000)
 							 .getText('.tab-pane.active .alert strong');
-		value.should.be.equal('Success!');
+		alert.should.be.equal('Success!');
 
-		var value = yield browser.getValue('input#retention');
+		value = yield browser.getValue('input#retention');
 		value.should.be.equal(currentValue);
 
 	});
