@@ -5,12 +5,22 @@
 	<h1>Finalise</h1>
 
 	<p>
-		If you've completed configuring your YouTransfer instance, it is recommended to finalise the settings. This will remove the 'Settings' link from the bottom-right corner. Access to the Settings pages are restricted. Changes must be done directly in the 'settings.json' file located in the root of the installation directory.
+		If you've completed configuring your YouTransfer instance, it is recommended to finalise the settings. This will remove the 'Settings' link from the bottom-right corner. Access to the Settings pages are restricted.
 	</p>
-
+	<p>
+		Once the settings have been finalised, changes must be done directly in the 'settings.json' file located in the root of the installation directory. You can also <a href="{{ baseUrl }}/unlock">unlock the settings</a>, which will require you to provide an unlock code.
+	</p>
+	<br />
 	<form class="form-horizontal" method="post">
 		<div class="form-group">
-			<div class="col-sm-9">
+			<label for="unlockCode" class="col-sm-3 control-label">Unlock code</label>
+			<div class="col-sm-6">
+				<input type="password" class="form-control" name="settings[unlockCode]" id="unlockCode" value="{{ unlockCode }}" required="true">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-6 col-sm-offset-3">
 				<a href="/settings/general" role="tab" data-async data-target="tab-content" class="btn btn-default">I'm not done yet!</a>
 				<button type="submit" class="btn btn-primary">I'm ready for Lockdown</button>
 			</div>

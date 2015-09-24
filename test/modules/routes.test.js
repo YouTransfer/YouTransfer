@@ -468,7 +468,13 @@ describe('YouTransfer Router module', function() {
 	// -------------------------------------------------------------------------------------- Testing settingsFinalise
 
 	it('should be possible to finalise settings', function() {
-		var req = {},
+		var req = {
+				params: {
+					settings: {
+						unlockCode: 'MySecretCode'
+					}
+				}
+			},
 			res = {
 				redirect: function() {}
 			}
@@ -476,6 +482,7 @@ describe('YouTransfer Router module', function() {
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
 			settings.finalised.should.equals(true);
+			settings.unlockCode.should.equals(req.params.settings.unlockCode);
 			callback();
 		});
 
