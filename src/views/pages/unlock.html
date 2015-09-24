@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="unlock hp jumbotron" id="unlock">
+	<header class="col-md-12">
+		<h1>{{ title }}</h1>
+		<h2>{{ subtitle }}</h2>
+	</header>
+	<form class="form-inline text-center" method="post">
+		<p>Please provide the code to unlock the settings pages</p>
+		<div class="form-group">
+			<input type="password" class="form-control" name="unlockCode" id="unlockCode" required="true">
+			<button type="submit" class="btn btn-primary">Unlock</button>
+		</div>
+	</form>
+	</div>
+</div>
+{% endblock %}

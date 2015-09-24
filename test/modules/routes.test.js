@@ -486,6 +486,69 @@ describe('YouTransfer Router module', function() {
 		resMock.verify();
 	});
 
+	// -------------------------------------------------------------------------------------- Testing settingsUnlock
+
+	it('should be possible to unlock settings', function() {
+		var req = {
+				params: {
+					unlockCode: 'MySecretCode'
+				}
+			},
+			res = {
+				redirect: function() {}
+			},
+			settings = {
+				finalised: true,
+				unlockCode: req.params.unlockCode
+			}
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
+			should.exist(settings);
+			settings.finalised.should.equals(false);
+			settings.unlockCode.should.equals(false);
+			callback();
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("redirect").once().withArgs('/');
+
+		router.settingsUnlock()(req, res);
+		resMock.verify();
+	});
+
+	it('should not be possible to unlock settings if code is incorrect', function() {
+		var req = {
+				params: {
+					unlockCode: 'MySecretCode'
+				}
+			},
+			res = {
+				render: function() {}
+			},
+			settings = {
+				finalised: true,
+				unlockCode: 'MyOtherCode'
+			},
+			response = {
+				success: false,
+				message: 'Incorrect code provided'
+			}
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, settings);
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("render").once().withArgs('unlock.html', response);
+
+		router.settingsUnlock()(req, res);
+		resMock.verify();
+	});
+
 	// -------------------------------------------------------------------------------------- Testing settingsGetTemplateByName
 
 	it('should be possible to get template source', function(done) {

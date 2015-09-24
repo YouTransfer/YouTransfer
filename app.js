@@ -47,6 +47,7 @@ app.get('/settings/template/:name', router.settingsGetTemplateByName());
 app.post('/settings/template/', router.settingsSaveTemplate());	
 app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());
+app.post('/unlock', router.settingsUnlock());
 app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
 app.get(/^\/(.*)/, router.default());
 
