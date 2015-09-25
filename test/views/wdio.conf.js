@@ -1,3 +1,7 @@
+var q = require('q');
+var fs = require('fs');
+var path = require('path');
+
 exports.config = {
     
     //
@@ -106,7 +110,11 @@ exports.config = {
     //
     // Gets executed before all workers get launched.
     onPrepare: function() {
-        // do something
+        var defer = q.defer();
+        fs.rename(path.join(__dirname, '/../../settings.json'), path.join(__dirname, '/../../settings.json.tmp'), function(err) {
+            defer.resolve();
+        });
+        return defer.promise;
     },
     //
     // Gets executed before test execution begins. At this point you will have access to all global
@@ -124,6 +132,6 @@ exports.config = {
     // Gets executed after all workers got shut down and the process is about to exit. It is not
     // possible to defer the end of the process using a promise.
     onComplete: function() {
-        // do something
+        fs.rename(path.join(__dirname, '/../../settings.json.tmp'), path.join(__dirname, '/../../settings.json'));
     }
 };

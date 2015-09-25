@@ -72,6 +72,7 @@
     "mocha": "^2.3.2",
     "phantomjs": "^1.9.18",
     "proxyquireify": "^3.0.0",
+    "q": "^1.4.1",
     "run-sequence": "^1.1.4",
     "selenium-standalone": "^4.6.0",
     "sinon": "^1.16.1",
