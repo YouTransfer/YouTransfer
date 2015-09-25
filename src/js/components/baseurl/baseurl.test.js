@@ -32,7 +32,7 @@ describe('BaseUrl component', function() {
 		var fixture = getFixture('http://someurl');
 		var instance = new baseurl(fixture);
 
-		$('.baseurl').html().should.equals("<strong>Warning</strong>: the base URL is set to someurl but you are accessing this page from localhost:5000. It is recommended to update the BaseUrl setting.");
+		$('.baseurl').html().should.equals("<strong>Warning</strong>: the base URL is set to someurl but you are accessing this page from localhost:9999. It is recommended to update the BaseUrl setting.");
 
 	});
 

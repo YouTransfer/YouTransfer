@@ -1,0 +1,20 @@
+<div class="dz-upload-complete {{ "hidden" if not isPostback }}">
+	<h2>Email a friend!</h2>
+	<form class="form form-group-sm" action="/send" method="POST">
+		<div class="form-group">
+			<input type="text" id="from" name="email[from]" class="form-control" placeholder="Your email">
+		</div>
+
+		<div class="form-group">
+			<input type="text" id="to" name="email[to]" class="form-control" placeholder="Your friend's email">
+		</div>
+
+		<div class="form-group">
+			<textarea placeholder="Message" name="email[body]" class="form-control" rows="5"></textarea>
+		</div>
+
+		<div class="form-group">
+			<button type="submit" name="submit" class="btn btn-default">Send</button>
+		</div>
+	</form>
+</div>

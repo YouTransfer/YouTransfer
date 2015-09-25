@@ -468,7 +468,13 @@ describe('YouTransfer Router module', function() {
 	// -------------------------------------------------------------------------------------- Testing settingsFinalise
 
 	it('should be possible to finalise settings', function() {
-		var req = {},
+		var req = {
+				params: {
+					settings: {
+						unlockCode: 'MySecretCode'
+					}
+				}
+			},
 			res = {
 				redirect: function() {}
 			}
@@ -476,6 +482,7 @@ describe('YouTransfer Router module', function() {
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
 			settings.finalised.should.equals(true);
+			settings.unlockCode.should.equals(req.params.settings.unlockCode);
 			callback();
 		});
 
@@ -483,6 +490,69 @@ describe('YouTransfer Router module', function() {
 		resMock.expects("redirect").once().withArgs('/');
 
 		router.settingsFinalise()(req, res);
+		resMock.verify();
+	});
+
+	// -------------------------------------------------------------------------------------- Testing settingsUnlock
+
+	it('should be possible to unlock settings', function() {
+		var req = {
+				params: {
+					unlockCode: 'MySecretCode'
+				}
+			},
+			res = {
+				redirect: function() {}
+			},
+			settings = {
+				finalised: true,
+				unlockCode: req.params.unlockCode
+			}
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
+			should.exist(settings);
+			settings.finalised.should.equals(false);
+			settings.unlockCode.should.equals(false);
+			callback();
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("redirect").once().withArgs('/');
+
+		router.settingsUnlock()(req, res);
+		resMock.verify();
+	});
+
+	it('should not be possible to unlock settings if code is incorrect', function() {
+		var req = {
+				params: {
+					unlockCode: 'MySecretCode'
+				}
+			},
+			res = {
+				render: function() {}
+			},
+			settings = {
+				finalised: true,
+				unlockCode: 'MyOtherCode'
+			},
+			response = {
+				success: false,
+				message: 'Incorrect code provided'
+			}
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, settings);
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("render").once().withArgs('unlock.html', response);
+
+		router.settingsUnlock()(req, res);
 		resMock.verify();
 	});
 
@@ -624,14 +694,6 @@ describe('YouTransfer Router module', function() {
 					template: 'template',
 					body: 'this is my template'
 				}
-			},
-			res = {
-				json: function() {}
-			},
-			response = {
-				success: true,
-				isPostback: true,
-				template: req.params.template
 			}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -641,14 +703,31 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			should.exist(file);
+			file.should.equals('./src/templates/' + req.params.template);
+
+			should.exist(data);
+			data.should.equals(req.params.body);
+
 			callback(null);
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
 
-		router.settingsSaveTemplate()(req, res, function() {
-			resMock.verify();
+				should.exist(req.params.success);
+				req.params.success.should.equals(true);
+
+				should.exist(req.params.isPostback);
+				req.params.isPostback.should.equals(true);
+
+				next();
+			};
+		});
+
+		router.settingsSaveTemplate()(req, null, function() {
 			done();
 		});
 	});
@@ -659,13 +738,6 @@ describe('YouTransfer Router module', function() {
 				params: {
 					body: 'this is my template'
 				}
-			},
-			res = {
-				json: function() {}
-			},
-			response = {
-				success: false,
-				err: 'The settings have been finalised and cannot be modified'
 			}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -674,30 +746,32 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
 
-		router.settingsSaveTemplate()(req, res, function() {
-			resMock.verify();
+				should.exist(req.params.success);
+				req.params.success.should.equals(false);
+
+				should.exist(req.params.isPostback);
+				req.params.isPostback.should.equals(true);
+
+				next();
+			};
+		});
+
+		router.settingsSaveTemplate()(req, null, function() {
 			done();
 		});
 	});
 
-	it('should not be possible to set template source if settings have been finalised', function(done) {
+	it('should not be possible to set template source if no template name was provided', function(done) {
 
 		var req = {
 				params: {
 					body: 'this is my template'
 				}
-			},
-			res = {
-				json: function() {}
-			},
-			response = {
-				success: false,
-				isPostback: true,
-				template: req.params.template,
-				err: 'Invalid template provided'
 			}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -706,11 +780,22 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
 
-		router.settingsSaveTemplate()(req, res, function() {
-			resMock.verify();
+				should.exist(req.params.success);
+				req.params.success.should.equals(false);
+
+				should.exist(req.params.isPostback);
+				req.params.isPostback.should.equals(true);
+
+				next();
+			};
+		});
+
+		router.settingsSaveTemplate()(req, null, function() {
 			done();
 		});
 	});

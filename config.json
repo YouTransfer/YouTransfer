@@ -14,7 +14,7 @@
 	"email": {
 		"subject": "YouTransfer",
 		"transporter": "direct",
-		"sendmail": "/usr/sbin/sendmail",
+		"sendmailPath": "/usr/sbin/sendmail",
 		"region": "eu-west-1",
 		"rateLimit": 1
 	},
@@ -26,5 +26,5 @@
 	"StorageLocation": "local",
 	"localstoragepath": "./uploads",
 	"S3Region": "us-east-1",
-	"S3SSLEnabled": true
+	"S3SSLEnabled": "true"
 }

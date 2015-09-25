@@ -30,7 +30,7 @@ describe('Anchor component', function() {
 
 	// -------------------------------------------------------------------------------------- Test features
 
-	it('should try to retrieve the url using JQuery XHR and replace target with result', function(done) {
+	it('should try to retrieve the url using JQuery XHR and replace target with result (same id)', function(done) {
 
 		var fixture = getFixture();
 		var instance = new anchor(fixture);
@@ -47,7 +47,7 @@ describe('Anchor component', function() {
 		$(document).on('xhr.loaded.anchor', function(event, element, $target) {
 			should.exist(element);
 			element.should.equals(fixture);
-			$target.selector.should.equals('#target');
+			$target.attr('id').should.equals('target');
 			$target.html().should.equals('content');
 			$.get.calledOnce.should.equals(true);
 		});
@@ -59,6 +59,34 @@ describe('Anchor component', function() {
 		$(fixture).click();
 	});
 
+	it('should try to retrieve the url using JQuery XHR and replace target with result (different id)', function(done) {
+
+		var fixture = getFixture();
+		var instance = new anchor(fixture);
+
+		sandbox.stub($, 'get', function (url) {
+			should.exist(url);
+			url.should.equals('http://someurl/');
+
+			var d = $.Deferred();
+			d.resolve('<div id="anotherTarget">content</div>');
+			return d.promise();
+		});
+
+		$(document).on('xhr.loaded.anchor', function(event, element, $target) {
+			should.exist(element);
+			element.should.equals(fixture);
+			$target.attr('id').should.equals('anotherTarget');
+			$target.html().should.equals('content');
+			$.get.calledOnce.should.equals(true);
+		});
+
+		$(document).on('component.anchor.success', function() {
+			done();
+		})
+
+		$(fixture).click();
+	});
 });
 
 // ------------------------------------------------------------------------------------------ Test fixture

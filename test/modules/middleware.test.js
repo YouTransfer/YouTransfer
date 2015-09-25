@@ -222,7 +222,8 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
-				headers: []
+				headers: [],
+				params: {}
 			},
 			viewEngine = {
 				getTemplate: function() {}

@@ -16,6 +16,8 @@ var TIMEOUT = 5000;
 // ------------------------------------------------------------------------------------------ Component Definition
 
 function Alerts(element, options) {
+	options = options || {};
+
 	var component = this;
 	component.$element = $(element);
 	component.timeout = options.timeout || TIMEOUT;
