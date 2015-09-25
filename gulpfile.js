@@ -45,7 +45,7 @@ gulp.task('clean', ['cleanTask']);
 gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
 gulp.task('dist', ['build']);
 gulp.task('test', function(callback) {
-	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback)
+	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback);
 });
 
 gulp.task('watch', ['dist'], function() {
