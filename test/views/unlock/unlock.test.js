@@ -63,7 +63,7 @@ describe('Unlock Settings View', function() {
 
 	});
 
-	it('should be able to unlock finalised settings', function *(done) {
+	it('should be able to unlock finalised settings', function *() {
 
 		var unlockCode = sandbox.unlockCode || 'unlock';
 
