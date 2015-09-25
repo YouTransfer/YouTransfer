@@ -20,12 +20,21 @@
 	</div>
 
 	<div class="col-md-6 dz-completed-container">
+
+		{%if isPostback %}
+
+		{% include "sendmail.html" %}
+
+		{% else %}
+
 		<div class="separator text-center">
 			<h6 class="separator-text"><em>or</em></h6>
 			<hr class="separator-ruler visible-xs-block visible-sm-block" />
 		</div>
 
 		{% include "gettoken.html" %}
+
+		{% endif %}
 	</div>
 
 </div>
