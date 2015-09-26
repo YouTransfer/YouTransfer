@@ -39,7 +39,7 @@ app.post('/upload', router.upload());
 app.post('/upload/bundle', router.uploadBundle());
 app.post(/^\/send/, router.send());
 app.get('/download/:token', router.downloadFile());
-app.post(/^\/download/, router.downloadFile());
+app.post('/download', router.downloadFile());
 app.get('/bundle/:token', router.downloadBundle());
 app.get('/settings', router.settingsRedirect());
 app.post('/settings/finalise', router.settingsFinalise());

@@ -402,7 +402,7 @@ describe('YouTransfer Router module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing downloadFile
 
-	it('should be possible to download a file', function() {
+	it('should be possible to download a file', function(done) {
 		var req = {
 				params: {
 					token: 'token'
@@ -418,11 +418,7 @@ describe('YouTransfer Router module', function() {
 			callback();
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects("redirect").once().withArgs('/');
-
-		router.downloadFile()(req, res);
-		resMock.verify();
+		router.downloadFile()(req, res, done);
 	});
 
 	// -------------------------------------------------------------------------------------- Testing downloadBundle

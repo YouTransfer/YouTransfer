@@ -332,10 +332,12 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 		var stream = {
-			pipe: function() {}
+			pipe: function() {},
+			on: function() {}
 		}
 		var streamMock = sandbox.mock(stream);
 		streamMock.expects("pipe").once();
+		streamMock.expects("on").once().withArgs('end').callsArg(1);
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
 		sandbox.stub(mime, 'lookup').returns(context.type);
@@ -371,10 +373,12 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 		var stream = {
-			pipe: function() {}
+			pipe: function() {},
+			on: function() {}
 		}
 		var streamMock = sandbox.mock(stream);
 		streamMock.expects("pipe").once();
+		streamMock.expects("on").once().withArgs('end').callsArg(1);
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
 		sandbox.stub(mime, 'lookup').returns(null);
