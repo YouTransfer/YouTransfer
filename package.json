@@ -37,13 +37,18 @@
     "dev": "gulp clean && gulp watch",
     "start": "gulp clean && gulp dist && node app.js",
     "app": "node app.js",
-    "test": "gulp test && codeclimate-test-reporter < ./test/unit-test-coverage/lcov.info"
+    "test": "gulp test"
   },
   "author": "Collabsoft",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "github.com/remie/YouTransfer.git"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm test"
+    }
   },
   "devDependencies": {
     "bootstrap": "^3.3.5",
@@ -52,6 +57,7 @@
     "codeclimate-test-reporter": "^0.1.1",
     "del": "^1.2.0",
     "dropzone": "^4.0.1",
+    "ghooks": "^0.3.2",
     "gulp": "^3.9.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-filter": "^3.0.0",
