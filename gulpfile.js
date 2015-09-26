@@ -140,7 +140,6 @@ function testViewsTask() {
 
 function testWebdriverTask(callback) {
 	selenium.install({
-		version: '2.45.0',
 		baseURL: 'http://selenium-release.storage.googleapis.com',
 		drivers: {
 			chrome: {
@@ -151,9 +150,7 @@ function testWebdriverTask(callback) {
 		}
 	}, function(err) {
 		if(!err) {
-			selenium.start({
-				version: '2.45.0'
-			}, function(err, child) {
+			selenium.start(function(err, child) {
 				if(!err) {
 					selenium.app = require('./app');
 					selenium.server = child;
