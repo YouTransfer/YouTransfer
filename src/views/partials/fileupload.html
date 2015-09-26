@@ -6,10 +6,11 @@
 
 	<div class="fallback">
 		<form method="POST" action="/upload" class="form" enctype="multipart/form-data">
-			<label class="btn btn-default" for="payload">
-				<input type="file" id="payload" name="payload" style="display:none;" />
-				Browse
+			<label for="payload">
+				<input type="file" id="payload" name="payload" style="display:none;" required="required" />
+				<span class="btn btn-default">Browse</span>
 			</label>
+			<button type="reset" name="reset" class="btn btn-default">Cancel</button>
 			<button type="submit" name="submit" class="btn btn-primary">Upload</button>
 			<span class="help-block">
 				Click browse to select file(s). <br />

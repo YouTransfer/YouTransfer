@@ -61,6 +61,40 @@
 	border-top: 1px solid #ddd;
 }
 
+/* 	
+Visual feedback for non-javascript users. 
+Unfortunately IE only supports :valid psuedo selectors on input elements.
+For those users the experience will be less intuitive.
+*/
+
+.hp .fallback button[type="reset"] {
+	display: none;
+}
+
+.hp .fallback form:invalid > button {
+	display: none;
+}
+
+.hp .fallback form:valid > button {
+	display: inline-block;
+}
+
+.hp .fallback form:valid label {
+	display: none;
+}
+
+.hp .fallback form input:valid + span {
+	display: inline-block;
+	padding: 6px 12px;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+	color: #fff;
+}
+
+.hp .fallback form label {
+	margin-bottom: 0;	
+}
+
 /*// ------------------------------------------------------------------------------------------ Download */
 
 .dl.hp header {
