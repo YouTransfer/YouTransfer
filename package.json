@@ -74,7 +74,7 @@
     "proxyquireify": "^3.0.0",
     "q": "^1.4.1",
     "run-sequence": "^1.1.4",
-    "selenium-standalone": "^4.6.0",
+    "selenium-standalone": "^4.6.3",
     "sinon": "^1.16.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-paths": "^1.0.0",

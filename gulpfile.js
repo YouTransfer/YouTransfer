@@ -149,16 +149,22 @@ function testWebdriverTask(callback) {
 				baseURL: 'http://chromedriver.storage.googleapis.com'
 			}
 		}
-	}, function() {
-		selenium.start(function(err, child) {
-			if(!err) {
-				selenium.app = require('./app');
-				selenium.server = child;
-				callback();
-			} else {
-				callback(err);
-			}
-		});
+	}, function(err) {
+		if(!err) {
+			selenium.start({
+				version: '2.45.0'
+			}, function(err, child) {
+				if(!err) {
+					selenium.app = require('./app');
+					selenium.server = child;
+					callback();
+				} else {
+					callback(err);
+				}
+			});
+		} else {
+			callback(err);
+		}
 	});	
 };
 
