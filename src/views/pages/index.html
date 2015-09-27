@@ -10,7 +10,8 @@
 	<div class="col-md-6">
 		{%if isPostback %}
 
-		{% include "dropzone.html" %}
+		{% import "dropzone.html" as dropzone %}
+		{{ dropzone.preview(bundle, isPostback)}}
 
 		{% else %}
 

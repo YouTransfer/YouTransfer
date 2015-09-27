@@ -72,19 +72,14 @@ function Fileupload(element) {
 
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
+				var file = response.bundle.files[0];
 				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
-				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + response.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + response.id + '</a>');
+				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + file.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + file.id + '</a>');
 
 				if($(DROPZONE_UPLOAD_COMPLETE_SELECTOR).length == 0) {
 					component.$completedContainer
 							 .html(component.completeTemplate)
 							 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
-				};
-
-				var file = {
-					id: response.id,
-					name: response.name,
-					size: response.filesize
 				};
 
 				component.bundle.files.push(file);

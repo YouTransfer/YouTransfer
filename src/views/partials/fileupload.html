@@ -1,13 +1,14 @@
+{% import "dropzone.html" as dropzone %}
 <div data-fileupload class="dz-action-add dz-clickable">
 
-	{% include "dropzone.html" %}
+	{{ dropzone.preview() }}
 
 	{% include "sendmail.html" %}
 
 	<div class="fallback">
 		<form method="POST" action="/upload" class="form" enctype="multipart/form-data">
 			<label for="payload">
-				<input type="file" id="payload" name="payload" style="display:none;" required="required" />
+				<input type="file" id="payload" name="payload" style="display:none;" required="required" multiple="multiple" />
 				<span class="btn btn-default">Browse</span>
 			</label>
 			<button type="reset" name="reset" class="btn btn-default">Cancel</button>

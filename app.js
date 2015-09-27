@@ -26,7 +26,7 @@ var middleware = require('./lib/middleware');
 
 var app = restify.createServer(); 
 app.pre(restify.pre.sanitizePath());
-app.use(restify.bodyParser());
+app.use(restify.bodyParser({ multiples: true }));
 app.use(restify.queryParser());
 app.use(restify.cookieParser.parse);
 app.use(restify.compression());
