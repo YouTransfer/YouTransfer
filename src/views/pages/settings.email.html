@@ -21,14 +21,6 @@
 	<form class="form-horizontal" method="post" data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true" data-select-content>
 
 		<div class="form-group">
-			<label for="sender" class="col-sm-3 control-label">Sender</label>
-			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[email][sender]" id="sender" value="{{ email.sender }}">
-			</div>
-			<div class="col-sm-3"></div>
-		</div>
-
-		<div class="form-group">
 			<label for="" class="col-sm-3 control-label">Transport Mechanism</label>
 			<div class="col-sm-6">
 				<select class="form-control" name="settings[email][transporter]" data-select>
@@ -41,13 +33,20 @@
 			<div class="col-sm-3"></div>
 		</div>
 
-		<div id="direct" role="select-section" class="select-section {{ "active" if email.transporter == 'direct' }}">
-
-			<h3>Direct transport to MX</h3>
-
-			<div class="alert alert-warning">
-				Please note that when choosing direct transport from your local server to the MX records of the recipient it is likely that the message will be rejected or redirected to the end-user SPAM folder unless you implement proper <a href="https://en.wikipedia.org/wiki/Anti-spam_techniques">anti-spam measures</a> to safeguard your domain reputation.
+		<div class="form-group">
+			<label for="sender" class="col-sm-3 control-label">Sender</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="settings[email][sender]" id="sender" value="{{ email.sender }}">
 			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label for="sender" class="col-sm-3 control-label">Subject</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="settings[email][subject]" id="subject" value="{{ email.subject }}">
+			</div>
+			<div class="col-sm-3"></div>
 		</div>
 
 		<div id="smtp" role="select-section" class="select-section {{ "active" if email.transporter == 'smtp' }}" data-select-content>
@@ -178,6 +177,15 @@
 					<input type="text" class="form-control" name="settings[email][rateLimit]" id="rateLimit" value="{{ email.rateLimit }}">
 				</div>
 				<div class="col-sm-3"></div>
+			</div>
+		</div>
+
+		<div id="direct" role="select-section" class="select-section {{ "active" if email.transporter == 'direct' }}">
+
+			<h3>Direct transport to MX</h3>
+
+			<div class="alert alert-warning">
+				Please note that when choosing direct transport from your local server to the MX records of the recipient it is likely that the message will be rejected or redirected to the end-user SPAM folder unless you implement proper <a href="https://en.wikipedia.org/wiki/Anti-spam_techniques">anti-spam measures</a> to safeguard your domain reputation.
 			</div>
 		</div>
 

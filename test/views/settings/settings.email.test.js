@@ -42,6 +42,13 @@ describe('Email Settings View', function() {
 
 	});
 
+	it('should have a "Transport Mechanism" field with the current value based on user settings', function *() {
+
+		var value = yield browser.getValue('select[name="settings[email][transporter]"]');
+		value.should.be.equal(sandbox.email.transporter);
+
+	});
+
 	it('should have a "Sender" field with the current value based on user settings', function *() {
 
 		var value = yield browser.getValue('input#sender')
@@ -49,10 +56,10 @@ describe('Email Settings View', function() {
 
 	});
 
-	it('should have a "Transport Mechanism" field with the current value based on user settings', function *() {
+	it('should have a "Subject" field with the current value based on user settings', function *() {
 
-		var value = yield browser.getValue('select[name="settings[email][transporter]"]');
-		value.should.be.equal(sandbox.email.transporter);
+		var value = yield browser.getValue('input#subject')
+		value.should.be.equal(sandbox.email.subject || '');
 
 	});
 

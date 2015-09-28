@@ -35,6 +35,7 @@ app.use(middleware);
 // ------------------------------------------------------------------------------------------ App Routing
 
 var router = routes('./dist');
+app.post('/', router.upload());
 app.post('/upload', router.upload());
 app.post('/upload/bundle', router.uploadBundle());
 app.post(/^\/send/, router.send());
