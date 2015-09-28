@@ -40,7 +40,7 @@ describe('Form component', function() {
 			$('#target').length.should.equals(1);
 			$('#target').html().should.equals('My Awesome Response');
 			done();
-		})
+		});
 
 		$(fixture).trigger('submit');
 
@@ -50,7 +50,7 @@ describe('Form component', function() {
 
 // ------------------------------------------------------------------------------------------ Test fixture
 
-function getFixture(value) {
+function getFixture() {
 	var fixture = document.createElement('form');
 	fixture.setAttribute('data-xhrform-target', 'target');
 

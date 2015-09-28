@@ -54,7 +54,7 @@ describe('Anchor component', function() {
 
 		$(document).on('component.anchor.success', function() {
 			done();
-		})
+		});
 
 		$(fixture).click();
 	});
@@ -83,7 +83,7 @@ describe('Anchor component', function() {
 
 		$(document).on('component.anchor.success', function() {
 			done();
-		})
+		});
 
 		$(fixture).click();
 	});

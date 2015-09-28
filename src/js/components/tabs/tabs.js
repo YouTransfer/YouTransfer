@@ -21,7 +21,7 @@ function Tabs(element) {
 
 	$(document).off(XHR_LOADED_EVENT_NAMESPACED);
 	$(document).on(XHR_LOADED_EVENT_NAMESPACED, function(event, elm) {
-		if(elm.getAttribute('role') == TAB_ROLE) {
+		if(elm.getAttribute('role') === TAB_ROLE) {
 			var url = elm.getAttribute('href');
 			if(url) {
 				component.$element.find('li').removeClass('active');

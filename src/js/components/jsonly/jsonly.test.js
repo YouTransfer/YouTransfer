@@ -32,7 +32,7 @@ describe('JSOnly component', function() {
 
 // ------------------------------------------------------------------------------------------ Test fixture
 
-function getFixture(value) {
+function getFixture() {
 	var fixture = document.createElement('div');
 	fixture.setAttribute('data-js-only', 'true');
 	return fixture;
