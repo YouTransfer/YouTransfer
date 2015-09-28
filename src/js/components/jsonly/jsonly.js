@@ -23,7 +23,7 @@ $(COMPONENT_SELECTOR).each(function(index, element) {
 	return new JSOnly(element);
 });
 
-$(document).on('xhr.loaded', function(event) {
+$(document).on('xhr.loaded', function() {
 	$(COMPONENT_SELECTOR).each(function(index, element) {
 		return new JSOnly(element);
 	});

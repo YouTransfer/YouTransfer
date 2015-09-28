@@ -62,7 +62,7 @@ function Fileupload(element) {
 		component.dropzone = new Dropzone(element, settings);
 
 		if(!settings.forceFallback) {
-			component.dropzone.on("addedfile", function(file) {
+			component.dropzone.on("addedfile", function() {
 				component.$element.addClass("dz-files-added");
 			});
 
@@ -95,7 +95,7 @@ function Fileupload(element) {
 				});
 			});
 
-			component.dropzone.on("reset", function(progress) {
+			component.dropzone.on("reset", function() {
 				component.$element.removeClass("dz-files-added");
 			});
 		}

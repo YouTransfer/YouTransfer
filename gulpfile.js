@@ -126,7 +126,7 @@ function testComponentsTask() {
 			   .on('error', function (err) {
 					throw err;
 			    });
-};
+}
 
 function testViewsTask() {
 	return  gulp.src('./test/views/wdio.conf.js')
@@ -136,7 +136,7 @@ function testViewsTask() {
 					selenium.app.close();
 					selenium.server.kill();
 				});
-};
+}
 
 function testWebdriverTask(callback) {
 	selenium.install({
@@ -163,7 +163,7 @@ function testWebdriverTask(callback) {
 			callback(err);
 		}
 	});	
-};
+}
 
 // Workaround for issue with gulp WebdriverIO task not ending the browser session correctly
 // This means that the test should be run stand-alone
