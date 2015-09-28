@@ -9,6 +9,12 @@
 	</head>
 	<body>
 
+		{% if invalidHost %}
+			<div class="baseurl alert alert-warning">
+				<strong>Warning</strong>: the base URL is set to {{ baseUrl }} but you are accessing this page from {{ host }}. It is recommended to <a href="/settings/general/">update the BaseUrl setting</a>.
+			</div>
+		{% endif %}
+
 		<header>
 			{% block header %}
 				{% include "header.html" %}
