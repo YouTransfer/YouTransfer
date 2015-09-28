@@ -372,19 +372,23 @@ describe('YouTransfer module', function() {
 					email: {
 						to: 'novalidemail'
 					},
-					files: {
-							0: encodeURIComponent(JSON.stringify({ id: 'file' }))
-					}
+					bundle: 'bundle'
 				}
 			},
 			res = {
 				renderTemplate: function() {}
 			},
 			settings = {
+				baseUrl: '',
 				email: {
 					service: 'gmail',
-					transporter: 'smtp'
+					transporter: 'smtp',
+					sender: 'sender',
+					subject: 'subject'
 				}
+			},
+			factory = {
+				getJSON: function() {}
 			},
 			transporter = {
 				sendMail: function() {}
@@ -393,12 +397,37 @@ describe('YouTransfer module', function() {
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
 		});
-		sandbox.stub(nodemailer, "createTransport").returns(transporter);
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
-			callback();
+
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
 		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(null, {
+				files: {
+					0: {
+						id: 'file'
+					}
+				}
+			});
+		});
+
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+			fields.bundle.id.should.equals(req.params.bundle);
+			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
+		});
+
+		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+
+		sandbox.stub(transporter, "sendMail", function(email, callback) {
+			email.from.should.equals(settings.email.sender);
+			email.to.should.equals(req.params.email.to);
+			email.subject.should.equals(settings.email.subject);
+			email.html.should.equals('body');
+			callback();
 		});
 
 		youtransfer.send(req, res, function() {
@@ -412,7 +441,8 @@ describe('YouTransfer module', function() {
 				params: {
 					email: {
 						to: 'novalidemail'
-					}
+					},
+					bundle: 'bundle'
 				}
 			},
 			res = {
@@ -421,8 +451,13 @@ describe('YouTransfer module', function() {
 			settings = {
 				email: {
 					service: '',
-					transporter: 'smtp'
+					transporter: 'smtp',
+					sender: 'sender',
+					subject: 'subject'
 				}
+			},
+			factory = {
+				getJSON: function() {}
 			},
 			transporter = {
 				sendMail: function() {}
@@ -431,12 +466,37 @@ describe('YouTransfer module', function() {
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
 		});
-		sandbox.stub(nodemailer, "createTransport").returns(transporter);
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
-			callback();
+
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
 		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(null, {
+				files: {
+					0: {
+						id: 'file'
+					}
+				}
+			});
+		});
+
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+			fields.bundle.id.should.equals(req.params.bundle);
+			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
+		});
+
+		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+
+		sandbox.stub(transporter, "sendMail", function(email, callback) {
+			email.from.should.equals(settings.email.sender);
+			email.to.should.equals(req.params.email.to);
+			email.subject.should.equals(settings.email.subject);
+			email.html.should.equals('body');
+			callback();
 		});
 
 		youtransfer.send(req, res, function() {
@@ -450,7 +510,8 @@ describe('YouTransfer module', function() {
 				params: {
 					email: {
 						to: 'novalidemail'
-					}
+					},
+					bundle: 'bundle'
 				}
 			},
 			res = {
@@ -458,8 +519,13 @@ describe('YouTransfer module', function() {
 			},
 			settings = {
 				email: {
-					transporter: 'sendmail'
+					transporter: 'sendmail',
+					sender: 'sender',
+					subject: 'subject'
 				}
+			},
+			factory = {
+				getJSON: function() {}
 			},
 			transporter = {
 				sendMail: function() {}
@@ -469,13 +535,35 @@ describe('YouTransfer module', function() {
 			callback(null, settings);
 		});
 
-		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
+		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(null, {
+				files: {
+					0: {
+						id: 'file'
+					}
+				}
+			});
+		});
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+			fields.bundle.id.should.equals(req.params.bundle);
+			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
 
+		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+
 		sandbox.stub(transporter, "sendMail", function(email, callback) {
+			email.from.should.equals(settings.email.sender);
+			email.to.should.equals(req.params.email.to);
+			email.subject.should.equals(settings.email.subject);
+			email.html.should.equals('body');
 			callback();
 		});
 
@@ -490,7 +578,8 @@ describe('YouTransfer module', function() {
 				params: {
 					email: {
 						to: 'novalidemail'
-					}
+					},
+					bundle: 'bundle'
 				}
 			},
 			res = {
@@ -498,8 +587,13 @@ describe('YouTransfer module', function() {
 			},
 			settings = {
 				email: {
-					transporter: 'ses'
+					transporter: 'ses',
+					sender: 'sender',
+					subject: 'subject'
 				}
+			},
+			factory = {
+				getJSON: function() {}
 			},
 			transporter = {
 				sendMail: function() {}
@@ -509,13 +603,35 @@ describe('YouTransfer module', function() {
 			callback(null, settings);
 		});
 
-		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
+		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(null, {
+				files: {
+					0: {
+						id: 'file'
+					}
+				}
+			});
+		});
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+			fields.bundle.id.should.equals(req.params.bundle);
+			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
 
+		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+
 		sandbox.stub(transporter, "sendMail", function(email, callback) {
+			email.from.should.equals(settings.email.sender);
+			email.to.should.equals(req.params.email.to);
+			email.subject.should.equals(settings.email.subject);
+			email.html.should.equals('body');
 			callback();
 		});
 
@@ -530,7 +646,8 @@ describe('YouTransfer module', function() {
 				params: {
 					email: {
 						to: 'novalidemail'
-					}
+					},
+					bundle: 'bundle'
 				}
 			},
 			res = {
@@ -538,8 +655,13 @@ describe('YouTransfer module', function() {
 			},
 			settings = {
 				email: {
-					transporter: 'notsupported'
+					transporter: 'notsupported',
+					sender: 'sender',
+					subject: 'subject'
 				}
+			},
+			factory = {
+				getJSON: function() {}
 			},
 			transporter = {
 				sendMail: function() {}
@@ -549,17 +671,127 @@ describe('YouTransfer module', function() {
 			callback(null, settings);
 		});
 
-		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
+		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(null, {
+				files: {
+					0: {
+						id: 'file'
+					}
+				}
+			});
+		});
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+			fields.bundle.id.should.equals(req.params.bundle);
+			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
 
+		sandbox.stub(nodemailer, "createTransport").returns(transporter);
+
 		sandbox.stub(transporter, "sendMail", function(email, callback) {
+			email.from.should.equals(settings.email.sender);
+			email.to.should.equals(req.params.email.to);
+			email.subject.should.equals(settings.email.subject);
+			email.html.should.equals('body');
 			callback();
 		});
 
 		youtransfer.send(req, res, function(err) {
+			done();
+		});
+	});	
+
+	it('should continue with erronous callback if an error occurs while retrieving settings when sending email', function(done) {
+
+		var req = {},
+			res = {}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(new Error('error'), null);
+		});
+
+		youtransfer.send(req, res, function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+
+	});	
+
+	it('should continue with erronous callback if an error occurs while retrieving storage factory when sending email', function(done) {
+
+		var req = {
+				params: {}
+			},
+			res = {},
+			settings = {}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(new Error('error'), null);
+		});
+
+		youtransfer.send(req, res, function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+
+	});	
+
+	it('should continue with erronous callback if an error occurs while retrieving metadata when sending email', function(done) {
+
+		var req = {
+				params: {
+					email: {
+						to: 'novalidemail'
+					},
+					bundle: 'bundle'
+				}
+			},
+			res = {
+				renderTemplate: function() {}
+			},
+			settings = {
+				email: {
+					transporter: 'notsupported',
+					sender: 'sender',
+					subject: 'subject'
+				}
+			},
+			factory = {
+				getJSON: function() {}
+			},
+			transporter = {
+				sendMail: function() {}
+			}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
+		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(new Error('error'), null);
+		});
+
+		youtransfer.send(req, res, function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
 			done();
 		});
 	});	
@@ -570,7 +802,8 @@ describe('YouTransfer module', function() {
 				params: {
 					email: {
 						to: 'novalidemail'
-					}
+					},
+					bundle: 'bundle'
 				}
 			},
 			res = {
@@ -578,8 +811,13 @@ describe('YouTransfer module', function() {
 			},
 			settings = {
 				email: {
-					transporter: 'notsupported'
+					transporter: 'notsupported',
+					sender: 'sender',
+					subject: 'subject'
 				}
+			},
+			factory = {
+				getJSON: function() {}
 			},
 			transporter = {
 				sendMail: function() {}
@@ -587,6 +825,21 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+			callback(null, factory);
+		});
+
+		sandbox.stub(factory, "getJSON", function(token, callback) {
+			token.should.equals(req.params.bundle);
+			callback(null, {
+				files: {
+					0: {
+						id: 'file'
+					}
+				}
+			});
 		});
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
