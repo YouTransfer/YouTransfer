@@ -63,6 +63,61 @@ describe('YouTransfer Local Storage module', function() {
 		}
 	});
 
+	// -------------------------------------------------------------------------------------- Testing JSON retrieval
+
+	it('should implement the "getJSON" method and enable retrieval of JSON metadata', function(done) {
+
+		var metadata = {
+			key: 'value'
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, callback) {
+			file.should.equals(path.join(provider.localstoragepath, 'file.json'));
+			callback(null, JSON.stringify(metadata));
+		});
+
+		provider.getJSON('file', function(err, value) {
+			value.key.should.equals(metadata.key);
+			done()
+		});
+	});
+
+	it('should implement the "getJSON" method and continue with erronous callback if JSON metadata retrieval failed', function(done) {
+
+		var metadata = {
+			key: 'value'
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, callback) {
+			file.should.equals(path.join(provider.localstoragepath, 'file.json'));
+			callback(new Error('error'));
+		});
+
+		provider.getJSON('file', function(err, value) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+	});
+
+	it('should implement the "getJSON" method and continue with erronous callback if JSON metadata parsing failed', function(done) {
+
+		var metadata = {
+			key: 'value'
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, callback) {
+			file.should.equals(path.join(provider.localstoragepath, 'file.json'));
+			callback(null, 'this is not JSON');
+		});
+
+		provider.getJSON('file', function(err, value) {
+			should.exist(err);
+			err.message.should.equals('Unexpected token h');
+			done();
+		});
+	});
+
 	// -------------------------------------------------------------------------------------- Testing file upload
 
 	it('should implement the "upload" method and enable local storage of a file', function(done) {

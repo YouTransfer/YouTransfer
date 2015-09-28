@@ -58,6 +58,7 @@ describe('Settings View', function() {
 		item.should.be.equal(true);
 
 		var header = yield browser.click('.settings ul[role="tablist"] li a[href="/settings/general"]')
+								  .waitForExist('.tab-pane.active h1')
 								  .getText('.tab-pane.active h1');
 		header.should.be.equal('General');
 
@@ -69,6 +70,7 @@ describe('Settings View', function() {
 		item.should.be.equal(true);
 
 		var header = yield browser.click('.settings ul[role="tablist"] li a[href="/settings/transfer"]')
+								  .waitForExist('.tab-pane.active h1')
 								  .getText('.tab-pane.active h1');
 		header.should.be.equal('Transfer');
 
@@ -80,6 +82,7 @@ describe('Settings View', function() {
 		item.should.be.equal(true);
 
 		var header = yield browser.click('.settings ul[role="tablist"] li a[href="/settings/email"]')
+								  .waitForExist('.tab-pane.active h1')
 								  .getText('.tab-pane.active h1');
 		header.should.be.equal('Email');
 
@@ -91,6 +94,7 @@ describe('Settings View', function() {
 		item.should.be.equal(true);
 
 		var header = yield browser.click('.settings ul[role="tablist"] li a[href="/settings/storage"]')
+								  .waitForExist('.tab-pane.active h1')
 								  .getText('.tab-pane.active h1');
 		header.should.be.equal('Storage');
 
@@ -102,6 +106,7 @@ describe('Settings View', function() {
 		item.should.be.equal(true);
 
 		var header = yield browser.click('.settings ul[role="tablist"] li a[href="/settings/template"]')
+								  .waitForExist('.tab-pane.active h1')
 								  .getText('.tab-pane.active h1');
 		header.should.be.equal('Templates');
 

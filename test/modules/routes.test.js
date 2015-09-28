@@ -77,27 +77,24 @@ describe('YouTransfer Router module', function() {
 			files: {
 				payload: 'file'
 			},
-			params: {
-				bundle: 'bundle'
-			},
+			params: {},
 			isXmlHtppRequest: true
 		}
 
 		var res = {
-			json: function() {},
-			render: function() {}
+			json: function() {}
 		};
 
 		var context = {
 			id: 'token'
 		}
 
-		var response = _.assign({
+		var response = {
 			success: true,
 			isPostback: true, 
-			link: '/download/' + context.id + '/',
-			error: ''
-		}, context);
+			errors: [],
+			bundle: { files: [{ id: context.id }] }
+		}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -106,7 +103,20 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+			should.exist(file);
+			should.exist(bundle);
+			file.should.equals(req.files.payload);
+			response.bundle.id = bundle.id;
 			callback(null, context);
+		});
+
+		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+			should.exist(bundle);
+			should.exist(bundle.id);
+			should.exist(bundle.files[0])
+			bundle.id.should.equals(response.bundle.id);
+			bundle.files[0].id.should.equals(context.id);
+			callback();
 		});
 
 		var resMock = sandbox.mock(res);
@@ -118,6 +128,64 @@ describe('YouTransfer Router module', function() {
 		});
 	});
 
+	it('should be possible to upload multiple files without using dropzone', function(done) {
+		
+		var req = {
+			files: {
+				payload: [ 'file1', 'file2' ]
+			},
+			params: {},
+			isXmlHtppRequest: true
+		}
+
+		var res = {
+			json: function() {}
+		};
+
+		var context = {
+			id: 'token'
+		}
+
+		var response = {
+			success: true,
+			isPostback: true, 
+			errors: [],
+			bundle: { files: [{ id: context.id }, { id: context.id }] }
+		}
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				baseUrl: ''
+			});
+		});
+
+		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+			should.exist(file);
+			should.exist(bundle);
+			file.should.match(/file1|file2/	);
+			response.bundle.id = bundle.id;
+			callback(null, context);
+		});
+
+		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+			should.exist(bundle);
+			should.exist(bundle.id);
+			should.exist(bundle.files[0])
+			should.exist(bundle.files[1])
+			bundle.id.should.equals(response.bundle.id);
+			bundle.files[0].id.should.equals(context.id);
+			bundle.files[1].id.should.equals(context.id);
+			callback();
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("json").once().withArgs(response);
+
+		router.upload()(req, res, function() {
+			resMock.verify();
+			done();
+		});
+	});
 	it('should be possible to upload using dropzone', function(done) {
 		
 		var req = {
@@ -139,12 +207,12 @@ describe('YouTransfer Router module', function() {
 			id: 'token'
 		}
 
-		var response = _.assign({
+		var response = {
 			success: true,
 			isPostback: true, 
-			link: '/download/' + context.id + '/',
-			error: ''
-		}, context);
+			errors: [],
+			bundle: { files: [{ id: context.id }] }
+		}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -153,7 +221,20 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+			should.exist(file);
+			should.exist(bundle);
+			file.should.equals(req.files['dz-payload']);
+			response.bundle.id = bundle.id;
 			callback(null, context);
+		});
+
+		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+			should.exist(bundle);
+			should.exist(bundle.id);
+			should.exist(bundle.files[0])
+			bundle.id.should.equals(response.bundle.id);
+			bundle.files[0].id.should.equals(context.id);
+			callback();
 		});
 
 		var resMock = sandbox.mock(res);
@@ -186,12 +267,12 @@ describe('YouTransfer Router module', function() {
 			id: 'token'
 		}
 
-		var response = _.assign({
-			success: false,
-			isPostback: true, 
-			link: '/download/' + context.id + '/',
-			error: 'this is an error'
-		}, context);
+		var response = {
+			bundle: { files: [{ id: "token" }], id: "bundle" },
+			errors: new Array(new Error('error')),
+			isPostback: true,
+			success: false
+		}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -200,7 +281,11 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
-			callback(new Error(response.error), context);
+			callback(new Error('error'), context);
+		});
+
+		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+			callback();
 		});
 
 		var resMock = sandbox.mock(res);
@@ -233,12 +318,12 @@ describe('YouTransfer Router module', function() {
 			id: 'token'
 		}
 
-		var response = _.assign({
-			success: false,
-			isPostback: true, 
-			link: '/download/' + context.id + '/',
-			error: 'this is an error'
-		}, context);
+		var response = {
+			bundle: { files: [{ id: "token" }], id: "bundle" },
+			errors: new Array(new Error('error')),
+			isPostback: true,
+			success: false
+		}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -247,7 +332,11 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
-			callback(new Error(response.error), context);
+			callback(new Error('Error'), context);
+		});
+
+		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+			callback();
 		});
 
 		var resMock = sandbox.mock(res);

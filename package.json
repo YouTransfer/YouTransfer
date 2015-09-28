@@ -30,7 +30,8 @@
     "restify": "^2.8.2",
     "restify-cookies": "^0.1.1",
     "url": "^0.11.0",
-    "uuid": "^2.0.1"
+    "uuid": "^2.0.1",
+    "validator": "^4.0.6"
   },
   "scripts": {
     "dist": "gulp clean && gulp dist",

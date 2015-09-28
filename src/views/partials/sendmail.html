@@ -1,6 +1,9 @@
 <div class="dz-upload-complete {{ "hidden" if not isPostback }}">
 	<h2>Email a friend!</h2>
 	<form class="form form-group-sm" action="/send" method="POST">
+		{% if isPostback %}
+		<input type="hidden" name="bundle" value="{{ bundle.id }}" />
+		{% endif %}
 		<div class="form-group">
 			<input type="text" id="from" name="email[from]" class="form-control" placeholder="Your email">
 		</div>

@@ -14,6 +14,7 @@ var archiver = require('archiver');
 var mime = require('mime');
 var stream = require('stream');
 var zlib = require('zlib');
+var validator = require('validator');
 
 // ------------------------------------------------------------------------------------------ Test Definition
 
@@ -82,6 +83,96 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		}
 	});
 
+	// -------------------------------------------------------------------------------------- Testing JSON retrieval
+
+	it('should implement the "getJSON" method and enable retrieval of JSON metadata of file', function(done) {
+
+		var token = 'file',
+			data = {
+				Metadata: {
+					json: JSON.stringify({
+						key: 'value'						
+					})
+				}
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				},
+				error: new Error('error')
+			}
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, data);
+
+		provider.getJSON(token, function(err, value) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should implement the "getJSON" method and enable retrieval of JSON metadata of bundle', function(done) {
+
+		var token = 'bundle',
+			data = {
+				Body: JSON.stringify({
+					key: 'value'						
+				})
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				},
+				error: new Error('error')
+			}
+
+		sandbox.stub(validator, 'isUUID').returns(true);
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, data);
+
+		provider.getJSON(token, function(err, value) {
+			should.not.exist(err);
+			done();
+		});
+
+	});	
+
+	it('should implement the "getJSON" method and continue with erronous callback if retrieval of JSON metadata fails', function(done) {
+
+		var token = 'bundle',
+			data = {
+				Body: JSON.stringify({
+					key: 'value'						
+				})
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				},
+				error: new Error('error')
+			}
+
+		sandbox.stub(validator, 'isUUID').returns(true);
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, s3obj.error, null);
+
+		provider.getJSON(token, function(err, value) {
+			should.exist(err);
+			err.should.equals(s3obj.error);
+			done();
+		});
+
+	});
+
 	// -------------------------------------------------------------------------------------- Testing file upload
 
 	it('should implement the "upload" method and enable Amazon S3 storage of a file', function(done) {
@@ -139,7 +230,6 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		sandbox.stub(provider.s3obj, 'upload', function (options, callback) {
 			should.exist(options);
 			options.Key.should.equals(bundle.id);
-			options.Metadata.json.should.equals(JSON.stringify(bundle));
 			callback(null, bundle);
 		});
 
@@ -200,6 +290,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		s3objMock.expects('getObject').once().withArgs({ Key: bundle.files[0].id }).returns(readstream);
 
 		var zip = {
+			on: function() {},
 			append: function() {},
 			pipe: function() {},
 			finalize: function() {}
@@ -208,6 +299,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		zipMock.expects('pipe').once();
 		zipMock.expects('finalize').once();
 		zipMock.expects('append').once();
+		zipMock.expects('on').once().callsArgAsync(1);
 		sandbox.stub(archiver, 'create').returns(zip);
 
 		var resMock = sandbox.mock(res);

@@ -137,7 +137,9 @@ describe('Index View', function() {
 								   .waitForExist('input#payload')
 								   .execute(function() {
 								   		// The WebDriverIO chooseFile() method cannot target an invisible input
-										jQuery("input#payload").show();
+								   		// It also does not work well with multiple file input
+										jQuery("input#payload").removeAttr('multiple')
+															   .show();
 								   })
 								   .waitForVisible('input#payload')
 								   .chooseFile('input#payload', path.join(__dirname, '../../../README.md'))

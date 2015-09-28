@@ -18,6 +18,8 @@ var SELECT_TARGET_SELECTOR = 'data-select-target';
 function SelectSection(element) {
 	var component = this;
 	component.$element = $(element);
+	component.$element.closest(SELECT_CONTENT_SELECTOR)
+					  .addClass('select-section-container');
 
 	element.onchange = function(event) {
 		component.$element.closest(SELECT_CONTENT_SELECTOR)

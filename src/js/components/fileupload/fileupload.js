@@ -72,35 +72,26 @@ function Fileupload(element) {
 
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
+				var file = response.bundle.files[0];
 				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
-				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + response.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + response.id + '</a>');
-
-				if($(DROPZONE_UPLOAD_COMPLETE_SELECTOR).length == 0) {
-					component.$completedContainer
-							 .html(component.completeTemplate)
-							 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
-				};
-
-				var file = {
-					id: response.id,
-					name: response.name,
-					size: response.filesize
-				};
-
+				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + file.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + file.id + '</a>');
 				component.bundle.files.push(file);
-				component.$completedContainer
-						 .find('form')
-						 .append('<input type="hidden" name="files[]" value="' + encodeURIComponent(JSON.stringify(file)) + '" />');
 			});
 
 			component.dropzone.on('queuecomplete', function() {
 				$.post('/upload/bundle', {
 					bundle: JSON.stringify(component.bundle)
 				}).done(function() {
+
+					component.$completedContainer
+							 .html(component.completeTemplate)
+							 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
+
 					$(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).prepend('<div class="dz-preview-bundle"><span class="glyphicon glyphicon-download-alt"></span> <a href="/bundle/' + component.bundle.id + '/">Download all files as a zip archive (<span class="glyphicon glyphicon-compressed"></span>)</a></div>');
 					component.$completedContainer
 							 .find('form')
-							 .append('<input type="hidden" name="bundle" value="' + component.bundle.id + '" />');					
+							 .append('<input type="hidden" name="bundle" value="' + component.bundle.id + '" />');
+
 				});
 			});
 
