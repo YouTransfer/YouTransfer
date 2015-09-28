@@ -42,12 +42,12 @@
 		</div>
 
 		<div id="direct" role="select-section" class="select-section {{ "active" if email.transporter == 'direct' }}">
-			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-6 text-right">
-					<button type="submit" class="btn btn-primary">Save</button>
-				</div>
-				<div class="col-sm-3"></div>
-			</div>					
+
+			<h3>Direct transport to MX</h3>
+
+			<div class="alert alert-warning">
+				Please note that when choosing direct transport from your local server to the MX records of the recipient it is likely that the message will be rejected or redirected to the end-user SPAM folder unless you implement proper <a href="https://en.wikipedia.org/wiki/Anti-spam_techniques">anti-spam measures</a> to safeguard your domain reputation.
+			</div>
 		</div>
 
 		<div id="smtp" role="select-section" class="select-section {{ "active" if email.transporter == 'smtp' }}" data-select-content>
@@ -134,13 +134,6 @@
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-6 text-right">
-					<button type="submit" class="btn btn-primary">Save</button>
-				</div>
-				<div class="col-sm-3"></div>
-			</div>					
 		</div>
 
 		<div id="sendmail" role="select-section" class="select-section {{ "active" if email.transporter == 'sendmail' }}">
@@ -153,13 +146,6 @@
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-6 text-right">
-					<button type="submit" class="btn btn-primary">Save</button>
-				</div>
-				<div class="col-sm-3"></div>
-			</div>					
 		</div>
 
 		<div id="ses" role="select-section" class="select-section {{ "active" if email.transporter == 'ses' }}">
@@ -193,14 +179,14 @@
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-6 text-right">
-					<button type="submit" class="btn btn-primary">Save</button>
-				</div>
-				<div class="col-sm-3"></div>
-			</div>					
 		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-6 text-right">
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>					
 
 	</form>
 </div>
