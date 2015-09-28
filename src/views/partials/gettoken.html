@@ -4,9 +4,25 @@
 	<form method="POST" action="/download" class="form-inline">
 
 		<div class="form-group">
-			<input type="text" class="form-control" name="token" />
+			<input type="text" class="form-control" name="token" value="{{ token }}" />
 			<button type="submit" name="submit" class="btn btn-primary">Download</button>
 		</div>
+
+		{% if not success and route == 'downloadFile' %}
+		<div>
+			<span class="help-block">
+				<span class="text-danger">
+					{% if error.code == 'ENOENT' %}
+					Oh no... there is no file to match this token!<br />
+					Are you sure you've entered the right one?
+				 	{% else %}
+				 	Whoops... something went wrong while looking for your file.<br />
+				 	Please try again later!
+				 	{% endif %}
+				 </span>
+			</span>
+		</div>
+		{% endif %}
 
 	</form>
 </div>

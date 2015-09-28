@@ -8,7 +8,7 @@
 	</header>
 
 	<div class="col-md-6">
-		{%if isPostback %}
+		{%if success and isPostback %}
 
 		{% import "dropzone.html" as dropzone %}
 		{{ dropzone.preview(bundle, isPostback)}}
@@ -22,7 +22,7 @@
 
 	<div class="col-md-6 dz-completed-container">
 
-		{%if isPostback %}
+		{%if success and isPostback %}
 
 		{% include "sendmail.html" %}
 
