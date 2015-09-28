@@ -290,6 +290,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		s3objMock.expects('getObject').once().withArgs({ Key: bundle.files[0].id }).returns(readstream);
 
 		var zip = {
+			on: function() {},
 			append: function() {},
 			pipe: function() {},
 			finalize: function() {}
@@ -298,6 +299,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		zipMock.expects('pipe').once();
 		zipMock.expects('finalize').once();
 		zipMock.expects('append').once();
+		zipMock.expects('on').once().callsArgAsync(1);
 		sandbox.stub(archiver, 'create').returns(zip);
 
 		var resMock = sandbox.mock(res);
