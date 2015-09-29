@@ -498,7 +498,7 @@ describe('YouTransfer Router module', function() {
 				}
 			},
 			res = {
-				redirect: function() {}
+				process: function() {}
 			}
 
 		sandbox.stub(youtransfer, 'download', function (token, res, callback) {
@@ -507,19 +507,25 @@ describe('YouTransfer Router module', function() {
 			callback();
 		});
 
-		router.downloadFile()(req, res, done);
+		sandbox.stub(res, "process", function (name, context, callback) {
+			name.should.equals('download.html');
+			should.not.exist(context);
+			callback();
+		});
+
+		router.download()(req, res, done);
 	});
 
 	// -------------------------------------------------------------------------------------- Testing downloadBundle
 
-	it('should be possible to download a bundle', function() {
+	it('should be possible to download a bundle', function(done) {
 		var req = {
 				params: {
-					token: 'token'
+					token: '00000000-0000-0000-0000-000000000000'
 				}
 			},
 			res = {
-				redirect: function() {}
+				process: function() {}
 			}
 
 		sandbox.stub(youtransfer, 'archive', function (token, res, callback) {
@@ -528,11 +534,13 @@ describe('YouTransfer Router module', function() {
 			callback();
 		});
 
-		var resMock = sandbox.mock(res);
-		resMock.expects("redirect").once().withArgs('/');
+		sandbox.stub(res, "process", function (name, context, callback) {
+			name.should.equals('download.html');
+			should.not.exist(context);
+			callback();
+		});
 
-		router.downloadBundle()(req, res);
-		resMock.verify();
+		router.download()(req, res, done);
 	});
 
 	// -------------------------------------------------------------------------------------- Testing settingsRedirect

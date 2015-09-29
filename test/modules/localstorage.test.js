@@ -59,7 +59,7 @@ describe('YouTransfer Local Storage module', function() {
 			should.not.exist(instance);
 		} catch(err) {
 			should.exist(err);
-			err.should.equals('Invalid options provided');
+			err.message.should.equals('Invalid options provided');
 		}
 	});
 
@@ -300,7 +300,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.archive(null, null, function(err) {
 			should.exist(err);
-			err.should.equals('Bundle identifier unknown');
+			err.message.should.equals('Bundle identifier unknown');
 		});
 
 	});	
@@ -364,7 +364,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.archive(token, res, function(err) {
 			should.exist(err);
-			err.should.equals('Invalid bundle data');
+			err.message.should.equals('Invalid bundle data');
 		});
 
 	});	
@@ -457,7 +457,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.download(null, null, function(err) {
 			should.exist(err);
-			err.should.equals('invalid token exception');
+			err.message.should.equals('invalid token exception');
 			done();
 		});
 

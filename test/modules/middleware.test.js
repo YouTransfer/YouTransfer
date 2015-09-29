@@ -7,6 +7,7 @@ var middleware = require('../../lib/middleware');
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
+var errors = require('../../lib/errors');
 var youtransfer = require('../../lib/youtransfer');
 var nunjucks = require('nunjucks');
 var nconf = require('nconf');
@@ -110,6 +111,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(errors, 'exist').returns(true);
 
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
@@ -330,6 +333,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -758,4 +763,93 @@ describe('YouTransfer Middleware module', function() {
 		});
 	});
 
+	// -------------------------------------------------------------------------------------- Testing res.process
+
+	it('should implement "res.process" method which results in template rendering', function(done) {
+		var name = 'MyTemplate',
+			context = {
+				success: true,
+				isPostback: true,
+				errors: []
+			},
+			res = {
+				render: function() {}
+			},
+			req = {
+				headers: []
+			};
+
+		middleware(req, res, function() {
+			should.exist(res.process);
+
+			sandbox.stub(res, 'render', function (template, variables, callback) {
+				template.should.equals(name);
+				variables.success.should.equals(context.success);
+				variables.isPostback.should.equals(context.isPostback);
+				variables.errors.should.equals(context.errors);
+				callback();
+			});
+
+			res.process(name, context, done);
+		});
+	});	
+
+	it('should implement "res.process" method which results in JSON response', function(done) {
+		var name = 'MyTemplate',
+			context = {
+				success: true,
+				isPostback: true,
+				errors: []
+			},
+			res = {
+				json: function() {}
+			},
+			req = {
+				headers: {
+					'x-requested-with': 'XMLHttpRequest'
+				}
+			};
+
+		middleware(req, res, function() {
+			should.exist(res.process);
+
+			sandbox.stub(res, 'json', function (variables) {
+				variables.success.should.equals(context.success);
+				variables.isPostback.should.equals(context.isPostback);
+				variables.errors.should.equals(context.errors);
+			});
+
+			res.process(name, context, done);
+		});
+	});	
+
+	it('should implement "res.process" method which results in JSON response without callback', function(done) {
+		var name = 'MyTemplate',
+			context = {
+				success: true,
+				isPostback: true,
+				errors: []
+			},
+			res = {
+				json: function() {}
+			},
+			req = {
+				headers: {
+					'x-requested-with': 'XMLHttpRequest'
+				}
+			};
+
+		middleware(req, res, function() {
+			should.exist(res.process);
+
+			sandbox.stub(res, 'json', function (variables) {
+				variables.success.should.equals(context.success);
+				variables.isPostback.should.equals(context.isPostback);
+				variables.errors.should.equals(context.errors);
+			});
+
+			res.process(name, context);
+			done();
+		});
+	});	
 });

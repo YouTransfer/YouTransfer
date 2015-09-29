@@ -1,0 +1,17 @@
+{% macro show(errors) %}
+
+	{% if errors.length > 0 %}
+
+	<div>
+		<span class="help-block">
+			<span class="text-danger">
+				{% for error in errors %}
+					{{ error.html | safe }}
+				{% endfor %}
+			 </span>
+		</span>
+	</div>
+
+	{% endif %}
+
+{% endmacro %}
