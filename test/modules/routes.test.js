@@ -74,6 +74,11 @@ describe('YouTransfer Router module', function() {
 	it('should be possible to upload without using dropzone', function(done) {
 		
 		var req = {
+			errors: {
+				register: function() {},
+				exist: function() {},
+				parse: function() {}
+			},
 			files: {
 				payload: 'file'
 			},
@@ -82,7 +87,7 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var res = {
-			json: function() {}
+			process: function() {}
 		};
 
 		var context = {
@@ -90,9 +95,6 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var response = {
-			success: true,
-			isPostback: true, 
-			errors: [],
 			bundle: { files: [{ id: context.id }] }
 		}
 
@@ -101,6 +103,8 @@ describe('YouTransfer Router module', function() {
 				baseUrl: ''
 			});
 		});
+
+		sandbox.stub(req.errors, "exist").returns(false);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			should.exist(file);
@@ -120,7 +124,7 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("json").once().withArgs(response);
+		resMock.expects("process").once().withArgs("index.html", response).callsArg(2);
 
 		router.upload()(req, res, function() {
 			resMock.verify();
@@ -131,6 +135,11 @@ describe('YouTransfer Router module', function() {
 	it('should be possible to upload multiple files without using dropzone', function(done) {
 		
 		var req = {
+			errors: {
+				register: function() {},
+				exist: function() {},
+				parse: function() {}
+			},
 			files: {
 				payload: [ 'file1', 'file2' ]
 			},
@@ -139,7 +148,7 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var res = {
-			json: function() {}
+			process: function() {}
 		};
 
 		var context = {
@@ -147,9 +156,6 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var response = {
-			success: true,
-			isPostback: true, 
-			errors: [],
 			bundle: { files: [{ id: context.id }, { id: context.id }] }
 		}
 
@@ -158,6 +164,8 @@ describe('YouTransfer Router module', function() {
 				baseUrl: ''
 			});
 		});
+
+		sandbox.stub(req.errors, "exist").returns(false);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			should.exist(file);
@@ -179,7 +187,7 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("json").once().withArgs(response);
+		resMock.expects("process").once().withArgs("index.html", response).callsArg(2);
 
 		router.upload()(req, res, function() {
 			resMock.verify();
@@ -189,6 +197,11 @@ describe('YouTransfer Router module', function() {
 	it('should be possible to upload using dropzone', function(done) {
 		
 		var req = {
+			errors: {
+				register: function() {},
+				exist: function() {},
+				parse: function() {}
+			},
 			files: {
 				'dz-payload': 'file'
 			},
@@ -199,8 +212,7 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var res = {
-			json: function() {},
-			render: function() {}
+			process: function() {},
 		};
 
 		var context = {
@@ -208,9 +220,6 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var response = {
-			success: true,
-			isPostback: true, 
-			errors: [],
 			bundle: { files: [{ id: context.id }] }
 		}
 
@@ -219,6 +228,8 @@ describe('YouTransfer Router module', function() {
 				baseUrl: ''
 			});
 		});
+
+		sandbox.stub(req.errors, "exist").returns(false);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			should.exist(file);
@@ -238,7 +249,7 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("json").once().withArgs(response);
+		resMock.expects("process").once().withArgs("index.html", response).callsArg(2);
 
 		router.upload()(req, res, function() {
 			resMock.verify();
@@ -249,6 +260,11 @@ describe('YouTransfer Router module', function() {
 	it('should provide feedback if errors occur while uploading', function(done) {
 		
 		var req = {
+			errors: {
+				register: function() {},
+				exist: function() {},
+				parse: function() {}
+			},
 			files: {
 				payload: 'file'
 			},
@@ -259,8 +275,7 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var res = {
-			json: function() {},
-			render: function() {}
+			process: function() {}
 		};
 
 		var context = {
@@ -268,10 +283,7 @@ describe('YouTransfer Router module', function() {
 		}
 
 		var response = {
-			bundle: { files: [{ id: "token" }], id: "bundle" },
-			errors: new Array(new Error('error')),
-			isPostback: true,
-			success: false
+			bundle: { files: [{ id: "token" }], id: "bundle" }
 		}
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -279,6 +291,14 @@ describe('YouTransfer Router module', function() {
 				baseUrl: ''
 			});
 		});
+
+		sandbox.stub(req.errors, "parse", function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			return true;
+		});
+
+		sandbox.stub(req.errors, "exist").returns(true);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			callback(new Error('error'), context);
@@ -289,7 +309,7 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("json").once().withArgs(response);
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
 		router.upload()(req, res, function() {
 			resMock.verify();
@@ -297,6 +317,7 @@ describe('YouTransfer Router module', function() {
 		});
 	});	
 
+	/*
 	it('should return the index page after uploading if not using XmlHtppRequest', function(done) {
 		
 		var req = {
@@ -347,6 +368,7 @@ describe('YouTransfer Router module', function() {
 			done();
 		});
 	});		
+	*/
 
 	// -------------------------------------------------------------------------------------- Testing uploadBundle
 
@@ -493,6 +515,11 @@ describe('YouTransfer Router module', function() {
 
 	it('should be possible to download a file', function(done) {
 		var req = {
+				errors: {
+					register: function() {},
+					exist: function() {},
+					parse: function() {}
+				},
 				params: {
 					token: 'token'
 				}
@@ -520,6 +547,11 @@ describe('YouTransfer Router module', function() {
 
 	it('should be possible to download a bundle', function(done) {
 		var req = {
+				errors: {
+					register: function() {},
+					exist: function() {},
+					parse: function() {}
+				},
 				params: {
 					token: '00000000-0000-0000-0000-000000000000'
 				}

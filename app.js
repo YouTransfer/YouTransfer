@@ -21,6 +21,7 @@ restify.compression = require('compression');
 // YouTransfer
 var routes = require('./lib/routes');
 var middleware = require('./lib/middleware');
+var errors = require('./lib/errors');
 
 // ------------------------------------------------------------------------------------------ App Initialization
 
@@ -30,6 +31,7 @@ app.use(restify.bodyParser({ multiples: true }));
 app.use(restify.queryParser());
 app.use(restify.cookieParser.parse);
 app.use(restify.compression());
+app.use(errors);
 app.use(middleware);
 
 // ------------------------------------------------------------------------------------------ App Routing

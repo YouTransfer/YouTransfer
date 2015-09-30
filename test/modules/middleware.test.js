@@ -101,6 +101,10 @@ describe('YouTransfer Middleware module', function() {
 			settings = {},
 			res = {},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: []
 			},
@@ -112,7 +116,7 @@ describe('YouTransfer Middleware module', function() {
 			callback(null, settings);
 		});
 
-		sandbox.stub(errors, 'exist').returns(true);
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
@@ -138,6 +142,10 @@ describe('YouTransfer Middleware module', function() {
 			},
 			res = {},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: {
 					host: 'myhost'
@@ -155,6 +163,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(false);
 
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
@@ -183,6 +193,10 @@ describe('YouTransfer Middleware module', function() {
 			},
 			res = {},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: {
 					host: 'anotherhost'
@@ -200,6 +214,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
@@ -228,6 +244,10 @@ describe('YouTransfer Middleware module', function() {
 			},
 			res = {},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: {
 					host: 'anotherhost'
@@ -247,6 +267,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
@@ -273,6 +295,10 @@ describe('YouTransfer Middleware module', function() {
 			settings = {},
 			res = {},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: []
 			},
@@ -283,6 +309,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback('error', null);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
@@ -316,6 +344,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: []
 			},
 			viewEngine = {
@@ -334,7 +366,7 @@ describe('YouTransfer Middleware module', function() {
 			callback(null, settings);
 		});
 
-		sandbox.stub(errors, 'exist').returns(true);
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -374,6 +406,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: {
 					host: 'myhost'
@@ -395,6 +431,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(false);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -438,6 +476,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: {
 					host: 'myhost'
@@ -461,6 +503,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -504,6 +548,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				params: {},
 				headers: {
 					host: 'anotherhost'
@@ -525,6 +573,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -566,6 +616,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: [],
 				params: {}
 			},
@@ -584,6 +638,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback('this is an error', {});
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -621,6 +677,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: []
 			},
 			viewEngine = {
@@ -638,6 +698,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -675,6 +737,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: []
 			},
 			viewEngine = {
@@ -691,6 +757,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -727,6 +795,10 @@ describe('YouTransfer Middleware module', function() {
 				end: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: []
 			},
 			viewEngine = {
@@ -743,6 +815,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
+
+		sandbox.stub(req.errors, 'exist').returns(true);
 
 		sandbox.stub(nunjucks, 'configure', function (files, options) {
 			return viewEngine;
@@ -776,11 +850,17 @@ describe('YouTransfer Middleware module', function() {
 				render: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: []
 			};
 
 		middleware(req, res, function() {
 			should.exist(res.process);
+
+			sandbox.stub(req.errors, 'exist').returns(true);
 
 			sandbox.stub(res, 'render', function (template, variables, callback) {
 				template.should.equals(name);
@@ -805,6 +885,10 @@ describe('YouTransfer Middleware module', function() {
 				json: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: {
 					'x-requested-with': 'XMLHttpRequest'
 				}
@@ -812,6 +896,8 @@ describe('YouTransfer Middleware module', function() {
 
 		middleware(req, res, function() {
 			should.exist(res.process);
+
+			sandbox.stub(req.errors, 'exist').returns(true);
 
 			sandbox.stub(res, 'json', function (variables) {
 				variables.success.should.equals(context.success);
@@ -834,6 +920,10 @@ describe('YouTransfer Middleware module', function() {
 				json: function() {}
 			},
 			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
 				headers: {
 					'x-requested-with': 'XMLHttpRequest'
 				}
@@ -841,6 +931,8 @@ describe('YouTransfer Middleware module', function() {
 
 		middleware(req, res, function() {
 			should.exist(res.process);
+
+			sandbox.stub(req.errors, 'exist').returns(true);
 
 			sandbox.stub(res, 'json', function (variables) {
 				variables.success.should.equals(context.success);
