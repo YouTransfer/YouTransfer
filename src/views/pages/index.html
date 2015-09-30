@@ -8,12 +8,22 @@
 	</header>
 
 	<div class="col-md-6">
-		{%if success and isPostback %}
+		{%if isPostback %}
 
-		{% import "dropzone.html" as dropzone %}
-		{{ dropzone.preview(bundle, isPostback)}}
+			{% if success %}
 
-		{% else %}
+				{% import "dropzone.html" as dropzone %}
+				{{ dropzone.preview(bundle, isPostback)}}
+
+			{% else %}
+
+				{% import "errors.html" as err %}
+				{{ err.show(errors) }}
+				<a href="/" data-async data-target="hp">Return to homepage</a>				
+
+			{% endif %}
+
+		{% else %}		
 
 		{% include "fileupload.html" %}
 
@@ -22,9 +32,11 @@
 
 	<div class="col-md-6 dz-completed-container">
 
-		{%if success and isPostback %}
+		{%if isPostback %}
 
-		{% include "sendmail.html" %}
+			{% if success %}
+				{% include "sendmail.html" %}
+			{% endif %}
 
 		{% else %}
 

@@ -2,15 +2,15 @@
 
 	{% if errors.length > 0 %}
 
+	{% for error in errors %}
 	<div>
 		<span class="help-block">
 			<span class="text-danger">
-				{% for error in errors %}
-					{{ error.html | safe }}
-				{% endfor %}
+					{{ error.html or error.message | safe }}
 			 </span>
 		</span>
 	</div>
+	{% endfor %}
 
 	{% endif %}
 
