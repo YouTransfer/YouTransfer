@@ -1045,7 +1045,10 @@ describe('YouTransfer Router module', function() {
 			res = {
 				process: function() {}
 			},
-			response = {}
+			response = {
+				activeTab: 'dropzone',
+				dropzone: {}
+			}
 
 		errors(req, null, function() {});
 

@@ -49,7 +49,7 @@ function Fileupload(element) {
 	component.$completedContainer = $(DROPZONE_COMPLETED_CONTAINER_SELECTOR);
 
 	$.getJSON('/settings/dropzone').done(function(settings) {
-		$.extend(settings, {
+		var options = $.extend({
 			url: '/upload',
 			paramName: DROPZONE_PARAMETER,
 			dictDefaultMessage: '<span class="glyphicon glyphicon-download-alt" style="font-size: 3em;"></span><br /><br /> Drop files here or click to select',
@@ -58,9 +58,9 @@ function Fileupload(element) {
 			previewTemplate: component.previewTemplate,
 			previewsContainer: component.previewContainer,
 			clickable: DROPZONE_ACTIONS_ADD_SELECTOR
-		});
+		}, settings.dropzone);
 
-		component.dropzone = new Dropzone(element, settings);
+		component.dropzone = new Dropzone(element, options);
 
 		if(!settings.forceFallback) {
 			component.dropzone.on("addedfile", function() {
