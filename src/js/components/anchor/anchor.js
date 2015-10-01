@@ -26,8 +26,8 @@ function Anchor(element) {
 		var target = this.getAttribute(TARGET_ATTRIBUTE);
 		var title = this.getAttribute(TITLE_ATTRIBUTE) || document.title;
 
-		$.get(url).done(function(content) {
-			content = $(content);
+		$.get(url).done(function(response) {
+			var content = $(response.output);
 			$('#' + target).replaceWith(content);
 			$(document).trigger('xhr.loaded', [ element, content ]);
 			$(document).trigger('component.anchor.success');

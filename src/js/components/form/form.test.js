@@ -33,7 +33,9 @@ describe('Form component', function() {
 		var instance = new form(fixture);
 
 		sandbox.stub($, 'ajax', function (options) {
-			options.success('My Awesome Response');
+			options.success({
+				output: '<div id="target">My Awesome Response</div>'
+			});
 		});
 
 		$(document).on('component.form.success', function() {
@@ -45,6 +47,28 @@ describe('Form component', function() {
 		$(fixture).trigger('submit');
 
 	});
+
+	it('should try to post to the url using JQuery XHR and replace target with result (different id)', function(done) {
+
+		var fixture = getFixture();
+		var instance = new form(fixture);
+
+		sandbox.stub($, 'ajax', function (options) {
+			options.success({
+				output: '<div id="anotherTarget">My Awesome Response</div>'
+			});
+		});
+
+		$(document).on('component.form.success', function() {
+			$('#anotherTarget').length.should.equals(1);
+			$('#anotherTarget').html().should.equals('My Awesome Response');
+			done();
+		});
+
+		$(fixture).trigger('submit');
+
+	});
+
 
 });
 

@@ -4,6 +4,7 @@
 var _ = require('lodash');
 var sinon = require('sinon');
 var should = require('chai').should();
+var errors = require('../../lib/errors');
 var routes = require('../../lib/routes');
 var router = routes('./dist');
 
@@ -74,37 +75,29 @@ describe('YouTransfer Router module', function() {
 	it('should be possible to upload without using dropzone', function(done) {
 		
 		var req = {
-			errors: {
-				register: function() {},
-				exist: function() {},
-				parse: function() {}
+				files: {
+					payload: 'file'
+				},
+				params: {},
+				isXmlHtppRequest: true
 			},
-			files: {
-				payload: 'file'
+			res = {
+				process: function() {}
 			},
-			params: {},
-			isXmlHtppRequest: true
-		}
+			context = {
+				id: 'token'
+			},
+			response = {
+				bundle: { files: [{ id: context.id }] }
+			};
 
-		var res = {
-			process: function() {}
-		};
-
-		var context = {
-			id: 'token'
-		}
-
-		var response = {
-			bundle: { files: [{ id: context.id }] }
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
 				baseUrl: ''
 			});
 		});
-
-		sandbox.stub(req.errors, "exist").returns(false);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			should.exist(file);
@@ -135,37 +128,29 @@ describe('YouTransfer Router module', function() {
 	it('should be possible to upload multiple files without using dropzone', function(done) {
 		
 		var req = {
-			errors: {
-				register: function() {},
-				exist: function() {},
-				parse: function() {}
+				files: {
+					payload: [ 'file1', 'file2' ]
+				},
+				params: {},
+				isXmlHtppRequest: true
 			},
-			files: {
-				payload: [ 'file1', 'file2' ]
+			res = {
+				process: function() {}
 			},
-			params: {},
-			isXmlHtppRequest: true
-		}
+			context = {
+				id: 'token'
+			},
+			response = {
+				bundle: { files: [{ id: context.id }, { id: context.id }] }
+			};
 
-		var res = {
-			process: function() {}
-		};
-
-		var context = {
-			id: 'token'
-		}
-
-		var response = {
-			bundle: { files: [{ id: context.id }, { id: context.id }] }
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
 				baseUrl: ''
 			});
 		});
-
-		sandbox.stub(req.errors, "exist").returns(false);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			should.exist(file);
@@ -197,39 +182,31 @@ describe('YouTransfer Router module', function() {
 	it('should be possible to upload using dropzone', function(done) {
 		
 		var req = {
-			errors: {
-				register: function() {},
-				exist: function() {},
-				parse: function() {}
+				files: {
+					'dz-payload': 'file'
+				},
+				params: {
+					bundle: 'bundle'
+				},
+				isXmlHtppRequest: true
 			},
-			files: {
-				'dz-payload': 'file'
+			res = {
+				process: function() {},
 			},
-			params: {
-				bundle: 'bundle'
+			context = {
+				id: 'token'
 			},
-			isXmlHtppRequest: true
-		}
+			response = {
+				bundle: { files: [{ id: context.id }] }
+			}
 
-		var res = {
-			process: function() {},
-		};
-
-		var context = {
-			id: 'token'
-		}
-
-		var response = {
-			bundle: { files: [{ id: context.id }] }
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
 				baseUrl: ''
 			});
 		});
-
-		sandbox.stub(req.errors, "exist").returns(false);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			should.exist(file);
@@ -252,6 +229,7 @@ describe('YouTransfer Router module', function() {
 		resMock.expects("process").once().withArgs("index.html", response).callsArg(2);
 
 		router.upload()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		});
@@ -260,45 +238,31 @@ describe('YouTransfer Router module', function() {
 	it('should provide feedback if errors occur while uploading', function(done) {
 		
 		var req = {
-			errors: {
-				register: function() {},
-				exist: function() {},
-				parse: function() {}
+				files: {
+					payload: 'file'
+				},
+				params: {
+					bundle: 'bundle'
+				},
+				isXmlHtppRequest: true
 			},
-			files: {
-				payload: 'file'
+			res = {
+				process: function() {}
 			},
-			params: {
-				bundle: 'bundle'
+			context = {
+				id: 'token'
 			},
-			isXmlHtppRequest: true
-		}
+			response = {
+				bundle: { files: [{ id: "token" }], id: "bundle" }
+			}
 
-		var res = {
-			process: function() {}
-		};
-
-		var context = {
-			id: 'token'
-		}
-
-		var response = {
-			bundle: { files: [{ id: "token" }], id: "bundle" }
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
 				baseUrl: ''
 			});
 		});
-
-		sandbox.stub(req.errors, "parse", function(err) {
-			should.exist(err);
-			err.message.should.equals('error');
-			return true;
-		});
-
-		sandbox.stub(req.errors, "exist").returns(true);
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
 			callback(new Error('error'), context);
@@ -313,38 +277,36 @@ describe('YouTransfer Router module', function() {
 
 		router.upload()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An error occurred while uploading your file(s)");
 			done();
 		});
 	});	
 
-	/*
-	it('should return the index page after uploading if not using XmlHtppRequest', function(done) {
+	it('should provide feedback if multiple errors occur while uploading', function(done) {
 		
 		var req = {
-			files: {
-				payload: 'file'
+				files: {
+					payload: [ 'file1', 'file2' ]
+				},
+				params: {
+					bundle: 'bundle'
+				},
+				isXmlHtppRequest: true
 			},
-			params: {
-				bundle: 'bundle'
+			res = {
+				process: function() {}
 			},
-			isXmlHtppRequest: false
-		}
+			context = {
+				id: 'token'
+			},
+			response = {
+				bundle: { files: [{ id: "token" }], id: "bundle" }
+			}
 
-		var res = {
-			json: function() {},
-			render: function() {}
-		};
-
-		var context = {
-			id: 'token'
-		}
-
-		var response = {
-			bundle: { files: [{ id: "token" }], id: "bundle" },
-			errors: new Array(new Error('error')),
-			isPostback: true,
-			success: false
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -353,7 +315,7 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
-			callback(new Error('Error'), context);
+			callback(new Error('error'), context);
 		});
 
 		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
@@ -361,47 +323,45 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("render").once().withArgs("index.html", response);
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
 		router.upload()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An error occurred while uploading your file(s)");
 			done();
 		});
-	});		
-	*/
+	});	
 
 	// -------------------------------------------------------------------------------------- Testing uploadBundle
 
 	it('should be possible to upload bundle', function(done) {
 
 		var req = {
-			params: {
-				bundle: JSON.stringify({
-					id: 'bundle'
-				})
+				params: {
+					bundle: JSON.stringify({
+						id: 'bundle'
+					})
+				},
+				isXmlHtppRequest: true
 			},
-			isXmlHtppRequest: true
-		}
+			res = {
+				process: function() {},
+			};
 
-		var res = {
-			json: function() {},
-			render: function() {}
-		};
-
-		var response = {
-			success: true,
-			isPostback: true, 
-			error: ''
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
 			callback(null);
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("json").once().withArgs(response);
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
 		router.uploadBundle()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		})
@@ -411,24 +371,18 @@ describe('YouTransfer Router module', function() {
 	it('should provide feedback if errors occur while uploading bundle', function(done) {
 
 		var req = {
-			params: {
-				bundle: JSON.stringify({
-					id: 'bundle'
-				})
+				params: {
+					bundle: JSON.stringify({
+						id: 'bundle'
+					})
+				},
+				isXmlHtppRequest: true
 			},
-			isXmlHtppRequest: true
-		}
+			res = {
+				process: function() {},
+			};
 
-		var res = {
-			json: function() {},
-			render: function() {}
-		};
-
-		var response = {
-			success: false,
-			isPostback: true, 
-			error: 'this is an error message'
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -437,40 +391,36 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
-			callback(new Error(response.error));
+			callback(new Error("error"));
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("json").once().withArgs(response);
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
 		router.uploadBundle()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An error occurred while uploading your file(s)");
 			done();
 		});
 
 	});
 
-	it('should return the index page after uploading bundle if not using XmlHtppRequest', function(done) {
+	it('should provide feedback if errors occur while parsing uploaded bundle', function(done) {
 
 		var req = {
-			params: {
-				bundle: JSON.stringify({
-					id: 'bundle'
-				})
+				params: {
+					bundle: 'this is not JSON'
+				},
+				isXmlHtppRequest: true
 			},
-			isXmlHtppRequest: false
-		}
+			res = {
+				process: function() {},
+			};
 
-		var res = {
-			json: function() {},
-			render: function() {}
-		};
-
-		var response = {
-			success: true,
-			isPostback: true, 
-			error: ''
-		}
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -479,14 +429,18 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
-			callback(null);
+			callback(new Error("error"));
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("render").once().withArgs('index.html', response);
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
 		router.uploadBundle()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An error occurred while uploading your file(s)");
 			done();
 		});
 
@@ -494,32 +448,36 @@ describe('YouTransfer Router module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing send
 
-	it('should be possible to send an email', function() {
+	it('should be possible to send an email', function(done) {
 		var req = {},
 			res = {
-				redirect: function() {}
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer, 'send', function (req, res, callback) {
 			callback();
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("redirect").once().withArgs('/');
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
-		router.send()(req, res);
-		resMock.verify();
+		router.send()(req, res, function() {
+			req.errors.exist().should.equals(false);
+			resMock.verify();
+			done();
+		});
 	});
+
+	////////////////////////////////////////////////
+	// TODO: create test for ERRORS WHILE SENDING //
+	////////////////////////////////////////////////
 
 	// -------------------------------------------------------------------------------------- Testing downloadFile
 
 	it('should be possible to download a file', function(done) {
 		var req = {
-				errors: {
-					register: function() {},
-					exist: function() {},
-					parse: function() {}
-				},
 				params: {
 					token: 'token'
 				}
@@ -527,6 +485,8 @@ describe('YouTransfer Router module', function() {
 			res = {
 				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer, 'download', function (token, res, callback) {
 			should.exist(token);
@@ -540,18 +500,16 @@ describe('YouTransfer Router module', function() {
 			callback();
 		});
 
-		router.download()(req, res, done);
+		router.download()(req, res, function() {
+			req.errors.exist().should.equals(false);
+			done();
+		});
 	});
 
 	// -------------------------------------------------------------------------------------- Testing downloadBundle
 
 	it('should be possible to download a bundle', function(done) {
 		var req = {
-				errors: {
-					register: function() {},
-					exist: function() {},
-					parse: function() {}
-				},
 				params: {
 					token: '00000000-0000-0000-0000-000000000000'
 				}
@@ -560,6 +518,8 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			}
 
+		errors(req, null, function() {});
+
 		sandbox.stub(youtransfer, 'archive', function (token, res, callback) {
 			should.exist(token);
 			token.should.equals(req.params.token);
@@ -567,6 +527,7 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(res, "process", function (name, context, callback) {
+			req.errors.exist().should.equals(false);
 			name.should.equals('download.html');
 			should.not.exist(context);
 			callback();
@@ -583,11 +544,16 @@ describe('YouTransfer Router module', function() {
 				redirect: function() {}
 			}
 
+		errors(req, null, function() {});
+
 		var resMock = sandbox.mock(res);
 		resMock.expects("redirect").once().withArgs('/settings/general');
 
 		router.settingsRedirect()(req, res);
+
+		req.errors.exist().should.equals(false);
 		resMock.verify();
+
 	});
 
 	// -------------------------------------------------------------------------------------- Testing settingsFinalise
@@ -604,6 +570,8 @@ describe('YouTransfer Router module', function() {
 				redirect: function() {}
 			}
 
+		errors(req, null, function() {});
+
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
 			settings.finalised.should.equals(true);
@@ -615,24 +583,64 @@ describe('YouTransfer Router module', function() {
 		resMock.expects("redirect").once().withArgs('/');
 
 		router.settingsFinalise()(req, res);
+
+		req.errors.exist().should.equals(false);
 		resMock.verify();
+
+	});
+
+	it('should provide feedback when an error occurs while trying to finalise settings', function(done) {
+		var req = {
+				params: {
+					settings: {
+						unlockCode: 'MySecretCode'
+					}
+				}
+			},
+			res = {
+				process: function() {}
+			}
+
+		errors(req, null, function() {});
+
+		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
+			should.exist(settings);
+			settings.finalised.should.equals(true);
+			settings.unlockCode.should.equals(req.params.settings.unlockCode);
+			callback(new Error('error'));
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("process").once().withArgs("settings.finalise.html").callsArg(2);
+
+		router.settingsFinalise()(req, res, function() {
+			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An unknown error occurred while finalising the settings. Please try again.");
+			done();
+		});
+
 	});
 
 	// -------------------------------------------------------------------------------------- Testing settingsUnlock
 
-	it('should be possible to unlock settings', function() {
+	it('should be possible to unlock settings', function(done) {
 		var req = {
 				params: {
 					unlockCode: 'MySecretCode'
 				}
 			},
 			res = {
-				redirect: function() {}
+				process: function() {}
 			},
 			settings = {
 				finalised: true,
 				unlockCode: req.params.unlockCode
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
@@ -646,39 +654,46 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("redirect").once().withArgs('/');
+		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
 
-		router.settingsUnlock()(req, res);
-		resMock.verify();
+		router.settingsUnlock()(req, res, function() {
+			req.errors.exist().should.equals(false);
+			resMock.verify();
+			done();
+		});
 	});
 
-	it('should not be possible to unlock settings if code is incorrect', function() {
+	it('should not be possible to unlock settings if code is incorrect', function(done) {
 		var req = {
 				params: {
 					unlockCode: 'MySecretCode'
 				}
 			},
 			res = {
-				render: function() {}
+				process: function() {}
 			},
 			settings = {
 				finalised: true,
 				unlockCode: 'MyOtherCode'
-			},
-			response = {
-				success: false,
-				message: 'Incorrect code provided'
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, settings);
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("render").once().withArgs('unlock.html', response);
+		resMock.expects("process").once().withArgs('unlock.html', null).callsArg(2);
 
-		router.settingsUnlock()(req, res);
-		resMock.verify();
+		router.settingsUnlock()(req, res, function() {
+			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("The unlock code is invalid. Please try again");
+			done();
+		});
 	});
 
 	// -------------------------------------------------------------------------------------- Testing settingsGetTemplateByName
@@ -687,14 +702,19 @@ describe('YouTransfer Router module', function() {
 
 		var req = {
 				params: {
-					name: 'template'
+					name: 'template',
+					template: 'someTemplate'
 				}
 			},
 			res = {
+				on: function() {},
 				setHeader: function() {},
 				send: function() {},
-				end: function() {}
+				end: function() {},
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -703,22 +723,26 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			should.exist(file);
+			file.should.equals('./src/templates/' + req.params.template);
 			callback(null, 'source');
 		});
 
 		var resMock = sandbox.mock(res);
+		resMock.expects('on').once().callsArgAsync(1);
 		resMock.expects('setHeader').once().withArgs('Content-Type', 'text/html');
 		resMock.expects('setHeader').once().withArgs('Cache-Control', 'private, max-age=0, proxy-revalidate, no-store, no-cache, must-revalidate');
 		resMock.expects('send').once().withArgs('source');
 		resMock.expects('end').once();
 
 		router.settingsGetTemplateByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		})
 	});
 
-	it('should not be possible to get template source if settings are finalised', function(done) {
+	it('should provide feedback when trying to get template source if settings are finalised', function(done) {
 
 		var req = {
 				params: {
@@ -726,12 +750,10 @@ describe('YouTransfer Router module', function() {
 				}
 			},
 			res = {
-				json: function() {}
-			},
-			response = {
-				success: false, 
-				err: 'The settings have been finalised and cannot be modified'
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -740,10 +762,14 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
 
 		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("The settings are currently locked. Please unlock them if you wish to make changes.");
 			done();
 		})
 	});	
@@ -752,16 +778,15 @@ describe('YouTransfer Router module', function() {
 
 		var req = {
 				params: {
-					name: 'template'
+					name: 'template',
+					template: 'someTemplate'
 				}
 			},
 			res = {
-				json: function() {}
-			},
-			response = { 
-				success: false, 
-				err: 'error' 
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -770,14 +795,18 @@ describe('YouTransfer Router module', function() {
 		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(new Error(response.err), null);
+			callback(new Error('error'), null);
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
 
 		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An error occurred while trying to retrieve the template");
 			done();
 		})
 	});	
@@ -788,12 +817,10 @@ describe('YouTransfer Router module', function() {
 				params: {}
 			},
 			res = {
-				json: function() {}
-			},
-			response = { 
-				success: false, 
-				err: 'template not found' 
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -802,10 +829,14 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
 
 		router.settingsGetTemplateByName()(req, res, function() {
 			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An invalid template has been selected. Please try again.");
 			done();
 		})
 	});	
@@ -816,10 +847,16 @@ describe('YouTransfer Router module', function() {
 
 		var req = {
 				params: {
-					template: 'template',
+					name: 'template',
+					template: 'someTemplate',
 					body: 'this is my template'
 				}
+			},
+			res = {
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -841,29 +878,33 @@ describe('YouTransfer Router module', function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('template');
-
-				should.exist(req.params.success);
-				req.params.success.should.equals(true);
-
-				should.exist(req.params.isPostback);
-				req.params.isPostback.should.equals(true);
-
 				next();
 			};
 		});
 
-		router.settingsSaveTemplate()(req, null, function() {
+		var resMock = sandbox.mock(res);
+		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
+
+		router.settingsSaveTemplate()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			done();
 		});
 	});
 
-	it('should not be possible to set template source if settings have been finalised', function(done) {
+	it('should provide feedback when trying to set template source if settings have been finalised', function(done) {
 
 		var req = {
 				params: {
+					name: 'template',
+					template: 'someTemplate',
 					body: 'this is my template'
 				}
+			},
+			res = {
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -875,18 +916,19 @@ describe('YouTransfer Router module', function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('template');
-
-				should.exist(req.params.success);
-				req.params.success.should.equals(false);
-
-				should.exist(req.params.isPostback);
-				req.params.isPostback.should.equals(true);
-
 				next();
 			};
 		});
 
-		router.settingsSaveTemplate()(req, null, function() {
+		var resMock = sandbox.mock(res);
+		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
+
+		router.settingsSaveTemplate()(req, res, function() {
+			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("The settings are currently locked. Please unlock them if you wish to make changes.");
 			done();
 		});
 	});
@@ -895,9 +937,15 @@ describe('YouTransfer Router module', function() {
 
 		var req = {
 				params: {
+					name: 'template',
 					body: 'this is my template'
 				}
+			},
+			res = {
+				process: function() {}
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -909,18 +957,19 @@ describe('YouTransfer Router module', function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('template');
-
-				should.exist(req.params.success);
-				req.params.success.should.equals(false);
-
-				should.exist(req.params.isPostback);
-				req.params.isPostback.should.equals(true);
-
 				next();
 			};
 		});
 
-		router.settingsSaveTemplate()(req, null, function() {
+		var resMock = sandbox.mock(res);
+		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
+
+		router.settingsSaveTemplate()(req, res, function() {
+			resMock.verify();
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("An invalid template has been selected. Please try again.");
 			done();
 		});
 	});
@@ -935,20 +984,23 @@ describe('YouTransfer Router module', function() {
 				}
 			},
 			res = {
-				render: function() {}
+				process: function() {}
 			},
 			response = {
 				activeTab: req.params.name
-			}
+			};
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {});
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('render').once().withArgs('settings.' + req.params.name + '.html', response);
+		resMock.expects('process').once().withArgs('settings.' + req.params.name + '.html', response).callsArg(2);
 
 		router.settingsGetByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		});
@@ -960,20 +1012,23 @@ describe('YouTransfer Router module', function() {
 				params: {}
 			},
 			res = {
-				render: function() {}
+				process: function() {}
 			},
 			response = {
 				activeTab: 'general'
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {});
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('render').once().withArgs('settings.general.html', response);
+		resMock.expects('process').once().withArgs('settings.general.html', response).callsArg(2);
 
 		router.settingsGetByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		});
@@ -988,18 +1043,21 @@ describe('YouTransfer Router module', function() {
 				isXmlHtppRequest: true
 			},
 			res = {
-				json: function() {}
+				process: function() {}
 			},
 			response = {}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, response);
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('json').once().withArgs(response);
+		resMock.expects('process').once().withArgs('settings.dropzone.html', response).callsArg(2);
 
 		router.settingsGetByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		});
@@ -1013,8 +1071,13 @@ describe('YouTransfer Router module', function() {
 				}
 			},
 			res = {
-				render: function() {}
+				process: function() {}
+			},
+			response = {
+				activeTab: 'general'
 			}
+
+		errors(req, null, function() {});
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
@@ -1023,9 +1086,10 @@ describe('YouTransfer Router module', function() {
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects('render').once().withArgs('404.html');
+		resMock.expects('process').once().withArgs('404.html', response).callsArg(2);
 
 		router.settingsGetByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		});
@@ -1048,17 +1112,93 @@ describe('YouTransfer Router module', function() {
 				activeTab: req.params.name
 			}
 
+		errors(req, null, function() {});
+
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
 			settings.should.equals(req.params.settings);
 			callback(null);
 		});
 
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('general');
+				next();
+			};
+		});
+
 		router.settingsSaveByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
 			done();
 		});
 
 	});
+
+	it('should be possible to save template settings by name', function(done) {
+
+		var req = {
+				params: {
+					name: 'template',
+				}
+			}
+
+		errors(req, null, function() {});
+
+		sandbox.stub(router, "settingsSaveTemplate", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('template');
+				next();
+			};
+		});
+
+		router.settingsSaveByName()(req, null, function() {
+			req.errors.exist().should.equals(false);
+			done();
+		});
+
+	});
+
+	it('should provide feedback when trying to save settings when settings are finalised', function(done) {
+
+		var req = {
+				params: {
+					name: 'general',
+					settings: {}
+				}
+			},
+			res = {
+				render: function() {}
+			},
+			response = {
+				activeTab: req.params.name
+			}
+
+		errors(req, null, function() {});
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				finalised: true
+			});
+		});
+
+		sandbox.stub(router, "settingsGetByName", function() {
+			return function(req, res, next) {
+				should.exist(req.params.name);
+				req.params.name.should.equals('general');
+				next();
+			};
+		});
+
+		router.settingsSaveByName()(req, res, function() {
+			req.errors.exist().should.equals(true);
+			var err = req.errors.get();
+			err.length.should.equals(1);
+			err[0].message.should.equals("The settings are currently locked. Please unlock them prior to making changes.");
+			done();
+		})
+	});	
 
 	// -------------------------------------------------------------------------------------- Testing settingsSaveByName
 
@@ -1084,40 +1224,50 @@ describe('YouTransfer Router module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing defalt routes
 
-	it('should be possible to retrieve a page', function() {
+	it('should be possible to retrieve a page', function(done) {
 
 		var res = {
 				setHeader: function() {},
-				render: function() {}
+				process: function() {}
 			},
 			req = {
 				params: new Array('index')
 			};
 
+		errors(req, null, function() {});
+
 		var resMock = sandbox.mock(res);
 		resMock.expects('setHeader').once().withArgs('Cache-Control', 'private, max-age=0, proxy-revalidate, no-store, no-cache, must-revalidate');
-		resMock.expects('render').once().withArgs(req.params[0] + '.html');
+		resMock.expects('process').once().withArgs('index.html', null).callsArg(2);
 
-		router.default()(req, res);
-		resMock.verify();
+		router.default()(req, res, function() {
+			req.errors.exist().should.equals(false);
+			resMock.verify();
+			done();
+		});
 	});
 
-	it('should be possible to retrieve index page if no specific page was requested', function() {
+	it('should be possible to retrieve index page if no specific page was requested', function(done) {
 
 		var res = {
 				setHeader: function() {},
-				render: function() {}
+				process: function() {}
 			},
 			req = {
 				params: {}
 			}
 
+		errors(req, null, function() {});
+
 		var resMock = sandbox.mock(res);
 		resMock.expects('setHeader').once().withArgs('Cache-Control', 'private, max-age=0, proxy-revalidate, no-store, no-cache, must-revalidate');
-		resMock.expects('render').once().withArgs('index.html');
+		resMock.expects('process').once().withArgs('index.html', null).callsArg(2);
 
-		router.default()(req, res);
-		resMock.verify();
+		router.default()(req, res, function() {
+			req.errors.exist().should.equals(false);
+			resMock.verify();
+			done();			
+		});
 	});	
 
 });

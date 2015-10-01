@@ -19,11 +19,13 @@ function Form(element) {
 	component.$element = $(element);
 
 	component.$element.ajaxForm({
-		target: $('#' + element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element,
-		replaceTarget: element.getAttribute(FORM_REPLACETARGET_ATTRIBUTE) || false,
-		success: function() {
+		success: function(response, status, xhr, $form) {
+			var content = $(response.output);
+
 			var target = $('#' + element.getAttribute(FORM_TARGET_ATTRIBUTE)) || component.$element; 
-			$(document).trigger('xhr.loaded', [ element, target ]);
+			target.replaceWith(content);
+
+			$(document).trigger('xhr.loaded', [ element, content ]);
 			$(document).trigger('component.form.success');
 		}
 	});

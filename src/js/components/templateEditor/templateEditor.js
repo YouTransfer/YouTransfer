@@ -17,8 +17,12 @@ function TemplateEditor(element) {
 	component.$element = $(element);
 
 	var template = element.getAttribute(TEMPLATE_SELECTOR);
-	$.get(template).done(function(content) {
-		component.$element.html(content);
+	$.get(template).done(function(response) {
+		if($.isPlainObject(response)) {
+			component.$element.html(response.output);
+		} else {
+			component.$element.html(response);
+		}
 	});
 }
 
