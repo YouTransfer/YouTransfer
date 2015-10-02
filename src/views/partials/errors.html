@@ -6,7 +6,11 @@
 	<div>
 		<span class="help-block">
 			<span class="text-danger">
-					{{ error.html or error.message | safe }}
+				{% if error.html %}
+				{{ error.html | safe }}
+				{% else %}
+				{{ error.message }}
+				{% endif %}
 			 </span>
 		</span>
 	</div>
