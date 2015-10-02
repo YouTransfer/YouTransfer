@@ -129,9 +129,9 @@ describe('Errors module', function() {
 		var req = {};
 
 		errors(req, null, function() {});
-		var result = req.errors.register('MYERROR', {
+		var result = req.errors.register({
 			message: 'My Error'
-		});
+		}, 'MYERROR');
 
 		result.should.equals(true);
 
@@ -143,7 +143,7 @@ describe('Errors module', function() {
 			error = new Error('My Error');
 
 		errors(req, null, function() {});
-		var result = req.errors.register('MYERROR', error);
+		var result = req.errors.register(error, 'MYERROR');
 		result.should.equals(true);
 
 	});
@@ -153,10 +153,10 @@ describe('Errors module', function() {
 		var req = {};
 
 		errors(req, null, function() {});
-		var result = req.errors.register(null, {
+		var result = req.errors.register({
 			code: 'MYERROR',
 			message: 'My Error'
-		});
+		}, null);
 
 		result.should.equals(true);
 
@@ -204,9 +204,9 @@ describe('Errors module', function() {
 		var req = {};
 
 		errors(req, null, function() {});
-		var result = req.errors.register(null, {
+		var result = req.errors.register({
 			message: 'My Error'
-		});
+		}, null);
 
 		result.should.equals(true);
 
