@@ -21,6 +21,7 @@ restify.compression = require('compression');
 // YouTransfer
 var routes = require('./lib/routes');
 var middleware = require('./lib/middleware');
+var errors = require('./lib/errors');
 
 // ------------------------------------------------------------------------------------------ App Initialization
 
@@ -30,6 +31,7 @@ app.use(restify.bodyParser({ multiples: true }));
 app.use(restify.queryParser());
 app.use(restify.cookieParser.parse);
 app.use(restify.compression());
+app.use(errors);
 app.use(middleware);
 
 // ------------------------------------------------------------------------------------------ App Routing
@@ -39,13 +41,12 @@ app.post('/', router.upload());
 app.post('/upload', router.upload());
 app.post('/upload/bundle', router.uploadBundle());
 app.post(/^\/send/, router.send());
-app.get('/download/:token', router.downloadFile());
-app.post('/download', router.downloadFile());
-app.get('/bundle/:token', router.downloadBundle());
+app.get('/download/:token', router.download());
+app.post('/download', router.download());
+app.get('/bundle/:token', router.download());
 app.get('/settings', router.settingsRedirect());
 app.post('/settings/finalise', router.settingsFinalise());
-app.get('/settings/template/:name', router.settingsGetTemplateByName());
-app.post('/settings/template/', router.settingsSaveTemplate());	
+app.get('/settings/:name/:template', router.settingsGetTemplateByName());
 app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());
 app.post('/unlock', router.settingsUnlock());

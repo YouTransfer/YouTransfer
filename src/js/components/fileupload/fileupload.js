@@ -17,6 +17,7 @@ var DROPZONE_PARAMETER = 'dz-payload';
 var DROPZONE_PREVIEW_TEMPLATE_SELECTOR = '.dz-preview-template';
 var DROPZONE_PREVIEW_DESCRIPTION_SELECTOR = '.dz-preview-description';
 var DROPZONE_PREVIEW_DATALINK_SELECTOR = '[data-dz-link]';
+var DROPZONE_PREVIEW_ERROR_MESSAGE_SELECTOR = '[data-dz-errormessage]';
 
 var DROPZONE_UPLOAD_COMPLETE_CLASS = 'dz-upload-complete';
 var DROPZONE_UPLOAD_COMPLETE_SELECTOR = '.' + DROPZONE_UPLOAD_COMPLETE_CLASS;
@@ -48,7 +49,7 @@ function Fileupload(element) {
 	component.$completedContainer = $(DROPZONE_COMPLETED_CONTAINER_SELECTOR);
 
 	$.getJSON('/settings/dropzone').done(function(settings) {
-		$.extend(settings, {
+		var options = $.extend({
 			url: '/upload',
 			paramName: DROPZONE_PARAMETER,
 			dictDefaultMessage: '<span class="glyphicon glyphicon-download-alt" style="font-size: 3em;"></span><br /><br /> Drop files here or click to select',
@@ -57,9 +58,9 @@ function Fileupload(element) {
 			previewTemplate: component.previewTemplate,
 			previewsContainer: component.previewContainer,
 			clickable: DROPZONE_ACTIONS_ADD_SELECTOR
-		});
+		}, settings.dropzone);
 
-		component.dropzone = new Dropzone(element, settings);
+		component.dropzone = new Dropzone(element, options);
 
 		if(!settings.forceFallback) {
 			component.dropzone.on("addedfile", function() {
@@ -72,10 +73,18 @@ function Fileupload(element) {
 
 			component.dropzone.on("complete", function(result) {
 				var response = JSON.parse(result.xhr.response);
-				var file = response.bundle.files[0];
 				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
-				$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + file.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + file.id + '</a>');
-				component.bundle.files.push(file);
+				
+				if(response.errors.length > 0) {
+					$.each(response.errors, function(i, error) {
+						$(result.previewElement).find(DROPZONE_PREVIEW_ERROR_MESSAGE_SELECTOR)
+												.html(error.message);
+					});
+				} else {
+					var file = response.bundle.files[0];
+					$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + file.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + file.id + '</a>');
+					component.bundle.files.push(file);
+				}
 			});
 
 			component.dropzone.on('queuecomplete', function() {
@@ -83,15 +92,17 @@ function Fileupload(element) {
 					bundle: JSON.stringify(component.bundle)
 				}).done(function() {
 
-					component.$completedContainer
-							 .html(component.completeTemplate)
-							 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
-
-					$(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).prepend('<div class="dz-preview-bundle"><span class="glyphicon glyphicon-download-alt"></span> <a href="/bundle/' + component.bundle.id + '/">Download all files as a zip archive (<span class="glyphicon glyphicon-compressed"></span>)</a></div>');
-					component.$completedContainer
-							 .find('form')
-							 .append('<input type="hidden" name="bundle" value="' + component.bundle.id + '" />');
-
+					if(component.bundle.files.length > 0) {
+						component.$completedContainer
+								 .html(component.completeTemplate)
+								 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
+						$(DROPZONE_PREVIEW_TEMPLATE_SELECTOR).prepend('<div class="dz-preview-bundle"><span class="glyphicon glyphicon-download-alt"></span> <a href="/bundle/' + component.bundle.id + '/">Download all files as a zip archive (<span class="glyphicon glyphicon-compressed"></span>)</a></div>');
+						component.$completedContainer
+								 .find('form')
+								 .append('<input type="hidden" name="bundle" value="' + component.bundle.id + '" />');
+					} else {
+						component.$completedContainer.html('<br /><p class="text-danger">Oh my... something went wrong while transferring your files. Please try again later.</p><a href="/" data-async data-target="hp">Return to homepage</a>');
+					}
 				});
 			});
 

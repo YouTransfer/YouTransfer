@@ -3,17 +3,27 @@
 {% block content %}
 <div class="hp jumbotron" id="hp">
 	<header class="col-md-12">
-		<h1>{{ title }}</h1>
-		<h2>{{ subtitle }}</h2>
+		<h1>{{ title | safe }}</h1>
+		<h2>{{ subtitle | safe }}</h2>
 	</header>
 
 	<div class="col-md-6">
 		{%if isPostback %}
 
-		{% import "dropzone.html" as dropzone %}
-		{{ dropzone.preview(bundle, isPostback)}}
+			{% if success %}
 
-		{% else %}
+				{% import "dropzone.html" as dropzone %}
+				{{ dropzone.preview(bundle, isPostback)}}
+
+			{% else %}
+
+				{% import "errors.html" as err %}
+				{{ err.show(errors) }}
+				<a href="/" data-async data-target="hp">Return to homepage</a>				
+
+			{% endif %}
+
+		{% else %}		
 
 		{% include "fileupload.html" %}
 
@@ -24,7 +34,9 @@
 
 		{%if isPostback %}
 
-		{% include "sendmail.html" %}
+			{% if success %}
+				{% include "sendmail.html" %}
+			{% endif %}
 
 		{% else %}
 

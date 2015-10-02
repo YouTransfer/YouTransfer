@@ -1,12 +1,16 @@
+{% import "errors.html" as err %}
+
 <div class="download text-center">
-	<p>Submit token to retrieve your file</p>
+	<p>Submit token to retrieve your file or archive</p>
 
 	<form method="POST" action="/download" class="form-inline">
 
 		<div class="form-group">
-			<input type="text" class="form-control" name="token" />
+			<input type="text" class="form-control" name="token" value="{{ token }}" />
 			<button type="submit" name="submit" class="btn btn-primary">Download</button>
 		</div>
+
+		{{ err.show(errors) }}
 
 	</form>
 </div>

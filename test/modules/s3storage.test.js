@@ -389,7 +389,8 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 			},
 			res = {
 				setHeader: function() {},
-				send: function() {}
+				send: function() {},
+				on: function() {}
 			},
 			s3obj = {
 				getObject: function() {},
@@ -410,6 +411,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
 		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
 		resMock.expects("send").once().withArgs(data.Body);
+		resMock.expects("on").once().withArgs('finish').callsArgAsync(1);
 
 		provider.download(token, res, function(err) {
 			should.not.exist(err);

@@ -40,7 +40,9 @@ describe('Anchor component', function() {
 			url.should.equals('http://someurl/');
 
 			var d = $.Deferred();
-			d.resolve('<div id="target">content</div>');
+			d.resolve({
+				output: '<div id="target">content</div>'
+			});
 			return d.promise();
 		});
 
@@ -69,7 +71,9 @@ describe('Anchor component', function() {
 			url.should.equals('http://someurl/');
 
 			var d = $.Deferred();
-			d.resolve('<div id="anotherTarget">content</div>');
+			d.resolve({
+				output: '<div id="anotherTarget">content</div>'
+			});
 			return d.promise();
 		});
 
