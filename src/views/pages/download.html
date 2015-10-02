@@ -3,8 +3,8 @@
 {% block content %}
 <div class="dl hp jumbotron" id="dl">
 	<header class="col-md-12">
-		<h1>{{ title }}</h1>
-		<h2>{{ subtitle }}</h2>
+		<h1>{{ title | safe }}</h1>
+		<h2>{{ subtitle | safe }}</h2>
 	</header>
 	{% include "gettoken.html" %}
 	<div class="text-center">
