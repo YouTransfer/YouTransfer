@@ -35,82 +35,35 @@
 
 <p>YouTransfer is a simple but elegant self-hosted file transfer &amp; sharing solution. It is an alternative to paid services like <a href="http://dropbox.com">Dropbox</a> and <a href="http://wetransfer.com">WeTransfer</a> by offering similar features but without limitations, price plans and a lengthy privacy policy. You remain in control of your files.</p>
 
+<p>Created to be installed behind the firewall on private servers, YouTransfer aims to empower organisations and individuals that wish to combine ease-to-use file transfer tooling with security and control.</p>
+
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
 
 <h3>
-<a id="docker" class="anchor" href="#docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker</h3>
+<a id="quick-start-using-docker" class="anchor" href="#quick-start-using-docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start using Docker</h3>
 
-<p>The easiest way to install YouTransfer in your own environment is to use the <a href="http://hub.docker.com/r/remie/youtransfer/">Docker image</a>:</p>
+<p>If you wish to install YouTransfer in your own environment without any modifications, the <a href="http://hub.docker.com/r/remie/youtransfer/">Docker image</a> is the most quick and easy approach. Simply <a href="https://docs.docker.com/installation/">install docker</a> and run:</p>
 
 <p><code>docker pull remie/youtransfer</code></p>
 
 <p>You can run the application with the following command:</p>
 
-<p><code>docker run -d -v [path_to_upload_folder]:/opt/youtransfer/uploads -v [path_to_config.json]:/opt/youtransfer/config.json -v [path_to_settings.json]:/opt/youtransfer/settings.json -p 80:5000 remie/youtransfer</code></p>
+<pre><code>docker run -d 
+-v [path_to_upload_folder]:/opt/youtransfer/uploads 
+-v [path_to_config.json]:/opt/youtransfer/config.json 
+-v [path_to_settings.json]:/opt/youtransfer/settings.json 
+-p 80:5000 
+remie/youtransfer
+</code></pre>
 
-<p>You can now connect to YouTransfer by browsing to http://[docker_host_ip]/</p>
-
-<p>N.B. the <code>config.json</code> file is the application configuration. This is static information: it cannot be modified on runtime. In addition, it is a placeholder for default values of user settings. The <code>settings.json</code> file contains all settings that can be adjusted through the web interface. It is recommended to store this outside the Docker container for persistance.</p>
-
-<h3>
-<a id="nodejs" class="anchor" href="#nodejs" aria-hidden="true"><span class="octicon octicon-link"></span></a>NodeJS</h3>
-
-<p>If you wish to run YouTransfer directly from source, you will need to install <a href="http://nodejs.org">NodeJS</a>. </p>
-
-<p>Download the latest release zip file from <a href="https://github.com/remie/YouTransfer/releases">GitHub</a> or clone the repository from <a href="https://github.com/remie/YouTransfer.git">https://github.com/remie/YouTransfer.git</a></p>
-
-<p>To install YouTransfer, run <code>npm install &amp;&amp; npm run dist</code>.
-After installation, start YouTransfer using <code>PORT=[port] node app.js</code>.</p>
-
-<p>You can now connect to YouTransfer by browsing to http://localhost:[port]/</p>
+<p>You can now connect to YouTransfer by browsing to http://[docker_host_ip]/
+For more information on Docker deployment, please read the <a href="https://github.com/remie/YouTransfer/wiki/docker">Docker installation instructions</a>.</p>
 
 <h3>
-<a id="npm" class="anchor" href="#npm" aria-hidden="true"><span class="octicon octicon-link"></span></a>NPM</h3>
+<a id="additional-documentation" class="anchor" href="#additional-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional documentation</h3>
 
-<p>YouTransfer is also available as an NPM package. This allows you to start a new <a href="http://nodejs.org">NodeJS</a> project, edit the source and customize the experience for your users.</p>
-
-<p>You can install the NPM package by running <code>npm install youtransfer -g</code>.</p>
-
-<p>Create a new empty directory for your project, e.g. '~/meTransfer'. Run <code>youtransfer init</code> in your project directory, which will copy all necessary files. Finalise the project setup by running <code>npm init</code> and <code>npm install</code>.</p>
-
-<p>Once your project is ready you can run <code>npm start</code> to start the application. Your project will now be available in your browser (http://localhost:5000). You can change the default port in the <code>config.json</code> file.</p>
-
-<p>For local development, the <code>npm run dev</code> command which will start 'gulp-watch' to automatically regenerate the static content upon change.</p>
-
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
-
-<h3>
-<a id="hosting" class="anchor" href="#hosting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hosting</h3>
-
-<h4>
-<a id="ngrok" class="anchor" href="#ngrok" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ngrok</h4>
-
-<p>The easiest way to host YouTransfer from your local system is to use <a href="http://ngrok.com">Ngrok</a>. This will create a secure tunnel between your computer and the NGrok servers, exposing the YouTransfer application to the outside world. </p>
-
-<p>NGrok offers secure connections using SSL, which is highly recommended.</p>
-
-<h4>
-<a id="reverse-proxy" class="anchor" href="#reverse-proxy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reverse Proxy</h4>
-
-<p>If you are hosting YouTransfer on your own servers, it is recommended that you add a reverse proxy in front of the application. There are several solutiona available, like <a href="http://www.haproxy.org">HAProxy</a>, <a href="http://nginx.org">Nginx</a> or <a href="http://httpd.apache.org">Apache Httpd</a>. </p>
-
-<p>A reverse proxy can be configured to support SSL, access rules and other security features which are not part of YouTransfer.</p>
-
-<h3>
-<a id="uploading--sharing-files" class="anchor" href="#uploading--sharing-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uploading &amp; sharing files</h3>
-
-<p>This should be the easy part :)</p>
-
-<p>You can upload the files using drag &amp; drop (depending on browser support) or by using the file input field on the form. Uploading will start automatically. As soon as the file has been transferred succesfully, a file-specific token will be provided. You can use this token to download the file to your computer. </p>
-
-<p>File sharing is done by publishing the access token.</p>
-
-<h4>
-<a id="browser-compatibility" class="anchor" href="#browser-compatibility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser compatibility</h4>
-
-<p>YouTransfer will always work with the latest version of any major browser, and will try to support up to three prior versions. There is one exception: drag &amp; drop support for file uploading. This relies on HTML5 and more specifically the ability for data transfer. See the DropzoneJS <a href="http://www.dropzonejs.com/#browser-support">compatibility chart</a> for more information.</p>
+<p>You can find additional documentation (incl. installation and usage instructions) on the <a href="https://github.com/remie/YouTransfer/wiki">GitHub Wiki</a></p>
 
 <h2>
 <a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributors</h2>
@@ -119,12 +72,11 @@ After installation, start YouTransfer using <code>PORT=[port] node app.js</code>
 <li><a href="https://github.com/remie">Remie Bolte</a></li>
 </ul>
 
-<p>You can contribute by forking the project and sending pull requests. If you do, please don't forget to add your name to this list!</p>
+<p>You can contribute by forking the project and sending pull requests.<br>
+If you do, please don't forget to add your name to this list!</p>
 
 <h2>
 <a id="license--other-legal-stuff" class="anchor" href="#license--other-legal-stuff" aria-hidden="true"><span class="octicon octicon-link"></span></a>License &amp; other legal stuff</h2>
-
-<p>Copyright 2015 Collabsoft</p>
 
 <p>Licensed under the Apache License, Version 2.0 (the "License");
 You may obtain a copy of the License at <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
