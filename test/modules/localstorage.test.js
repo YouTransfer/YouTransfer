@@ -254,7 +254,53 @@ describe('YouTransfer Local Storage module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing archive download
 
-	it('should be possible to download an archive', function() {
+	it('should be possible to download an archive', function(done) {
+
+		var token = 'bundle';
+		var bundle = {
+			expires: Date.tomorrow(),
+			files: [
+				{
+					id: 'file',
+					name: 'filename'
+				}
+			]
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(bundle));
+		});
+
+		var zip = {
+			on: function() {},
+			file: function() {},
+			pipe: function() {},
+			finalize: function() {}
+		};
+		var zipMock = sandbox.mock(zip);
+		zipMock.expects('pipe').once();
+		zipMock.expects('finalize').once();
+		zipMock.expects('on').once().withArgs('finish').callsArgAsync(1);
+		zipMock.expects('file').once().withArgs(path.join(__dirname, bundle.files[0].id + '.binary'), { name: bundle.files[0].name });
+		sandbox.stub(archiver, 'create').returns(zip);
+
+		var res = {
+			setHeader: function() {},
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+
+		provider.archive(token, res, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should be possible to download an archive without expiration date', function(done) {
 
 		var token = 'bundle';
 		var bundle = {
@@ -273,6 +319,7 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 		var zip = {
+			on: function() {},
 			file: function() {},
 			pipe: function() {},
 			finalize: function() {}
@@ -280,6 +327,7 @@ describe('YouTransfer Local Storage module', function() {
 		var zipMock = sandbox.mock(zip);
 		zipMock.expects('pipe').once();
 		zipMock.expects('finalize').once();
+		zipMock.expects('on').once().withArgs('finish').callsArgAsync(1);
 		zipMock.expects('file').once().withArgs(path.join(__dirname, bundle.files[0].id + '.binary'), { name: bundle.files[0].name });
 		sandbox.stub(archiver, 'create').returns(zip);
 
@@ -292,20 +340,22 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.archive(token, res, function(err) {
 			should.not.exist(err);
+			done();
 		});
 
 	});
 
-	it('should continue with erronous callback if archive token is unknown', function() {
+	it('should continue with erronous callback if archive token is unknown', function(done) {
 
 		provider.archive(null, null, function(err) {
 			should.exist(err);
 			err.message.should.equals('Bundle identifier unknown');
+			done();
 		});
 
 	});	
 
-	it('should continue with erronous callback if archive token retrieval throws error', function() {
+	it('should continue with erronous callback if archive token retrieval throws error', function(done) {
 
 		var token = 'bundle';
 		var bundle = {
@@ -333,11 +383,12 @@ describe('YouTransfer Local Storage module', function() {
 		provider.archive(token, res, function(err) {
 			should.exist(err);
 			err.should.equals('error');
+			done();
 		});
 
 	});
 
-	it('should continue with erronous callback if archive bundle retrieval throws error', function() {
+	it('should continue with erronous callback if archive bundle retrieval throws error', function(done) {
 
 		var token = 'bundle';
 		var bundle = {
@@ -365,6 +416,34 @@ describe('YouTransfer Local Storage module', function() {
 		provider.archive(token, res, function(err) {
 			should.exist(err);
 			err.message.should.equals('Invalid bundle data');
+			done();
+		});
+
+	});	
+
+	it('should continue with erronous callback if archive bundle has expired', function(done) {
+
+		var token = 'bundle';
+		var bundle = {
+			expires: 1,
+			files: [
+				{
+					id: 'file',
+					name: 'filename'
+				}
+			]
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(bundle));
+		});
+
+		provider.archive(token, null, function(err) {
+			should.exist(err);
+			err.message.should.equals('The requested bundle is no longer available.');
+			done();
 		});
 
 	});	
@@ -372,6 +451,48 @@ describe('YouTransfer Local Storage module', function() {
 	// -------------------------------------------------------------------------------------- Testing file download
 
 	it('should be possible to download a file', function(done) {
+
+		var token = 'file';
+		var context = {
+			expires: Date.tomorrow(),
+			name: 'filename',
+			size: 10,
+			type: 'binary'
+		};
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(context));
+		});
+
+		var stream = {
+			pipe: function() {},
+		}
+		var streamMock = sandbox.mock(stream);
+		streamMock.expects("pipe").once();
+		sandbox.stub(fs, 'createReadStream').returns(stream);
+
+		sandbox.stub(mime, 'lookup').returns(context.type);
+
+		var res = {
+			setHeader: function() {},
+			on: function() {}
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="' + context.name + '"');
+		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
+		resMock.expects("setHeader").once().withArgs('Content-type', context.type);
+		resMock.expects("on").once().withArgs('finish').callsArgAsync(1);
+
+		provider.download(token, res, function(err) {
+			should.not.exist(err);
+			resMock.verify();
+			done();
+		});
+	});
+
+	it('should be possible to download a file without expiration date', function(done) {
 
 		var token = 'file';
 		var context = {
@@ -480,6 +601,29 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 	});
+
+	it('should continue with erronous callback if download file has expired', function(done) {
+
+		var token = 'file';
+		var context = {
+			expires: 1,
+			name: 'filename',
+			size: 10,
+			type: 'binary'
+		};
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(context));
+		});
+
+		provider.download(token, null, function(err) {
+			should.exist(err);
+			err.message.should.equals('The requested file is no longer available.');
+			done();
+		});
+	});	
 
 	// -------------------------------------------------------------------------------------- Testing file purge
 

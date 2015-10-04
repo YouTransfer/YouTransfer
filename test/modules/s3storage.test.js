@@ -260,6 +260,67 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 
 		var token = 'bundle',
 			bundle = {
+				expires: Date.tomorrow(),
+				files: [
+					{
+						id: 'file',
+						name: 'filename'
+					}
+				]
+			},
+			res = {
+				setHeader: function() {},
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				}
+			},
+			readstream = {
+				createReadStream: function() { 
+					return {
+						pipe: function() {}
+					}
+				},
+			}
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, { Body: JSON.stringify(bundle) });
+		s3objMock.expects('getObject').once().withArgs({ Key: bundle.files[0].id }).returns(readstream);
+
+		var zip = {
+			on: function() {},
+			append: function() {},
+			pipe: function() {},
+			finalize: function() {}
+		};
+		var zipMock = sandbox.mock(zip);
+		zipMock.expects('pipe').once();
+		zipMock.expects('finalize').once();
+		zipMock.expects('append').once();
+		zipMock.expects('on').once().callsArgAsync(1);
+		sandbox.stub(archiver, 'create').returns(zip);
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+
+		provider.archive(token, res, function(err) {
+			should.not.exist(err);
+			s3objMock.verify();
+			zipMock.verify();
+			done();
+		});
+
+	});
+
+	it('should be possible to download an archive without expiration date', function(done) {
+
+		var token = 'bundle',
+			bundle = {
+				expires: Date.tomorrow(),
 				files: [
 					{
 						id: 'file',
@@ -371,9 +432,101 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 
 	});
 
+	it('should continue with erronous callback if archive bundle has expired', function(done) {
+
+		var token = 'bundle',
+			bundle = {
+				expires: 1,
+				files: [
+					{
+						id: 'file',
+						name: 'filename'
+					}
+				]
+			},
+			res = {
+				setHeader: function() {},
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				}
+			},
+			readstream = {
+				createReadStream: function() { 
+					return {
+						pipe: function() {}
+					}
+				},
+			}
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, { Body: JSON.stringify(bundle) });
+
+		provider.archive(token, null, function(err) {
+			should.exist(err);
+			err.message.should.equals('The requested bundle is no longer available.');
+			s3objMock.verify();
+			done();
+		});
+
+	});
+
+
 	// -------------------------------------------------------------------------------------- Testing file download
 
 	it('should be possible to download a file', function(done) {
+
+		var token = 'file',
+			context = {
+				expires: Date.tomorrow(),
+				name: 'filename',
+				size: 10,
+				type: 'binary'
+			},
+			data = {
+				Body: 'data',
+				Metadata: {
+					json: JSON.stringify(context)
+				}
+			},
+			res = {
+				setHeader: function() {},
+				send: function() {},
+				on: function() {}
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				}
+			}
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, data);
+		sandbox.stub(zlib, 'gunzip', function(data, callback) {
+			callback(null, data);
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="' + context.name + '"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
+		resMock.expects("send").once().withArgs(data.Body);
+		resMock.expects("on").once().withArgs('finish').callsArgAsync(1);
+
+		provider.download(token, res, function(err) {
+			should.not.exist(err);
+			s3objMock.verify();
+			resMock.verify();
+			done();
+		});
+	});
+
+	it('should be possible to download a file without expiration date', function(done) {
 
 		var token = 'file',
 			context = {
@@ -415,6 +568,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 
 		provider.download(token, res, function(err) {
 			should.not.exist(err);
+			s3objMock.verify();
 			resMock.verify();
 			done();
 		});
@@ -451,6 +605,45 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 			done();
 		});		
 
+	});
+
+	it('should continue with erronous callback if download file has expired', function(done) {
+
+		var token = 'file',
+			context = {
+				expires: 1,
+				name: 'filename',
+				size: 10,
+				type: 'binary'
+			},
+			data = {
+				Body: 'data',
+				Metadata: {
+					json: JSON.stringify(context)
+				}
+			},
+			res = {
+				setHeader: function() {},
+				send: function() {},
+				on: function() {}
+			},
+			s3obj = {
+				getObject: function() {},
+				params: {
+					Key: token
+				}
+			}
+
+		provider.s3obj = s3obj;
+		var s3objMock = sandbox.mock(s3obj);
+		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, data);
+
+		provider.download(token, null, function(err) {
+			should.exist(err);
+			err.message.should.equals('The requested file is no longer available.');
+			s3objMock.verify();
+			done();
+		});
 	});
 
 	// -------------------------------------------------------------------------------------- Testing file purge
