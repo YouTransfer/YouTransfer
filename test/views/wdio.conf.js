@@ -50,7 +50,7 @@ exports.config = {
     coloredLogs: true,
     //
     // Saves a screenshot to a given path if a command fails.
-    screenshotPath: './test/ui-test-screenshots/',
+    screenshotPath: './test/',
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", the base url gets prepended.

@@ -18,6 +18,7 @@ var DROPZONE_PREVIEW_TEMPLATE_SELECTOR = '.dz-preview-template';
 var DROPZONE_PREVIEW_DESCRIPTION_SELECTOR = '.dz-preview-description';
 var DROPZONE_PREVIEW_DATALINK_SELECTOR = '[data-dz-link]';
 var DROPZONE_PREVIEW_ERROR_MESSAGE_SELECTOR = '[data-dz-errormessage]';
+var DROPZONE_PREVIEW_PROGRESS_SELECTOR = '.dz-preview-progress';
 
 var DROPZONE_UPLOAD_COMPLETE_CLASS = 'dz-upload-complete';
 var DROPZONE_UPLOAD_COMPLETE_SELECTOR = '.' + DROPZONE_UPLOAD_COMPLETE_CLASS;
@@ -62,7 +63,7 @@ function Fileupload(element) {
 
 		component.dropzone = new Dropzone(element, options);
 
-		if(!settings.forceFallback) {
+		if(!settings.dropzone.forceFallback) {
 			component.dropzone.on("addedfile", function() {
 				component.$element.addClass("dz-files-added");
 			});
@@ -72,27 +73,28 @@ function Fileupload(element) {
 			});
 
 			component.dropzone.on("complete", function(result) {
-				var response = JSON.parse(result.xhr.response);
 				$(result.previewElement).find(DROPZONE_PREVIEW_DESCRIPTION_SELECTOR).removeClass('col-md-7');
-				
-				if(response.errors.length > 0) {
-					$.each(response.errors, function(i, error) {
-						$(result.previewElement).find(DROPZONE_PREVIEW_ERROR_MESSAGE_SELECTOR)
-												.html(error.message);
-					});
-				} else {
-					var file = response.bundle.files[0];
-					$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + file.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + file.id + '</a>');
-					component.bundle.files.push(file);
+				$(result.previewElement).find(DROPZONE_PREVIEW_PROGRESS_SELECTOR).hide();
+				if(result.xhr) {
+					var response = JSON.parse(result.xhr.response);
+					if(response.errors.length > 0) {
+						$.each(response.errors, function(i, error) {
+							$(result.previewElement).find(DROPZONE_PREVIEW_ERROR_MESSAGE_SELECTOR)
+													.html(error.message);
+						});
+					} else {
+						var file = response.bundle.files[0];
+						$(result.previewElement).find(DROPZONE_PREVIEW_DATALINK_SELECTOR).append('<a href="/download/' + file.id + '"><span class="glyphicon glyphicon-download-alt"></span> ' + file.id + '</a>');
+						component.bundle.files.push(file);
+					}
 				}
 			});
 
 			component.dropzone.on('queuecomplete', function() {
-				$.post('/upload/bundle', {
-					bundle: JSON.stringify(component.bundle)
-				}).done(function() {
-
-					if(component.bundle.files.length > 0) {
+				if(component.bundle.files.length > 0) {
+					$.post('/upload/bundle', {
+						bundle: JSON.stringify(component.bundle)
+					}).done(function() {
 						component.$completedContainer
 								 .html(component.completeTemplate)
 								 .addClass(DROPZONE_UPLOAD_COMPLETE_CLASS);
@@ -100,10 +102,12 @@ function Fileupload(element) {
 						component.$completedContainer
 								 .find('form')
 								 .append('<input type="hidden" name="bundle" value="' + component.bundle.id + '" />');
-					} else {
-						component.$completedContainer.html('<br /><p class="text-danger">Oh my... something went wrong while transferring your files. Please try again later.</p><a href="/" data-async data-target="hp">Return to homepage</a>');
-					}
-				});
+					});
+				} else {
+					component.$completedContainer.html('<br /><p class="text-danger">Oh my... something went wrong while transferring your files. Please try again later.</p><a href="/" data-async data-target="hp">Return to homepage</a>');
+				}
+
+				component.dropzone.disable();
 			});
 
 			component.dropzone.on("reset", function() {

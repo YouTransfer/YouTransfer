@@ -6,7 +6,7 @@
 	"baseUrl": "http://localhost:5000",
 
 	"dropzone": {
-		"maxFileSize": "2000",
+		"maxFilesize": "2000",
 		"parallelUploads": 20,
 		"forceFallback": false
 	},

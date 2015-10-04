@@ -44,8 +44,8 @@ describe('Transfer Settings View', function() {
 
 	it('should have a "Max. file size (MB)" field with the current value based on user settings', function *() {
 
-		var value = yield browser.getValue('input#maxFileSize')
-		value.should.be.equal(sandbox.dropzone.maxFileSize);
+		var value = yield browser.getValue('input#maxFilesize')
+		value.should.be.equal(sandbox.dropzone.maxFilesize);
 
 	});
 
@@ -91,25 +91,25 @@ describe('Transfer Settings View', function() {
 		var alert = yield browser.isExisting('.tab-pane.active .alert strong');
 		alert.should.be.equal(false);
 
-		var currentValue = sandbox.dropzone.maxFileSize;
+		var currentValue = sandbox.dropzone.maxFilesize;
 		var newValue = currentValue + '2';
 
-		alert = yield browser.setValue('input#maxFileSize', newValue)
+		alert = yield browser.setValue('input#maxFilesize', newValue)
 							 .submitForm('.tab-pane.active form')
 							 .waitForExist('.tab-pane.active .alert strong', 5000)
 							 .getText('.tab-pane.active .alert strong');
 		alert.should.be.equal('Success!');
 
-		var title = yield browser.getValue('input#maxFileSize');
+		var title = yield browser.getValue('input#maxFilesize');
 		title.should.be.equal(newValue);
 
-		alert = yield browser.setValue('input#maxFileSize', currentValue)
+		alert = yield browser.setValue('input#maxFilesize', currentValue)
 							 .submitForm('.tab-pane.active form')
 							 .waitForExist('.tab-pane.active .alert strong', 5000)
 							 .getText('.tab-pane.active .alert strong');
 		alert.should.be.equal('Success!');
 
-		var value = yield browser.getValue('input#maxFileSize');
+		var value = yield browser.getValue('input#maxFilesize');
 		value.should.be.equal(currentValue);
 
 	});
