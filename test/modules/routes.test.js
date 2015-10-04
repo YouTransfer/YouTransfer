@@ -280,7 +280,7 @@ describe('YouTransfer Router module', function() {
 			req.errors.exist().should.equals(true);
 			var err = req.errors.get();
 			err.length.should.equals(1);
-			err[0].message.should.equals("An error occurred while uploading your file(s)");
+			err[0].message.should.equals("An error occurred while uploading your file(s).");
 			done();
 		});
 	});	
@@ -330,7 +330,7 @@ describe('YouTransfer Router module', function() {
 			req.errors.exist().should.equals(true);
 			var err = req.errors.get();
 			err.length.should.equals(1);
-			err[0].message.should.equals("An error occurred while uploading your file(s)");
+			err[0].message.should.equals("An error occurred while uploading your file(s).");
 			done();
 		});
 	});	
@@ -1058,6 +1058,40 @@ describe('YouTransfer Router module', function() {
 
 		var resMock = sandbox.mock(res);
 		resMock.expects('process').once().withArgs('settings.dropzone.html', response).callsArg(2);
+
+		router.settingsGetByName()(req, res, function() {
+			req.errors.exist().should.equals(false);
+			resMock.verify();
+			done();
+		});
+	});	
+
+	it('should be possible to retrieve dropzone settings even if there is no default setting present', function(done) {
+
+		var req = {
+				params: {
+					name: 'dropzone'
+				},
+				isXmlHtppRequest: true
+			},
+			res = {
+				process: function() {}
+			},
+			response = {
+				activeTab: 'dropzone',
+			},
+			context = _.assign({
+				dropzone: {}
+			}, response);
+
+		errors(req, null, function() {});
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, response);
+		});
+
+		var resMock = sandbox.mock(res);
+		resMock.expects('process').once().withArgs('settings.dropzone.html', context).callsArg(2);
 
 		router.settingsGetByName()(req, res, function() {
 			req.errors.exist().should.equals(false);

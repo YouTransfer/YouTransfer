@@ -944,4 +944,37 @@ describe('YouTransfer Middleware module', function() {
 			done();
 		});
 	});	
+
+	it('should implement "res.process" method which does not return any result if the response stream has already finished', function() {
+		var name = 'MyTemplate',
+			context = {
+				success: true,
+				isPostback: true,
+				errors: []
+			},
+			res = {
+				finished: true,
+				json: function() {}
+			},
+			req = {
+				errors: {
+					get: function() {},
+					exist: function() {}
+				},
+				headers: {
+					'x-requested-with': 'XMLHttpRequest'
+				}
+			};
+
+		middleware(req, res, function() {
+			should.exist(res.process);
+
+			var resMock = sandbox.mock(res);
+			resMock.expects("json").never();
+
+			res.process(name, context, null);
+
+			resMock.verify();
+		});
+	});		
 });

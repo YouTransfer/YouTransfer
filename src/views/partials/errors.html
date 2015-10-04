@@ -12,6 +12,8 @@
 				{{ error.message }}
 				{% endif %}
 			 </span>
+			 <br />
+			 <span>{{ error.original.message | safe }}</span>
 		</span>
 	</div>
 	{% endfor %}

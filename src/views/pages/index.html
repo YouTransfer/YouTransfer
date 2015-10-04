@@ -7,7 +7,7 @@
 		<h2>{{ subtitle | safe }}</h2>
 	</header>
 
-	<div class="col-md-6">
+	<div class="{{ "col-md-6" if success else "col-md-12" }}">
 		{%if isPostback %}
 
 			{% if success %}
@@ -30,13 +30,12 @@
 		{% endif %}
 	</div>
 
+	{% if success %}
 	<div class="col-md-6 dz-completed-container">
 
 		{%if isPostback %}
 
-			{% if success %}
-				{% include "sendmail.html" %}
-			{% endif %}
+			{% include "sendmail.html" %}
 
 		{% else %}
 
@@ -49,6 +48,6 @@
 
 		{% endif %}
 	</div>
-
+	{% endif %}
 </div>
 {% endblock %}

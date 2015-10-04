@@ -159,7 +159,10 @@ describe('YouTransfer module', function() {
 			settings = {
 				localstoragepath: __dirname,
 				retentionUnit: 'seconds',
-				retention: 1
+				retention: 1,
+				dropzone: {
+					maxFilesize: 2000
+				}
 			},
 			factory = {
 				upload: function() {}
@@ -198,7 +201,10 @@ describe('YouTransfer module', function() {
 			bundle = 'bundle',
 			settings = {
 				localstoragepath: __dirname,
-				retentionUnit: 'seconds'
+				retentionUnit: 'seconds',
+				dropzone: {
+					maxFilesize: 2000
+				}
 			},
 			factory = {
 				upload: function() {}
@@ -225,6 +231,39 @@ describe('YouTransfer module', function() {
 			done();
 		});
 	});	
+
+	it('should not be possible to upload a file if the size exceeds the maxFilesize setting', function(done) {
+
+		var file = {
+				id: 'file',
+				name: 'file',
+				type: 'file',
+				size: 100000000,
+				lastModifiedDate: 'now'
+			},
+			bundle = 'bundle',
+			settings = {
+				localstoragepath: __dirname,
+				retentionUnit: 'seconds',
+				retention: 1,
+				dropzone: {
+					maxFilesize: 0.1
+				}
+			},
+			factory = {
+				upload: function() {}
+			};
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.upload(file, bundle, function(err, context) {
+			should.exist(err);
+			err.message.should.equals('File "file" is too big (95.37 MB). Max filesize: 0.1MiB.');
+			done();
+		});
+	});
 
 	// -------------------------------------------------------------------------------------- Testing bundle
 
