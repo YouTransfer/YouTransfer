@@ -6,6 +6,11 @@ YouTransfer is a simple but elegant self-hosted file transfer & sharing solution
 
 Created to be installed behind the firewall on private servers, YouTransfer aims to empower organisations and individuals that wish to combine ease-to-use file transfer tooling with security and control.
 
+## Demo
+
+You can see a live demo of YouTransfer on http://demo.youtransfer.io  
+The demo is [somewhat limited](https://github.com/remie/YouTransfer/wiki/Demo) so it is recommended to run it locally (see quick start section below).
+
 ## Documentation
 
 ### Quick Start using Docker
