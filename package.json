@@ -1,6 +1,6 @@
 {
   "name": "youtransfer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "YouTransfer, the self-hosted file transfer solution",
   "main": "app.js",
   "engines": {
