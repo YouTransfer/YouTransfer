@@ -13,7 +13,7 @@
 				{% endif %}
 			 </span>
 			 <br />
-			 <span>{{ error.original.message | safe }}</span>
+			 <span>{{ error.original.message | escape }}</span>
 		</span>
 	</div>
 	{% endfor %}
