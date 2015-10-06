@@ -87,6 +87,70 @@ describe('YouTransfer Settings module', function() {
 
 	});
 
+	it('should be possible to set boolean value to true explicitely', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				booleanValue: true
+			}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.booleanValue.should.equals(true);
+			callback(null);
+		});
+
+		settings.push({ booleanValue: true }, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should be possible to set boolean value to false explicitely', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				booleanValue: true
+			}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.booleanValue.should.equals(false);
+			callback(null);
+		});
+
+		settings.push({ booleanValue: false }, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should be possible to set boolean value to false by omission', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				booleanValue: true
+			}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.booleanValue.should.equals(false);
+			callback(null);
+		});
+
+		settings.push({}, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+
 	it('should throw an error if it is not possible to write settings file', function(done) {
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, 'this is not json and should produce an error');

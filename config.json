@@ -4,6 +4,7 @@
 	"title": "YouTransfer",
 	"subtitle": "The self-hosted file sharing solution",
 	"baseUrl": "http://localhost:5000",
+	"enableDownload": true,
 
 	"dropzone": {
 		"maxFilesize": "2000",

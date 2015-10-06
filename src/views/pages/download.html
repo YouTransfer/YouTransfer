@@ -6,7 +6,34 @@
 		<h1>{{ title | safe }}</h1>
 		<h2>{{ subtitle | safe }}</h2>
 	</header>
+
+	{% if enableDownload %}
+
 	{% include "gettoken.html" %}
+
+	{% elif errors.length > 0 %}
+
+		<div class="download text-center">
+			{% import "errors.html" as err %}
+			{{ err.show(errors) }}
+		</div>
+
+	{% else %}
+
+		<div class="download text-center">
+			<div class="help-block">
+				<div class="text-danger">
+					<p>
+						Err... this is awkward...<br />
+						File download by token has been disabled.<br />
+						Didn't you get the memo?
+					</p>
+				</div>
+			</div>
+		</div>
+
+	{% endif %}
+
 	<div class="text-center">
 		<a href="/" data-async data-target="dl">or return to homepage</a>
 	</div>

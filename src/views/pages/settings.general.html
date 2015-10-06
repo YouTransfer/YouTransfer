@@ -51,6 +51,17 @@
 		</div>
 
 		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<div class="checkbox">
+					<label for="enableDownload">
+						<input type="checkbox" name="settings[enableDownload]" id="enableDownload" {{ "checked" if enableDownload }} value="true">
+						Enable file download feature
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-6 text-right">
 				<button type="submit" class="btn btn-primary">Save</button>
 			</div>
