@@ -70,6 +70,18 @@ describe('General Settings View', function() {
 
 	});
 
+	it('should have a "Enable file download feature" field with the current value based on user settings', function *() {
+
+		var value = yield browser.getAttribute('input#enableDownload', 'checked')
+		if(sandbox.enableDownload) {
+			should.exist(value);
+		} else {
+			should.not.exist(value);
+		}
+
+	});
+
+
 	it('should be able to save the settings', function *() {
 
 		var alert = yield browser.isExisting('.tab-pane.active .alert strong');

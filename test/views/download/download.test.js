@@ -73,4 +73,39 @@ describe('Download View', function() {
 
 	});
 
+	it('should not have a form to enable downloading a file if this feature is disabled', function *() {
+
+		var currentValue = sandbox.enableDownload;
+		if(currentValue) {
+			var enableDownload = yield browser.click('ul.nav > li > a')
+											  .click('input#enableDownload')
+											  .submitForm('.tab-pane.active form')
+											  .waitForExist('.tab-pane.active .alert strong', 5000)
+											  .isExisting('input#enableDownload:checked');
+			enableDownload.should.be.equal(false);
+		}
+
+		var form = yield browser.url(sandbox.baseUrl + '/download')
+								.isExisting('.download form');
+		form.should.be.equal(false);
+
+		var submit = yield browser.url(sandbox.baseUrl + '/download')
+								  .isExisting('.download form button[type=submit]');
+		submit.should.be.equal(false);
+
+		var error = yield browser.url(sandbox.baseUrl + '/download')
+								 .getText('.text-danger');
+		error.should.equals("Err... this is awkward...\nFile download by token has been disabled.\nDidn\'t you get the memo?");
+
+		var currentValue = sandbox.enableDownload;
+		if(currentValue) {
+			var enableDownload = yield browser.click('ul.nav > li > a')
+											  .click('input#enableDownload')
+											  .submitForm('.tab-pane.active form')
+											  .waitForExist('.tab-pane.active .alert strong', 5000)
+											  .isExisting('input#enableDownload:checked');
+			enableDownload.should.be.equal(true);
+		}
+
+	});
 });

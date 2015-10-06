@@ -74,6 +74,42 @@ describe('Index View', function() {
 
 	});
 
+	it('should not have a form to enable downloading a file if this feature is disabled', function *() {
+
+		var currentValue = sandbox.enableDownload;
+		if(currentValue) {
+			var enableDownload = yield browser.click('ul.nav > li > a')
+											  .click('input#enableDownload')
+											  .submitForm('.tab-pane.active form')
+											  .waitForExist('.tab-pane.active .alert strong', 5000)
+											  .isExisting('input#enableDownload:checked');
+			enableDownload.should.be.equal(false);
+		}
+
+		var download = yield browser.url('/')
+									.isExisting('.download');
+		download.should.be.equal(false);
+
+		var form = yield browser.url('/')
+								.isExisting('.download form');
+		form.should.be.equal(false);
+
+		var submit = yield browser.url('/')
+								  .isExisting('.download form button[type=submit]');
+		submit.should.be.equal(false);
+
+		var currentValue = sandbox.enableDownload;
+		if(currentValue) {
+			var enableDownload = yield browser.click('ul.nav > li > a')
+											  .click('input#enableDownload')
+											  .submitForm('.tab-pane.active form')
+											  .waitForExist('.tab-pane.active .alert strong', 5000)
+											  .isExisting('input#enableDownload:checked');
+			enableDownload.should.be.equal(true);
+		}
+
+	});
+
 	it('should have a form to enable downloading a file which throws an error when trying to exploit path traversal', function *() {
 
 		var form = yield browser.isExisting('.download form');
