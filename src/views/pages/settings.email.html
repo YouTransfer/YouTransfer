@@ -42,9 +42,17 @@
 		</div>
 
 		<div class="form-group">
-			<label for="sender" class="col-sm-3 control-label">Subject</label>
+			<label for="subject" class="col-sm-3 control-label">Subject</label>
 			<div class="col-sm-6">
 				<input type="text" class="form-control" name="settings[email][subject]" id="subject" value="{{ email.subject }}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label for="send-copy" class="col-sm-3 control-label">Send Copy To Sender</label>
+			<div class="col-sm-6">
+				<input type="checkbox" class="form-control" name="settings[email][send_copy_to_sender]" id="send-copy" {{ "checked" if email.send_copy_to_sender }} value="true">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -194,7 +202,7 @@
 				<button type="submit" class="btn btn-primary">Save</button>
 			</div>
 			<div class="col-sm-3"></div>
-		</div>					
+		</div>
 
 	</form>
 </div>
