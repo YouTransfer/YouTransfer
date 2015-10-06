@@ -63,6 +63,13 @@ describe('Email Settings View', function() {
 
 	});
 
+	it('should have a "Send Copy To Sender" checkbox', function *() {
+
+		var value = yield browser.getValue('input#send-copy')
+		value.should.be.equal('true');
+
+	});
+
 	it('should show all fields related to "SMTP" if the option is selected in the "Transport Mechanism" field', function *() {
 
 		var value = yield browser.selectByVisibleText('select[name="settings[email][transporter]"]', 'SMTP')
