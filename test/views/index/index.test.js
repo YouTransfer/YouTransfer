@@ -171,6 +171,103 @@ describe('Index View', function() {
 
 		var submit = yield browser.isExisting('#hp .dz-completed-container .dz-upload-complete form button[type="submit"]');
 		submit.should.be.equal(true);
+
+		if(!currentValue) {
+			fallback = yield browser.click('ul.nav > li > a')
+									.click('a[href="/settings/transfer"]')
+									.click('input#forceFallback')
+									.submitForm('.tab-pane.active form')
+									.url('/')
+									.isExisting('.fallback');
+			fallback.should.be.equal(false);
+		}
+
+	});
+
+	it('should be possible to upload encrypted file and retrieve token', function *() {
+
+		var currentValue = sandbox.dropzone.fallback;
+
+		if(!sandbox.dropzone.fallback) {
+			var fallback = yield browser.click('ul.nav > li > a')
+										.click('a[href="/settings/transfer"]')
+										.click('input#forceFallback')
+										.submitForm('.tab-pane.active form')
+										.url('/')
+										.isExisting('.fallback');
+			fallback.should.be.equal(true);
+		}
+
+		if(!sandbox.StorageLocation === 'local') {
+			var alert = yield browser.url('/')
+									 .click('ul.nav > li > a')
+									 .click('a[href="/settings/storage"]')
+									 .selectByVisibleText('select#StorageLocation', 'Local file system')
+									 .submitForm('.tab-pane.active form')
+									 .waitForExist('.tab-pane.active .alert strong', 5000)
+									 .getText('.tab-pane.active .alert strong');
+			alert.should.be.equal('Success!');
+		}
+
+		var encrypted = yield browser.url('/')
+									 .click('ul.nav > li > a')
+									 .click('a[href="/settings/storage"]')
+									 .click('input#encryptionEnabled')
+									 .setValue('input#encryptionKey', 'MySecretEncryptionKey')
+									 .submitForm('.tab-pane.active form')
+									 .waitForExist('.tab-pane.active .alert strong', 5000)
+									 .isExisting('input#encryptionEnabled:checked');
+		encrypted.should.be.equal(true);
+
+		var preview = yield browser.url('/')
+								   .waitForExist('input#payload')
+								   .execute(function() {
+								   		// The WebDriverIO chooseFile() method cannot target an invisible input
+								   		// It also does not work well with multiple file input
+										jQuery("input#payload").removeAttr('multiple')
+															   .show();
+								   })
+								   .waitForVisible('input#payload')
+								   .chooseFile('input#payload', path.join(__dirname, '../../../README.md'))
+								   .submitForm('.fallback form')
+								   .waitForExist('.dz-preview-template')
+								   .getText('.dz-preview-template .dz-preview-description span[data-dz-name]')
+		preview.should.be.equal('README.md');
+
+		var token = yield browser.getText('.dz-preview-item .dz-preview-description .dz-preview-result .text-success a')
+		should.exist(token);
+
+		var tokenLink = yield browser.getAttribute('.dz-preview-item .dz-preview-description .dz-preview-result .text-success a', 'href')
+		tokenLink.should.be.equal(sandbox.baseUrl + '/download/' + token + '/');
+
+		var emailHeader = yield browser.getText('#hp .dz-completed-container .dz-upload-complete h2');
+		should.exist(emailHeader);
+
+		var emailForm = yield browser.isExisting('#hp .dz-completed-container .dz-upload-complete form');
+		emailForm.should.be.equal(true);
+
+		var emailFrom = yield browser.isExisting('#hp .dz-completed-container .dz-upload-complete form input#from');
+		emailFrom.should.be.equal(true);
+
+		var emailTo = yield browser.isExisting('#hp .dz-completed-container .dz-upload-complete form input#to');
+		emailTo.should.be.equal(true);
+
+		var emailBody = yield browser.isExisting('#hp .dz-completed-container .dz-upload-complete form textarea[name="email[body]"]');
+		emailBody.should.be.equal(true);
+
+		var submit = yield browser.isExisting('#hp .dz-completed-container .dz-upload-complete form button[type="submit"]');
+		submit.should.be.equal(true);
+
+		if(!currentValue) {
+			fallback = yield browser.click('ul.nav > li > a')
+									.click('a[href="/settings/transfer"]')
+									.click('input#forceFallback')
+									.submitForm('.tab-pane.active form')
+									.url('/')
+									.isExisting('.fallback');
+			fallback.should.be.equal(false);
+		}
+		
 	});
 
 });

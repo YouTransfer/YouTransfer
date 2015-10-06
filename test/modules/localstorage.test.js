@@ -5,6 +5,7 @@ require('date-utils');
 var sinon = require('sinon');
 var should = require('chai').should();
 var localstorage = require('../../lib/localstorage');
+var crypto = require('crypto');
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
@@ -46,11 +47,6 @@ describe('YouTransfer Local Storage module', function() {
 	it('should accept options by empty Object', function() {
 		var instance = localstorage({});
 		instance.localstoragepath.should.equals(path.resolve('./lib'));
-	});
-
-	it('should accept options by String', function() {
-		var instance = localstorage(__dirname);
-		instance.localstoragepath.should.equals(__dirname);
 	});
 
 	it('should throw an error when setting options by Integer', function() {
@@ -148,6 +144,57 @@ describe('YouTransfer Local Storage module', function() {
 			} else {
 				callback = encoding;
 				file.should.equals(uploadedFile.context.path);
+				data.should.equals(uploadedFile.data);
+				callback(null);
+			}
+		});
+
+		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
+			should.not.exist(err);
+			context.should.equals(uploadedFile.context);
+			done();
+		});
+	});
+
+	it('should implement the "upload" method and enable local storage of an encrypted file', function(done) {
+		provider = localstorage({ 
+			localstoragepath: __dirname,
+			encryptionEnabled: true,
+			encryptionKey: 'MySecretEncryptionKey'
+		});
+
+		var uploadedFile = {
+			path: path.join(__dirname, 'file.tmp'),
+			data: 'my awesome content',
+			context: {
+				path: path.join(__dirname, 'file.binary'),
+				jsonPath: path.join(__dirname, 'file.json')
+			}
+		}
+
+		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+			dir.should.equals(__dirname);
+			callback();
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, callback) {
+			file.should.equals(uploadedFile.path);
+			callback(null, uploadedFile.data);
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			if(typeof encoding == "string") {
+				file.should.equals(uploadedFile.context.jsonPath);
+				data.should.equals(JSON.stringify(uploadedFile.context));
+				callback(null);				
+			} else {
+				callback = encoding;
+				file.should.equals(uploadedFile.context.path);
+
+				var decipher = crypto.createDecipher('aes-256-ctr', 'MySecretEncryptionKey');
+				var buffer = Buffer.concat([decipher.update(data) , decipher.final()]);
+				data = buffer.toString();
+
 				data.should.equals(uploadedFile.data);
 				callback(null);
 			}
@@ -284,6 +331,68 @@ describe('YouTransfer Local Storage module', function() {
 		zipMock.expects('finalize').once();
 		zipMock.expects('on').once().withArgs('finish').callsArgAsync(1);
 		zipMock.expects('file').once().withArgs(path.join(__dirname, bundle.files[0].id + '.binary'), { name: bundle.files[0].name });
+		sandbox.stub(archiver, 'create').returns(zip);
+
+		var res = {
+			setHeader: function() {},
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+
+		provider.archive(token, res, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should be possible to download an archive with encrypted files', function(done) {
+		provider = localstorage({ 
+			localstoragepath: __dirname,
+			encryptionEnabled: true,
+			encryptionKey: 'MySecretEncryptionKey'
+		});
+
+		var data = "my binary data";
+		var cipher = crypto.createCipher('aes-256-ctr', 'MySecretEncryptionKey');
+		var buffer = Buffer.concat([cipher.update(data) , cipher.final()]);
+
+		var token = 'bundle';
+		var bundle = {
+			expires: Date.tomorrow(),
+			files: [
+				{
+					id: 'file',
+					name: 'filename'
+				}
+			]
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			if(file.match(/.json$/)) {
+				encoding.should.equals('utf-8');
+				file.should.equals(path.join(__dirname, token + '.json'));
+				callback(null, JSON.stringify(bundle));
+			} else {
+				callback = encoding;
+				file.should.equals(path.join(__dirname, bundle.files[0].id + '.binary'));
+				callback(null, buffer);
+			}
+		});
+
+		var zip = {
+			on: function() {},
+			file: function() {},
+			append: function() {},
+			pipe: function() {},
+			finalize: function() {}
+		};
+		var zipMock = sandbox.mock(zip);
+		zipMock.expects('pipe').once();
+		zipMock.expects('finalize').once();
+		zipMock.expects('on').once().withArgs('finish').callsArgAsync(1);
+		zipMock.expects('append').once().withArgs(new Buffer(data), { name: bundle.files[0].name });
 		sandbox.stub(archiver, 'create').returns(zip);
 
 		var res = {
@@ -479,6 +588,55 @@ describe('YouTransfer Local Storage module', function() {
 			setHeader: function() {},
 			on: function() {}
 		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="' + context.name + '"');
+		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
+		resMock.expects("setHeader").once().withArgs('Content-type', context.type);
+		resMock.expects("on").once().withArgs('finish').callsArgAsync(1);
+
+		provider.download(token, res, function(err) {
+			should.not.exist(err);
+			resMock.verify();
+			done();
+		});
+	});
+
+	it('should be possible to download an encrypted file', function(done) {
+		provider = localstorage({ 
+			localstoragepath: __dirname,
+			encryptionEnabled: true,
+			encryptionKey: 'MySecretEncryptionKey'
+		});
+
+		var token = 'file',
+			context = {
+				expires: Date.tomorrow(),
+				name: 'filename',
+				size: 10,
+				type: 'binary'
+			},
+			res = {
+				setHeader: function() {},
+				on: function() {}
+			},
+			stream = {
+				pipe: function() {}
+			}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(context));
+		});
+
+		sandbox.stub(mime, 'lookup').returns(context.type);
+
+		sandbox.stub(crypto, "createDecipher").returns(stream);
+
+		sandbox.stub(fs, 'createReadStream').returns(stream);
+
+		sandbox.stub(stream, "pipe").returns(stream);
+
 		var resMock = sandbox.mock(res);
 		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="' + context.name + '"');
 		resMock.expects("setHeader").once().withArgs('Content-length', context.size);
