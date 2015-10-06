@@ -94,19 +94,19 @@ describe('Storage Settings View', function() {
 
 	it('should be able to save the settings', function *() {
 
-		var alert = yield browser.isExisting('.tab-pane.active .alert strong');
+		var alert = yield browser.isExisting('.tab-pane.active > .alert strong');
 		alert.should.be.equal(false);
 
 		var value = yield browser.submitForm('.tab-pane.active form')
-								 .waitForExist('.tab-pane.active .alert strong', 5000)
-								 .getText('.tab-pane.active .alert strong');
+								 .waitForExist('.tab-pane.active > .alert strong', 5000)
+								 .getText('.tab-pane.active > .alert strong');
 		value.should.be.equal('Success!');
 
 	});
 
 	it('should be able to alter and save the settings', function *() {
 
-		var alert = yield browser.isExisting('.tab-pane.active .alert strong');
+		var alert = yield browser.isExisting('.tab-pane.active > .alert strong');
 		alert.should.be.equal(false);
 
 		var currentValue = sandbox.retention.toString();
@@ -114,8 +114,8 @@ describe('Storage Settings View', function() {
 
 		var alert = yield browser.setValue('input#retention', newValue)
 								 .submitForm('.tab-pane.active form')
-								 .waitForExist('.tab-pane.active .alert strong', 5000)
-								 .getText('.tab-pane.active .alert strong');
+								 .waitForExist('.tab-pane.active > .alert strong', 5000)
+								 .getText('.tab-pane.active > .alert strong');
 		alert.should.be.equal('Success!');
 
 		var value = yield browser.getValue('input#retention');
@@ -123,8 +123,8 @@ describe('Storage Settings View', function() {
 
 		alert = yield browser.setValue('input#retention', currentValue)
 							 .submitForm('.tab-pane.active form')
-							 .waitForExist('.tab-pane.active .alert strong', 5000)
-							 .getText('.tab-pane.active .alert strong');
+							 .waitForExist('.tab-pane.active > .alert strong', 5000)
+							 .getText('.tab-pane.active > .alert strong');
 		alert.should.be.equal('Success!');
 
 		value = yield browser.getValue('input#retention');

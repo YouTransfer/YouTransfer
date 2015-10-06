@@ -107,6 +107,33 @@
 			</div>
 		</div>
 
+		<div id="encryption">
+			<h3>Encryption</h3>
+
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<div class="checkbox">
+						<label for="encryptionEnabled">
+							<input type="checkbox" value="true" name="settings[encryptionEnabled]" id="encryptionEnabled" {{ "checked='checked'" if encryptionEnabled }}>
+							Enable file encryption
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="encryptionKey" class="col-sm-3 control-label">Secret Key</label>
+				<div class="col-sm-6">
+					<input type="password" class="form-control" name="settings[encryptionKey]" id="encryptionKey" value="{{ encryptionKey }}">
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+
+			<div class="col-sm-6 col-sm-offset-3 alert alert-info">
+				<strong>Important:</strong> it is not recommended to store the secret encryption key as part of the application settings. For security reasons, the encryption key should be passed to the application using the ENVIRONMENT variables.
+			</div>
+		</div>
+
 		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-6 text-right">
 				<button type="submit" class="btn btn-primary">Save</button>
