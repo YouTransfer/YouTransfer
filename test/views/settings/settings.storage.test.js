@@ -92,6 +92,24 @@ describe('Storage Settings View', function() {
 		}
 	});
 
+	it('should have a "encryptionEnabled" field with the current value based on user settings', function *() {
+
+		var encryptionEnabled = yield browser.isExisting('input#encryptionEnabled:checked');
+		if(sandbox.encryptionEnabled) {
+			encryptionEnabled.should.equals(true);
+		} else {
+			encryptionEnabled.should.equals(false);
+		}
+
+	});
+
+	it('should have a "Encryption Key" field with the current value based on user settings', function *() {
+
+		var encryptionKey = yield browser.getValue('input#encryptionKey');
+		encryptionKey.should.be.equal(sandbox.encryptionKey);
+
+	});
+
 	it('should be able to save the settings', function *() {
 
 		var alert = yield browser.isExisting('.tab-pane.active > .alert strong');
