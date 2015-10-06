@@ -4,7 +4,7 @@ var path = require("path");
 var fs = require("fs-extra");
 var program = require('commander');
 
-program.version('1.0.2')
+program.version('1.0.3')
 	   .arguments('<init>', 'Initialise a YouTransfer project')
 	   .action(function(cmd) {
 			if(cmd == "init") {
