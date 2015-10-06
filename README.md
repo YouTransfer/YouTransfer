@@ -5,7 +5,7 @@
 
 YouTransfer is a simple but elegant self-hosted file transfer & sharing solution. It is an alternative to paid services like [Dropbox](http://dropbox.com) and [WeTransfer](http://wetransfer.com) by offering similar features but without limitations, price plans and a lengthy privacy policy. You remain in control of your files.
 
-Created to be installed behind the firewall on private servers, YouTransfer aims to empower organisations and individuals that wish to combine ease-to-use file transfer tooling with security and control.
+Created to be installed behind the firewall on private servers, YouTransfer aims to empower organisations and individuals that wish to combine easy-to-use file transfer tooling with security and control.
 
 ## Demo
 
