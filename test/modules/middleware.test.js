@@ -70,8 +70,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
 		middleware(req, res, function() {
-			should.exist(req.isXmlHtppRequest);
-			req.isXmlHtppRequest.should.equals(true);
+			should.exist(req.isXMLHttpRequest);
+			req.isXMLHttpRequest.should.equals(true);
 			done();
 		});
 	});
@@ -88,8 +88,8 @@ describe('YouTransfer Middleware module', function() {
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
 		middleware(req, res, function() {
-			should.exist(req.isXmlHtppRequest);
-			req.isXmlHtppRequest.should.equals(false);
+			should.exist(req.isXMLHttpRequest);
+			req.isXMLHttpRequest.should.equals(false);
 			done();
 		});
 	});	
@@ -109,7 +109,7 @@ describe('YouTransfer Middleware module', function() {
 				headers: []
 			},
 			context = {
-				isXmlHtppRequest: false
+				isXMLHttpRequest: false
 			};
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -123,7 +123,7 @@ describe('YouTransfer Middleware module', function() {
 
 		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
 			template.should.equals(name);
-			variables.isXmlHtppRequest.should.equals(context.isXmlHtppRequest);
+			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
 		});
 
@@ -156,7 +156,7 @@ describe('YouTransfer Middleware module', function() {
 				baseUrl: 'http://myhost',
 				host: 'http://myhost',
 				invalidHost: false,
-				isXmlHtppRequest: false
+				isXMLHttpRequest: false
 			};
 
 
@@ -174,7 +174,7 @@ describe('YouTransfer Middleware module', function() {
 			variables.baseUrl.should.equals(context.baseUrl);
 			variables.host.should.equals(context.host);
 			variables.invalidHost.should.equals(context.invalidHost);
-			variables.isXmlHtppRequest.should.equals(context.isXmlHtppRequest);
+			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
 		});
 
@@ -207,7 +207,7 @@ describe('YouTransfer Middleware module', function() {
 				baseUrl: 'http://myhost',
 				host: 'http://anotherhost',
 				invalidHost: true,				
-				isXmlHtppRequest: false
+				isXMLHttpRequest: false
 			};
 
 
@@ -225,7 +225,7 @@ describe('YouTransfer Middleware module', function() {
 			variables.baseUrl.should.equals(context.baseUrl);
 			variables.host.should.equals(context.host);
 			variables.invalidHost.should.equals(context.invalidHost);
-			variables.isXmlHtppRequest.should.equals(context.isXmlHtppRequest);
+			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
 		});
 
@@ -260,7 +260,7 @@ describe('YouTransfer Middleware module', function() {
 				baseUrl: 'https://myhost',
 				host: 'https://anotherhost',
 				invalidHost: true,				
-				isXmlHtppRequest: false
+				isXMLHttpRequest: false
 			};
 
 
@@ -278,7 +278,7 @@ describe('YouTransfer Middleware module', function() {
 			variables.baseUrl.should.equals(context.baseUrl);
 			variables.host.should.equals(context.host);
 			variables.invalidHost.should.equals(context.invalidHost);
-			variables.isXmlHtppRequest.should.equals(context.isXmlHtppRequest);
+			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
 		});
 
@@ -303,7 +303,7 @@ describe('YouTransfer Middleware module', function() {
 				headers: []
 			},
 			context = {
-				isXmlHtppRequest: false
+				isXMLHttpRequest: false
 			};
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
@@ -317,7 +317,7 @@ describe('YouTransfer Middleware module', function() {
 
 		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
 			template.should.equals(name);
-			variables.isXmlHtppRequest.should.equals(context.isXmlHtppRequest);
+			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
 		});
 
@@ -442,7 +442,7 @@ describe('YouTransfer Middleware module', function() {
 			context.invalidHost.should.equals(false);
 			context.baseUrl.should.equals(settings.baseUrl);
 			context.host.should.equals(settings.baseUrl);
-			context.isXmlHtppRequest.should.equals(false);
+			context.isXMLHttpRequest.should.equals(false);
 			return template.content;
 		});
 
@@ -514,7 +514,7 @@ describe('YouTransfer Middleware module', function() {
 			context.invalidHost.should.equals(false);
 			context.baseUrl.should.equals(settings.baseUrl);
 			context.host.should.equals(settings.baseUrl);
-			context.isXmlHtppRequest.should.equals(false);
+			context.isXMLHttpRequest.should.equals(false);
 			return template.content;
 		});
 
@@ -584,7 +584,7 @@ describe('YouTransfer Middleware module', function() {
 			context.invalidHost.should.equals(true);
 			context.baseUrl.should.equals(settings.baseUrl);
 			context.host.should.equals('http://anotherhost');
-			context.isXmlHtppRequest.should.equals(false);
+			context.isXMLHttpRequest.should.equals(false);
 			return template.content;
 		});
 

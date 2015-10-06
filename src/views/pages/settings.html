@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% if not isXmlHtppRequest %}
+{% if not isXMLHttpRequest %}
 <div class="settings">
 	<div class="col-md-3">
 		<ul class="nav nav-tabs nav-stacked">
@@ -34,7 +34,7 @@
 			{% block tabcontent %}
 			{% endblock %}
 		</div>
-{% if not isXmlHtppRequest %}
+{% if not isXMLHttpRequest %}
 	</div>
 	<div class="finalise col-md-3">
 		<a class="btn btn-default" href="/settings/finalise" role="tab" data-async data-target="tab-content">Finalise</a>
