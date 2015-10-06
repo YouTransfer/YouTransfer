@@ -423,7 +423,8 @@ describe('YouTransfer module', function() {
 					service: 'gmail',
 					transporter: 'smtp',
 					sender: 'sender',
-					subject: 'subject'
+					subject: 'subject',
+					sendCopy: true
 				}
 			},
 			factory = {
@@ -466,6 +467,7 @@ describe('YouTransfer module', function() {
 			email.to.should.equals(req.params.email.to);
 			email.subject.should.equals(settings.email.subject);
 			email.html.should.equals('body');
+			email.cc.should.equals(settings.email.sender);
 			callback();
 		});
 
