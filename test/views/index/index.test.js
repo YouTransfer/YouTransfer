@@ -74,6 +74,26 @@ describe('Index View', function() {
 
 	});
 
+	it('should have a form to enable downloading a file which throws an error when trying to exploit path traversal', function *() {
+
+		var form = yield browser.isExisting('.download form');
+		form.should.be.equal(true);
+
+		var action = yield browser.getAttribute('.download form', 'action');
+		should.exist(action);
+		action.should.be.equal(sandbox.baseUrl + '/download');
+
+		var submit = yield browser.isExisting('.download form button[type=submit]');
+		submit.should.be.equal(true);
+
+		var error = yield browser.setValue('input[name="token"]', '../config')
+								 .submitForm('.download form button[type=submit]')
+								 .waitForExist('.download form span.help-block span.text-danger')
+								 .getText('.download form span.help-block span.text-danger');
+		error.should.equals('Oh my... something went terribly wrong!');
+
+	});
+
 	it('should have a dropzone', function *() {
 
 		var dropzone = yield browser.isExisting('.dz-action-add.dz-clickable.dropzone');

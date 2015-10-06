@@ -303,16 +303,25 @@ describe('YouTransfer Local Storage module', function() {
 
 	it('should be possible to download an archive', function(done) {
 
-		var token = 'bundle';
-		var bundle = {
-			expires: Date.tomorrow(),
-			files: [
-				{
-					id: 'file',
-					name: 'filename'
-				}
-			]
-		}
+		var token = 'bundle',
+			bundle = {
+				expires: Date.tomorrow(),
+				files: [
+					{
+						id: 'file',
+						name: 'filename'
+					}
+				]
+			},
+			zip = {
+				on: function() {},
+				file: function() {},
+				pipe: function() {},
+				finalize: function() {}
+			},
+			res = {
+				setHeader: function() {},
+			};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			encoding.should.equals('utf-8');
@@ -320,12 +329,6 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null, JSON.stringify(bundle));
 		});
 
-		var zip = {
-			on: function() {},
-			file: function() {},
-			pipe: function() {},
-			finalize: function() {}
-		};
 		var zipMock = sandbox.mock(zip);
 		zipMock.expects('pipe').once();
 		zipMock.expects('finalize').once();
@@ -333,15 +336,14 @@ describe('YouTransfer Local Storage module', function() {
 		zipMock.expects('file').once().withArgs(path.join(__dirname, bundle.files[0].id + '.binary'), { name: bundle.files[0].name });
 		sandbox.stub(archiver, 'create').returns(zip);
 
-		var res = {
-			setHeader: function() {},
-		};
 		var resMock = sandbox.mock(res);
 		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
 		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
 
 		provider.archive(token, res, function(err) {
 			should.not.exist(err);
+			resMock.verify();
+			zipMock.verify();
 			done();
 		});
 
@@ -358,16 +360,27 @@ describe('YouTransfer Local Storage module', function() {
 		var cipher = crypto.createCipher('aes-256-ctr', 'MySecretEncryptionKey');
 		var buffer = Buffer.concat([cipher.update(data) , cipher.final()]);
 
-		var token = 'bundle';
-		var bundle = {
-			expires: Date.tomorrow(),
-			files: [
-				{
-					id: 'file',
-					name: 'filename'
-				}
-			]
-		}
+		var token = 'bundle',
+			bundle = {
+				expires: Date.tomorrow(),
+				files: [
+					{
+						id: 'file',
+						name: 'filename'
+					}
+				]
+			},
+			zip = {
+				on: function() {},
+				file: function() {},
+				append: function() {},
+				pipe: function() {},
+				finalize: function() {}
+			},
+			res = {
+				setHeader: function() {},
+			}
+
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			if(file.match(/.json$/)) {
@@ -381,13 +394,6 @@ describe('YouTransfer Local Storage module', function() {
 			}
 		});
 
-		var zip = {
-			on: function() {},
-			file: function() {},
-			append: function() {},
-			pipe: function() {},
-			finalize: function() {}
-		};
 		var zipMock = sandbox.mock(zip);
 		zipMock.expects('pipe').once();
 		zipMock.expects('finalize').once();
@@ -395,15 +401,14 @@ describe('YouTransfer Local Storage module', function() {
 		zipMock.expects('append').once().withArgs(new Buffer(data), { name: bundle.files[0].name });
 		sandbox.stub(archiver, 'create').returns(zip);
 
-		var res = {
-			setHeader: function() {},
-		};
 		var resMock = sandbox.mock(res);
 		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
 		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
 
 		provider.archive(token, res, function(err) {
 			should.not.exist(err);
+			resMock.verify();
+			zipMock.verify();
 			done();
 		});
 
@@ -449,6 +454,8 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.archive(token, res, function(err) {
 			should.not.exist(err);
+			resMock.verify();
+			zipMock.verify();
 			done();
 		});
 
@@ -464,17 +471,29 @@ describe('YouTransfer Local Storage module', function() {
 
 	});	
 
+	it('should continue with erronous callback if archive token path traversal detection throws error', function(done) {
+
+		var token = '../../some/sneaky/path';
+
+		provider.archive(token, null, function(err) {
+			should.exist(err);
+			err.message.should.equals('Invalid token provided');
+			done();
+		});
+
+	});
+
 	it('should continue with erronous callback if archive token retrieval throws error', function(done) {
 
-		var token = 'bundle';
-		var bundle = {
-			files: [
-				{
-					id: 'file',
-					name: 'filename'
-				}
-			]
-		}
+		var token = 'bundle',
+			bundle = {
+				files: [
+					{
+						id: 'file',
+						name: 'filename'
+					}
+				]
+			}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			encoding.should.equals('utf-8');
@@ -482,14 +501,7 @@ describe('YouTransfer Local Storage module', function() {
 			callback('error', null);
 		});
 
-		var res = {
-			setHeader: function() {},
-		};
-		var resMock = sandbox.mock(res);
-		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
-		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
-
-		provider.archive(token, res, function(err) {
+		provider.archive(token, null, function(err) {
 			should.exist(err);
 			err.should.equals('error');
 			done();
@@ -515,14 +527,7 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null, '{}');
 		});
 
-		var res = {
-			setHeader: function() {},
-		};
-		var resMock = sandbox.mock(res);
-		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
-		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
-
-		provider.archive(token, res, function(err) {
+		provider.archive(token, null, function(err) {
 			should.exist(err);
 			err.message.should.equals('Invalid bundle data');
 			done();
@@ -552,6 +557,48 @@ describe('YouTransfer Local Storage module', function() {
 		provider.archive(token, null, function(err) {
 			should.exist(err);
 			err.message.should.equals('The requested bundle is no longer available.');
+			done();
+		});
+
+	});	
+
+	it('should continue with erronous callback if archive file path traversal detection throws error', function(done) {
+
+		var token = 'bundle';
+		var bundle = {
+			expires: Date.tomorrow(),
+			files: [
+				{
+					id: '../../some/sneaky/path',
+					name: 'filename'
+				}
+			]
+		}
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			encoding.should.equals('utf-8');
+			file.should.equals(path.join(__dirname, token + '.json'));
+			callback(null, JSON.stringify(bundle));
+		});
+
+		var zip = {
+			on: function() {},
+		};
+		var zipMock = sandbox.mock(zip);
+		zipMock.expects('on').once().withArgs('finish').callsArgAsync(1);
+		sandbox.stub(archiver, 'create').returns(zip);
+
+		var res = {
+			setHeader: function() {},
+		};
+		var resMock = sandbox.mock(res);
+		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
+
+		provider.archive(token, res, function(err) {
+			should.exist(err);
+			err.message.should.equals('Invalid token provided');
+			zipMock.verify();
 			done();
 		});
 
@@ -762,13 +809,13 @@ describe('YouTransfer Local Storage module', function() {
 
 	it('should continue with erronous callback if download file has expired', function(done) {
 
-		var token = 'file';
-		var context = {
-			expires: 1,
-			name: 'filename',
-			size: 10,
-			type: 'binary'
-		};
+		var token = 'file',
+			context = {
+				expires: 1,
+				name: 'filename',
+				size: 10,
+				type: 'binary'
+			};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			encoding.should.equals('utf-8');
@@ -782,6 +829,18 @@ describe('YouTransfer Local Storage module', function() {
 			done();
 		});
 	});	
+
+	it('should continue with erronous callback if download token path traversal detection throws error', function(done) {
+
+		var token = '../../some/sneaky/path';
+
+		provider.download(token, null, function(err) {
+			should.exist(err);
+			err.message.should.equals('Invalid token provided');
+			done();
+		});
+
+	});
 
 	// -------------------------------------------------------------------------------------- Testing file purge
 
