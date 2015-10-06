@@ -79,7 +79,7 @@ describe('YouTransfer Router module', function() {
 					payload: 'file'
 				},
 				params: {},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {}
@@ -132,7 +132,7 @@ describe('YouTransfer Router module', function() {
 					payload: [ 'file1', 'file2' ]
 				},
 				params: {},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {}
@@ -188,7 +188,7 @@ describe('YouTransfer Router module', function() {
 				params: {
 					bundle: 'bundle'
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {},
@@ -244,7 +244,7 @@ describe('YouTransfer Router module', function() {
 				params: {
 					bundle: 'bundle'
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {}
@@ -294,7 +294,7 @@ describe('YouTransfer Router module', function() {
 				params: {
 					bundle: 'bundle'
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {}
@@ -345,7 +345,7 @@ describe('YouTransfer Router module', function() {
 						id: 'bundle'
 					})
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {},
@@ -376,7 +376,7 @@ describe('YouTransfer Router module', function() {
 						id: 'bundle'
 					})
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {},
@@ -414,7 +414,7 @@ describe('YouTransfer Router module', function() {
 				params: {
 					bundle: 'this is not JSON'
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {},
@@ -1040,7 +1040,7 @@ describe('YouTransfer Router module', function() {
 				params: {
 					name: 'dropzone'
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {}
@@ -1072,7 +1072,7 @@ describe('YouTransfer Router module', function() {
 				params: {
 					name: 'dropzone'
 				},
-				isXmlHtppRequest: true
+				isXMLHttpRequest: true
 			},
 			res = {
 				process: function() {}
