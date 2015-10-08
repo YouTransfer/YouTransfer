@@ -287,7 +287,7 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(bundle.path);
 			data.should.equals(JSON.stringify(bundle));
 			callback(null);
@@ -324,7 +324,7 @@ describe('YouTransfer Local Storage module', function() {
 			};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
 		});
@@ -384,7 +384,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			if(file.match(/.json$/)) {
-				encoding.should.equals('utf-8');
+				encoding.should.equals('utf8');
 				file.should.equals(path.join(__dirname, token + '.json'));
 				callback(null, JSON.stringify(bundle));
 			} else {
@@ -427,7 +427,7 @@ describe('YouTransfer Local Storage module', function() {
 		}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
 		});
@@ -496,7 +496,7 @@ describe('YouTransfer Local Storage module', function() {
 			}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback('error', null);
 		});
@@ -522,7 +522,7 @@ describe('YouTransfer Local Storage module', function() {
 		}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, '{}');
 		});
@@ -549,7 +549,7 @@ describe('YouTransfer Local Storage module', function() {
 		}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
 		});
@@ -576,7 +576,7 @@ describe('YouTransfer Local Storage module', function() {
 		}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
 		});
@@ -617,7 +617,7 @@ describe('YouTransfer Local Storage module', function() {
 		};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
 		});
@@ -671,7 +671,7 @@ describe('YouTransfer Local Storage module', function() {
 			}
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
 		});
@@ -707,7 +707,7 @@ describe('YouTransfer Local Storage module', function() {
 		};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
 		});
@@ -748,7 +748,7 @@ describe('YouTransfer Local Storage module', function() {
 		};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
 		});
@@ -794,7 +794,7 @@ describe('YouTransfer Local Storage module', function() {
 		var token = 'file';
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback('error', null);
 		});
@@ -818,7 +818,7 @@ describe('YouTransfer Local Storage module', function() {
 			};
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			encoding.should.equals('utf-8');
+			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
 		});
