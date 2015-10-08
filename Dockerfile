@@ -1,7 +1,7 @@
 FROM node:0.12
 
 MAINTAINER Remie Bolte (r.bolte@gmail.com)
-LABEL version="1.0.4"
+LABEL version="1.0.5"
 
 VOLUME /opt/youtransfer/config
 VOLUME /opt/youtransfer/uploads

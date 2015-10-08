@@ -6,7 +6,7 @@ var path = require('path');
 var fs = require('fs-extra');
 var program = require('commander');
 
-program.version('1.0.4')
+program.version('1.0.5')
 	   .command('<init>', 'Initialise a YouTransfer project')
 	   .command('<dockerize>', 'Prepare a YouTransfer project to run in a docker container')
 	   .action(function(cmd) {
