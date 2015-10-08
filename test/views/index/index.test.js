@@ -267,7 +267,7 @@ describe('Index View', function() {
 
 		var encrypted = yield browser.url('/')
 									 .click('ul.nav > li > a')
-									 .click('a[href="/settings/storage"]')
+									 .click('a[href="/settings/security"]')
 									 .click('input#encryptionEnabled')
 									 .setValue('input#encryptionKey', 'MySecretEncryptionKey')
 									 .submitForm('.tab-pane.active form')
