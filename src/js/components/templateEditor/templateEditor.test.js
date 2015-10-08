@@ -37,10 +37,10 @@ describe('TemplateEditor component', function() {
 		});
 
 		var fixture = getFixture();
-		var instance = new templateEditor(fixture);
+		new templateEditor(fixture);
 		$(fixture).html().should.equals('content');
 		$.get.calledOnce.should.equals(true);
-		
+
 	});
 
 });

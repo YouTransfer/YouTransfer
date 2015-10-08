@@ -20,7 +20,7 @@ describe('Alerts component', function() {
 	it('should remove the "hidden" class from the close button', function(done) {
 
 		var fixture = getFixture();
-		var instance = new alerts(fixture, { 
+		new alerts(fixture, {
 			timeout: 500,
 			callback: function() {
 				var closeButton = document.getElementsByClassName('close')[0];
@@ -34,7 +34,7 @@ describe('Alerts component', function() {
 	it('should fade out after a period of time', function(done) {
 
 		var fixture = getFixture();
-		var instance = new alerts(fixture, { 
+		new alerts(fixture, {
 			timeout: 500,
 			callback: function() {
 				fixture.getAttribute('style').should.equals('display: none; ');
