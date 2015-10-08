@@ -31,7 +31,7 @@ describe('Tabs component', function() {
 	it('should change the active tab after an XHR request triggered by a tablist link', function() {
 
 		var fixture = getFixture();
-		var instance = new tabs($('[role="tablist"]').get(0));
+		new tabs($('[role="tablist"]').get(0));
 
 		$('li.active a').html().should.equals('first');
 		$(document).trigger('xhr.loaded', fixture);
