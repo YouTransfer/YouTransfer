@@ -36,6 +36,7 @@
     "dist": "gulp clean && gulp dist",
     "dev": "gulp clean && gulp watch",
     "start": "gulp clean && gulp dist && node app.js",
+    "dockerized": "node ./bin/youtransfer dockerize && npm start",
     "app": "node app.js",
     "test": "gulp test"
   },
