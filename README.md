@@ -18,20 +18,19 @@ The demo is [somewhat limited](https://github.com/remie/YouTransfer/wiki/Demo) s
 
 If you wish to install YouTransfer in your own environment without any modifications, the [Docker image](http://hub.docker.com/r/remie/youtransfer/) is the most quick and easy approach. Simply [install docker](https://docs.docker.com/installation/) and run:
 
-`docker pull remie/youtransfer`
+`docker pull remie/youtransfer:stable`
 
 You can run the application with the following command:
 
 ````
 docker run -d 
 -v [path_to_upload_folder]:/opt/youtransfer/uploads 
--v [path_to_config.json]:/opt/youtransfer/config.json 
--v [path_to_settings.json]:/opt/youtransfer/settings.json 
+-v [path_to_config_folder]:/opt/youtransfer/config 
 -p 80:5000 
-remie/youtransfer
+remie/youtransfer:stable
 ````
 
-You can now connect to YouTransfer by browsing to http://[docker_host_ip]/
+You can now connect to YouTransfer by browsing to http://[docker_host_ip]/  
 For more information on Docker deployment, please read the [Docker installation instructions](https://github.com/remie/YouTransfer/wiki/docker).
 
 ### Additional documentation
