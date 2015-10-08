@@ -30,7 +30,7 @@ docker run -d
 remie/youtransfer:stable
 ````
 
-You can now connect to YouTransfer by browsing to http://[docker_host_ip]/
+You can now connect to YouTransfer by browsing to http://[docker_host_ip]/  
 For more information on Docker deployment, please read the [Docker installation instructions](https://github.com/remie/YouTransfer/wiki/docker).
 
 ### Additional documentation
