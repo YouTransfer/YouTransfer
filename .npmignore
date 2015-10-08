@@ -1,0 +1,6 @@
+dist/
+uploads/
+.travis.yml
+Dockerfile
+settings.json
+*.log
