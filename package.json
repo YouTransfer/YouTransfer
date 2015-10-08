@@ -1,6 +1,6 @@
 {
   "name": "youtransfer",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "YouTransfer, the self-hosted file transfer solution",
   "main": "app.js",
   "engines": {
@@ -36,6 +36,7 @@
     "dist": "gulp clean && gulp dist",
     "dev": "gulp clean && gulp watch",
     "start": "gulp clean && gulp dist && node app.js",
+    "dockerized": "node ./bin/youtransfer dockerize && npm start",
     "app": "node app.js",
     "test": "gulp test"
   },

@@ -30,7 +30,7 @@ describe('Form component', function() {
 	it('should try to post to the url using JQuery XHR and replace target with result', function(done) {
 
 		var fixture = getFixture();
-		var instance = new form(fixture);
+		new form(fixture);
 
 		sandbox.stub($, 'ajax', function (options) {
 			options.success({
@@ -51,7 +51,7 @@ describe('Form component', function() {
 	it('should try to post to the url using JQuery XHR and replace target with result (different id)', function(done) {
 
 		var fixture = getFixture();
-		var instance = new form(fixture);
+		new form(fixture);
 
 		sandbox.stub($, 'ajax', function (options) {
 			options.success({

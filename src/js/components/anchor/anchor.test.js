@@ -33,7 +33,7 @@ describe('Anchor component', function() {
 	it('should try to retrieve the url using JQuery XHR and replace target with result (same id)', function(done) {
 
 		var fixture = getFixture();
-		var instance = new anchor(fixture);
+		new anchor(fixture);
 
 		sandbox.stub($, 'get', function (url) {
 			should.exist(url);
@@ -64,7 +64,7 @@ describe('Anchor component', function() {
 	it('should try to retrieve the url using JQuery XHR and replace target with result (different id)', function(done) {
 
 		var fixture = getFixture();
-		var instance = new anchor(fixture);
+		new anchor(fixture);
 
 		sandbox.stub($, 'get', function (url) {
 			should.exist(url);
