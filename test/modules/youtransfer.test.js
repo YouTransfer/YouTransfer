@@ -30,8 +30,10 @@ describe('YouTransfer module', function() {
 	it('should be possible to initialize module (incl. scheduling of background jobs)', function(done) {
 
 		var settings = {
-			schedulerEnabled: true,
-			cleanupSchedule: 'cronschedule',
+			general: {
+				schedulerEnabled: true,
+				cleanupSchedule: 'cronschedule'
+			},
 			on: function() {}
 		}
 
@@ -45,13 +47,13 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(scheduler, "add", function(name, schedule, job) {
 			name.should.equals('cleanup');
-			schedule.should.equals(settings.cleanupSchedule);
+			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
 		});
 
 		sandbox.stub(scheduler, "reschedule", function(name, schedule, job) {
 			name.should.equals('cleanup');
-			schedule.should.equals(settings.cleanupSchedule);
+			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
 			done();
 		});
@@ -73,7 +75,10 @@ describe('YouTransfer module', function() {
 
 	it('should be possible to retrieve the default storage provider from the storage factory', function(done) {
 
-		var settings = {}
+		var settings = {
+			storage: {
+			}
+		}
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
@@ -90,7 +95,9 @@ describe('YouTransfer module', function() {
 	it('should be possible to retrieve the local storage provider from the storage factory', function(done) {
 
 		var settings = {
-				StorageLocation: 'local'
+				storage: {
+					location: 'local'
+				}
 			}
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
@@ -99,8 +106,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.StorageLocation);
-			factory.options.StorageLocation.should.equals(settings.StorageLocation);
+			should.exist(factory.options.storage.location);
+			factory.options.storage.location.should.equals(settings.storage.location);
 			done();
 		});
 
@@ -109,7 +116,9 @@ describe('YouTransfer module', function() {
 	it('should be possible to retrieve the Amazon S3 storage provider from the storage factory', function(done) {
 
 		var settings = {
-				StorageLocation: 's3'
+				storage: {
+					location: 's3'
+				}
 			}
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
@@ -118,8 +127,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.StorageLocation);
-			factory.options.StorageLocation.should.equals(settings.StorageLocation);
+			should.exist(factory.options.storage.location);
+			factory.options.storage.location.should.equals(settings.storage.location);
 			done();
 		});
 
@@ -128,7 +137,9 @@ describe('YouTransfer module', function() {
 	it('should continue with erronous callback if an error occurs while retrieving the storage provider from the storage factory', function(done) {
 
 		var settings = {
-			StorageLocation: 'unknown'
+			storage: {
+				location: 'unknown'
+			}
 		}
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
@@ -157,9 +168,14 @@ describe('YouTransfer module', function() {
 			},
 			bundle = 'bundle',
 			settings = {
-				localstoragepath: __dirname,
-				retentionUnit: 'seconds',
-				retention: 1,
+				general: {
+					baseUrl: ''
+				},
+				storage: {
+					localstoragepath: __dirname,
+					retentionUnit: 'seconds',
+					retention: 1
+				},
 				dropzone: {
 					maxFilesize: 2000
 				}
@@ -200,8 +216,13 @@ describe('YouTransfer module', function() {
 			},
 			bundle = 'bundle',
 			settings = {
-				localstoragepath: __dirname,
-				retentionUnit: 'seconds',
+				general: {
+					baseUrl: ''
+				},
+				storage: {
+					localstoragepath: __dirname,
+					retentionUnit: 'seconds'
+				},
 				dropzone: {
 					maxFilesize: 2000
 				}
@@ -243,9 +264,14 @@ describe('YouTransfer module', function() {
 			},
 			bundle = 'bundle',
 			settings = {
-				localstoragepath: __dirname,
-				retentionUnit: 'seconds',
-				retention: 1,
+				general: {
+					baseUrl: ''
+				},
+				storage: {
+					localstoragepath: __dirname,
+					retentionUnit: 'seconds',
+					retention: 1
+				},
 				dropzone: {
 					maxFilesize: 0.1
 				}
@@ -273,9 +299,14 @@ describe('YouTransfer module', function() {
 				id: 'bundle'
 			}
 			settings = {
-				localstoragepath: __dirname,
-				retentionUnit: 'seconds',
-				retention: 1
+				general: {
+					baseUrl: ''
+				},
+				storage: {
+					localstoragepath: __dirname,
+					retentionUnit: 'seconds',
+					retention: 1
+				}
 			},
 			factory = {
 				bundle: function() {}
@@ -305,8 +336,13 @@ describe('YouTransfer module', function() {
 				id: 'bundle'
 			}
 			settings = {
-				localstoragepath: __dirname,
-				retentionUnit: 'seconds',
+				general: {
+					baseUrl: ''
+				},
+				storage: {
+					localstoragepath: __dirname,
+					retentionUnit: 'seconds'
+				}
 			},
 			factory = {
 				bundle: function() {}
@@ -418,7 +454,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
-				baseUrl: '',
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					service: 'gmail',
 					transporter: 'smtp',
@@ -455,7 +493,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
-			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
@@ -490,6 +528,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					service: '',
 					transporter: 'smtp',
@@ -525,7 +566,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
-			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
@@ -559,6 +600,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					transporter: 'sendmail',
 					sender: 'sender',
@@ -593,7 +637,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
-			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
@@ -627,6 +671,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					transporter: 'ses',
 					sender: 'sender',
@@ -661,7 +708,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
-			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
@@ -695,6 +742,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					transporter: 'notsupported',
 					sender: 'sender',
@@ -729,7 +779,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
-			fields.bundle.link.should.equals(settings.baseUrl + '/bundle/' + req.params.bundle);
+			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
 			callback(null, 'body');
 		});
@@ -772,7 +822,11 @@ describe('YouTransfer module', function() {
 				params: {}
 			},
 			res = {},
-			settings = {}
+			settings = {
+				general: {
+					baseUrl: ''
+				}
+			}				
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
@@ -804,6 +858,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					transporter: 'notsupported',
 					sender: 'sender',
@@ -851,6 +908,9 @@ describe('YouTransfer module', function() {
 				renderTemplate: function() {}
 			},
 			settings = {
+				general: {
+					baseUrl: ''
+				},
 				email: {
 					transporter: 'notsupported',
 					sender: 'sender',

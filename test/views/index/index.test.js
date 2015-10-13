@@ -26,27 +26,27 @@ describe('Index View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl);
+		yield browser.url(sandbox.general.baseUrl);
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have the header title based on user settings', function *() {
 
 		var header = yield browser.getText('#hp header h1')
-		header.should.be.equal(sandbox.title);
+		header.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have the header subtitle based on user settings', function *() {
 
 		var subtitle = yield browser.getText('#hp header h2')
-		subtitle.should.be.equal(sandbox.subtitle);
+		subtitle.should.be.equal(sandbox.general.subtitle);
 
 	});
 
@@ -67,7 +67,7 @@ describe('Index View', function() {
 
 		var action = yield browser.getAttribute('.download form', 'action');
 		should.exist(action);
-		action.should.be.equal(sandbox.baseUrl + '/download');
+		action.should.be.equal(sandbox.general.baseUrl + '/download');
 
 		var submit = yield browser.isExisting('.download form button[type=submit]');
 		submit.should.be.equal(true);
@@ -76,7 +76,7 @@ describe('Index View', function() {
 
 	it('should not have a form to enable downloading a file if this feature is disabled', function *() {
 
-		var currentValue = sandbox.enableDownload;
+		var currentValue = sandbox.general.enableDownload;
 		if(currentValue) {
 			var enableDownload = yield browser.click('ul.nav > li > a')
 											  .click('input#enableDownload')
@@ -98,7 +98,6 @@ describe('Index View', function() {
 								  .isExisting('.download form button[type=submit]');
 		submit.should.be.equal(false);
 
-		var currentValue = sandbox.enableDownload;
 		if(currentValue) {
 			var enableDownload = yield browser.click('ul.nav > li > a')
 											  .click('input#enableDownload')
@@ -117,7 +116,7 @@ describe('Index View', function() {
 
 		var action = yield browser.getAttribute('.download form', 'action');
 		should.exist(action);
-		action.should.be.equal(sandbox.baseUrl + '/download');
+		action.should.be.equal(sandbox.general.baseUrl + '/download');
 
 		var submit = yield browser.isExisting('.download form button[type=submit]');
 		submit.should.be.equal(true);
@@ -179,7 +178,7 @@ describe('Index View', function() {
 									.isExisting('.fallback');
 		fallback.should.be.equal(true);
 
-		if(!sandbox.StorageLocation === 'local') {
+		if(!sandbox.storage.location === 'local') {
 			var alert = yield browser.click('ul.nav > li > a')
 									 .click('a[href="/settings/storage"]')
 									 .selectByVisibleText('select#StorageLocation', 'Local file system')
@@ -208,7 +207,7 @@ describe('Index View', function() {
 		should.exist(token);
 
 		var tokenLink = yield browser.getAttribute('.dz-preview-item .dz-preview-description .dz-preview-result .text-success a', 'href')
-		tokenLink.should.be.equal(sandbox.baseUrl + '/download/' + token + '/');
+		tokenLink.should.be.equal(sandbox.general.baseUrl + '/download/' + token + '/');
 
 		var emailHeader = yield browser.getText('#hp .dz-completed-container .dz-upload-complete h2');
 		should.exist(emailHeader);
@@ -244,7 +243,7 @@ describe('Index View', function() {
 
 		var currentValue = sandbox.dropzone.fallback;
 
-		if(!sandbox.dropzone.fallback) {
+		if(!currentValue) {
 			var fallback = yield browser.click('ul.nav > li > a')
 										.click('a[href="/settings/transfer"]')
 										.click('input#forceFallback')
@@ -254,7 +253,7 @@ describe('Index View', function() {
 			fallback.should.be.equal(true);
 		}
 
-		if(!sandbox.StorageLocation === 'local') {
+		if(!sandbox.storage.location === 'local') {
 			var alert = yield browser.url('/')
 									 .click('ul.nav > li > a')
 									 .click('a[href="/settings/storage"]')
@@ -294,7 +293,7 @@ describe('Index View', function() {
 		should.exist(token);
 
 		var tokenLink = yield browser.getAttribute('.dz-preview-item .dz-preview-description .dz-preview-result .text-success a', 'href')
-		tokenLink.should.be.equal(sandbox.baseUrl + '/download/' + token + '/');
+		tokenLink.should.be.equal(sandbox.general.baseUrl + '/download/' + token + '/');
 
 		var emailHeader = yield browser.getText('#hp .dz-completed-container .dz-upload-complete h2');
 		should.exist(emailHeader);

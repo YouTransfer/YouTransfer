@@ -2,16 +2,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>{{ title }}</title>
+		<title>{{ general.title }}</title>
 		<link rel="stylesheet" href="/css/styles.css" />
-		<meta name="baseurl" value="{{ baseUrl }}" />
+		<meta name="baseurl" value="{{ general.baseUrl }}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
 
 		{% if invalidHost %}
 			<div class="baseurl alert alert-warning">
-				<strong>Warning</strong>: the base URL is set to {{ baseUrl }} but you are accessing this page from {{ host }}. It is recommended to <a href="/settings/general/">update the BaseUrl setting</a>.
+				<strong>Warning</strong>: the base URL is set to {{ general.baseUrl }} but you are accessing this page from {{ host }}. It is recommended to <a href="/settings/general/">update the BaseUrl setting</a>.
 			</div>
 		{% endif %}
 

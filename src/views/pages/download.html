@@ -2,12 +2,9 @@
 
 {% block content %}
 <div class="dl hp jumbotron" id="dl">
-	<header class="col-md-12">
-		<h1>{{ title | safe }}</h1>
-		<h2>{{ subtitle | safe }}</h2>
-	</header>
+	{% include "title.html" %}
 
-	{% if enableDownload %}
+	{% if general.enableDownload %}
 
 	{% include "gettoken.html" %}
 

@@ -60,10 +60,16 @@ describe('YouTransfer Settings module', function() {
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.title.should.equals('title');
 			callback(null);
 		});
 
-		settings.push({ title: title }, function(err) {
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
 			should.not.exist(err);
 			done();
 		});
@@ -77,31 +83,81 @@ describe('YouTransfer Settings module', function() {
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.title.should.equals('title');
 			callback(null);
 		});
 
-		settings.push({ title: title }, function(err) {
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
 			should.not.exist(err);
 			done();
 		});
 
 	});
 
+	it('should throw an error if it current settings file is not valid', function(done) {
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, 'this is not json and should produce an error');
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.exist(err);
+			err.message.should.equals('Unexpected token h');
+			done();
+		});
+	});
+
+	it('should throw an error if it is not possible to write settings file', function(done) {
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.title.should.equals('title');
+			callback(new Error('error'));
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+	});
+
 	it('should be possible to set boolean value to true explicitely', function(done) {
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
-				booleanValue: true
+				general: {
+					booleanValue: true
+				}
 			}));
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
-			settings.booleanValue.should.equals(true);
+			settings.general.booleanValue.should.equals(true);
 			callback(null);
 		});
 
-		settings.push({ booleanValue: true }, function(err) {
+		settings.push({ 
+			general: {
+				booleanValue: true 
+			}
+		}, function(err) {
 			should.not.exist(err);
 			done();
 		});
@@ -112,17 +168,23 @@ describe('YouTransfer Settings module', function() {
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
-				booleanValue: true
+				general: {
+					booleanValue: true
+				}
 			}));
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
-			settings.booleanValue.should.equals(false);
+			settings.general.booleanValue.should.equals(false);
 			callback(null);
 		});
 
-		settings.push({ booleanValue: false }, function(err) {
+		settings.push({
+			general: {
+				booleanValue: false 
+			}
+		}, function(err) {
 			should.not.exist(err);
 			done();
 		});
@@ -133,13 +195,40 @@ describe('YouTransfer Settings module', function() {
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
-				booleanValue: true
+				general: {
+					booleanValue: true
+				}
 			}));
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
-			settings.booleanValue.should.equals(false);
+			settings.general.booleanValue.should.equals(false);
+			callback(null);
+		});
+
+		settings.push({
+			general: {}
+		}, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should not be possible to set boolean value to false by omission if section does not exist', function(done) {
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				general: {
+					booleanValue: true
+				}
+			}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.booleanValue.should.equals(true);
 			callback(null);
 		});
 
@@ -150,18 +239,6 @@ describe('YouTransfer Settings module', function() {
 
 	});
 
-
-	it('should throw an error if it is not possible to write settings file', function(done) {
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, 'this is not json and should produce an error');
-		});
-
-		settings.push({ title: title }, function(err) {
-			should.exist(err);
-			err.message.should.equals('Unexpected token h');
-			done();
-		});
-	});
 
 	// -------------------------------------------------------------------------------------- Testing read
 
