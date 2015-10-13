@@ -25,13 +25,13 @@ describe('Finalise Settings View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl + '/settings/finalise');
+		yield browser.url(sandbox.general.baseUrl + '/settings/finalise');
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 
@@ -45,7 +45,7 @@ describe('Finalise Settings View', function() {
 	it('should have a cancel button which will redirect to the General Settings page', function *() {
 
 		var value = yield browser.getAttribute('.tab-pane.active form a.btn.btn-default', 'href')
-		value.should.be.equal(sandbox.baseUrl + '/settings/general');
+		value.should.be.equal(sandbox.general.baseUrl + '/settings/general');
 
 		var header = yield browser.click('.tab-pane.active form a.btn.btn-default')
 								  .getText('.tab-pane.active h1');
@@ -62,18 +62,18 @@ describe('Finalise Settings View', function() {
 
 	it('should be able to finalise the settings', function *(done) {
 
-		var unlockCode = sandbox.unlockCode || 'unlock';
+		var unlockCode = sandbox.general.unlockCode || 'unlock';
 
 		var link = yield browser.setValue('input#unlockCode', unlockCode)
 								.submitForm('.tab-pane.active form')
 								.isExisting('ul.nav > li > a');
 		link.should.be.equal(false);
 
-		var notfound = yield browser.url(sandbox.baseUrl + '/settings/general')
+		var notfound = yield browser.url(sandbox.general.baseUrl + '/settings/general')
 									.getText('.hp h1');
 		notfound.should.be.equal('404 Page not found');
 
-		link = yield browser.url(sandbox.baseUrl + '/unlock')
+		link = yield browser.url(sandbox.general.baseUrl + '/unlock')
 							.setValue('input#unlockCode', unlockCode)
 							.submitForm('#unlock form')
 							.isExisting('ul.nav > li > a');

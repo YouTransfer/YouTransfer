@@ -1,13 +1,10 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="hp jumbotron {{"col-md-6" if not enableDownload }}" id="hp">
-	<header class="col-md-12">
-		<h1>{{ title | safe }}</h1>
-		<h2>{{ subtitle | safe }}</h2>
-	</header>
-
-	<div class="{{ "col-md-6" if success and enableDownload else "col-md-12" }}">
+<div class="hp jumbotron {{"col-md-6" if not general.enableDownload }}" id="hp">
+	{% include "title.html" %}
+	
+	<div class="{{ "col-md-6" if success and general.enableDownload else "col-md-12" }}">
 		{%if isPostback %}
 
 			{% if success %}
@@ -31,13 +28,13 @@
 	</div>
 
 	{% if success %}
-	<div class="{{"col-md-6" if enableDownload else "col-md-12" }} dz-completed-container">
+	<div class="{{"col-md-6" if general.enableDownload else "col-md-12" }} dz-completed-container">
 
 		{%if isPostback %}
 
 			{% include "sendmail.html" %}
 
-		{% elif enableDownload %}
+		{% elif general.enableDownload %}
 
 		<div class="separator text-center">
 			<h6 class="separator-text"><em>or</em></h6>
