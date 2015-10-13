@@ -25,13 +25,13 @@ describe('General Settings View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl + '/settings/general');
+		yield browser.url(sandbox.general.baseUrl + '/settings/general');
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 
@@ -45,35 +45,35 @@ describe('General Settings View', function() {
 	it('should have a "Title" field with the current title based on user settings', function *() {
 
 		var value = yield browser.getValue('input#title')
-		value.should.be.equal(sandbox.title);
+		value.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have a "Tagline" field with the current subtitle based on user settings', function *() {
 
 		var value = yield browser.getValue('input#subtitle')
-		value.should.be.equal(sandbox.subtitle);
+		value.should.be.equal(sandbox.general.subtitle);
 
 	});
 
 	it('should have a "Base URL" field with the current base URL based on user settings', function *() {
 
 		var value = yield browser.getValue('input#baseUrl')
-		value.should.be.equal(sandbox.baseUrl);
+		value.should.be.equal(sandbox.general.baseUrl);
 
 	});
 
 	it('should have a "Cleanup Schedule" field with the current cleanup schedule based on user settings', function *() {
 
 		var value = yield browser.getValue('input#cleanupSchedule')
-		value.should.be.equal(sandbox.cleanupSchedule);
+		value.should.be.equal(sandbox.general.cleanupSchedule);
 
 	});
 
 	it('should have a "Enable file download feature" field with the current value based on user settings', function *() {
 
 		var value = yield browser.getAttribute('input#enableDownload', 'checked')
-		if(sandbox.enableDownload) {
+		if(sandbox.general.enableDownload) {
 			should.exist(value);
 		} else {
 			should.not.exist(value);
@@ -99,7 +99,7 @@ describe('General Settings View', function() {
 		var alert = yield browser.isExisting('.tab-pane.active .alert strong');
 		alert.should.be.equal(false);
 
-		var currentValue = sandbox.title;
+		var currentValue = sandbox.general.title;
 		var newValue = currentValue + '2';
 
 		var value = yield browser.setValue('input#title', newValue)

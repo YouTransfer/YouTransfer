@@ -25,27 +25,27 @@ describe('Unlock Settings View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl + '/unlock');
+		yield browser.url(sandbox.general.baseUrl + '/unlock');
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have the header title based on user settings', function *() {
 
 		var header = yield browser.getText('#unlock header h1')
-		header.should.be.equal(sandbox.title);
+		header.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have the header subtitle based on user settings', function *() {
 
 		var subtitle = yield browser.getText('#unlock header h2')
-		subtitle.should.be.equal(sandbox.subtitle);
+		subtitle.should.be.equal(sandbox.general.subtitle);
 
 	});
 
@@ -65,19 +65,19 @@ describe('Unlock Settings View', function() {
 
 	it('should be able to unlock finalised settings', function *() {
 
-		var unlockCode = sandbox.unlockCode || 'unlock';
+		var unlockCode = sandbox.general.unlockCode || 'unlock';
 
-		var link = yield browser.url(sandbox.baseUrl + '/settings/finalise')
+		var link = yield browser.url(sandbox.general.baseUrl + '/settings/finalise')
 								.setValue('input#unlockCode', unlockCode)
 								.submitForm('.tab-pane.active form')
 								.isExisting('ul.nav > li > a');
 		link.should.be.equal(false);
 
-		var notfound = yield browser.url(sandbox.baseUrl + '/settings/general')
+		var notfound = yield browser.url(sandbox.general.baseUrl + '/settings/general')
 									.getText('.hp h1');
 		notfound.should.be.equal('404 Page not found');
 
-		link = yield browser.url(sandbox.baseUrl + '/unlock')
+		link = yield browser.url(sandbox.general.baseUrl + '/unlock')
 							.setValue('input#unlockCode', unlockCode)
 							.submitForm('#unlock form')
 							.isExisting('ul.nav > li > a');

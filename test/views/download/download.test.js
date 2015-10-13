@@ -25,27 +25,27 @@ describe('Download View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl + '/download');
+		yield browser.url(sandbox.general.baseUrl + '/download');
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have the header title based on user settings', function *() {
 
 		var header = yield browser.getText('#dl header h1')
-		header.should.be.equal(sandbox.title);
+		header.should.be.equal(sandbox.general.title);
 
 	});
 
 	it('should have the header subtitle based on user settings', function *() {
 
 		var subtitle = yield browser.getText('#dl header h2')
-		subtitle.should.be.equal(sandbox.subtitle);
+		subtitle.should.be.equal(sandbox.general.subtitle);
 
 	});
 
@@ -56,7 +56,7 @@ describe('Download View', function() {
 
 		var action = yield browser.getAttribute('#dl .download form', 'action');
 		should.exist(action);
-		action.should.be.equal(sandbox.baseUrl + '/download');
+		action.should.be.equal(sandbox.general.baseUrl + '/download');
 
 		var submit = yield browser.isExisting('#dl .download form button[type=submit]');
 		submit.should.be.equal(true);
@@ -75,7 +75,7 @@ describe('Download View', function() {
 
 	it('should not have a form to enable downloading a file if this feature is disabled', function *() {
 
-		var currentValue = sandbox.enableDownload;
+		var currentValue = sandbox.general.enableDownload;
 		if(currentValue) {
 			var enableDownload = yield browser.click('ul.nav > li > a')
 											  .click('input#enableDownload')
@@ -85,19 +85,18 @@ describe('Download View', function() {
 			enableDownload.should.be.equal(false);
 		}
 
-		var form = yield browser.url(sandbox.baseUrl + '/download')
+		var form = yield browser.url(sandbox.general.baseUrl + '/download')
 								.isExisting('.download form');
 		form.should.be.equal(false);
 
-		var submit = yield browser.url(sandbox.baseUrl + '/download')
+		var submit = yield browser.url(sandbox.general.baseUrl + '/download')
 								  .isExisting('.download form button[type=submit]');
 		submit.should.be.equal(false);
 
-		var error = yield browser.url(sandbox.baseUrl + '/download')
+		var error = yield browser.url(sandbox.general.baseUrl + '/download')
 								 .getText('.text-danger');
 		error.should.equals("Err... this is awkward...\nFile download by token has been disabled.\nDidn\'t you get the memo?");
 
-		var currentValue = sandbox.enableDownload;
 		if(currentValue) {
 			var enableDownload = yield browser.click('ul.nav > li > a')
 											  .click('input#enableDownload')

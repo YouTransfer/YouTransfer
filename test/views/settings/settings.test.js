@@ -25,13 +25,13 @@ describe('Settings View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl + '/settings/general');
+		yield browser.url(sandbox.general.baseUrl + '/settings/general');
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 

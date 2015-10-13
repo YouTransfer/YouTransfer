@@ -25,13 +25,13 @@ describe('Storage Settings View', function() {
 	});
 
 	beforeEach(function *() {
-		yield browser.url(sandbox.baseUrl + '/settings/storage');
+		yield browser.url(sandbox.general.baseUrl + '/settings/storage');
 	});
 
 	it('should have the window title based on user settings', function *() {
 
 		var title = yield browser.getTitle()
-		title.should.be.equal(sandbox.title);
+		title.should.be.equal(sandbox.general.title);
 
 	});
 
@@ -45,17 +45,17 @@ describe('Storage Settings View', function() {
 	it('should have a "Location" field with the current value based on user settings', function *() {
 
 		var value = yield browser.getValue('select#StorageLocation');
-		value.should.be.equal(sandbox.StorageLocation);
+		value.should.be.equal(sandbox.storage.location);
 
 	});
 
 	it('should have a "Retention" field with the current value based on user settings', function *() {
 
 		var retention = yield browser.getValue('input#retention');
-		retention.should.be.equal(sandbox.retention.toString());
+		retention.should.be.equal(sandbox.storage.retention.toString());
 
 		var retentionUnit = yield browser.getValue('select#retentionUnit');
-		retentionUnit.should.be.equal(sandbox.retentionUnit);
+		retentionUnit.should.be.equal(sandbox.storage.retentionUnit);
 
 	});
 
@@ -64,7 +64,7 @@ describe('Storage Settings View', function() {
 		var value = yield browser.selectByVisibleText('select#StorageLocation', 'Local file system')
 								 .waitForVisible('div#local')
 								 .getValue('input#localstoragepath');
-		value.should.be.equal(sandbox.localstoragepath);
+		value.should.be.equal(sandbox.storage.localstoragepath);
 
 	});
 
@@ -73,19 +73,19 @@ describe('Storage Settings View', function() {
 		var value = yield browser.selectByVisibleText('select#StorageLocation', 'Amazon S3')
 								 .waitForVisible('div#s3')
 								 .getValue('input#S3AccessKeyId');
-		value.should.be.equal(sandbox.S3AccessKeyId || '');
+		value.should.be.equal(sandbox.storage.S3AccessKeyId || '');
 
 		var S3SecretAccessKey = yield browser.getValue('input#S3SecretAccessKey');
-		S3SecretAccessKey.should.be.equal(sandbox.S3SecretAccessKey || '');
+		S3SecretAccessKey.should.be.equal(sandbox.storage.S3SecretAccessKey || '');
 
 		var S3Bucket = yield browser.getValue('input#S3Bucket');
-		S3Bucket.should.be.equal(sandbox.S3Bucket || '');
+		S3Bucket.should.be.equal(sandbox.storage.S3Bucket || '');
 
 		var S3Region = yield browser.getValue('input#S3Region');
-		S3Region.should.be.equal(sandbox.S3Region);
+		S3Region.should.be.equal(sandbox.storage.S3Region);
 
 		var S3SSLEnabled = yield browser.isExisting('input#S3SSLEnabled:checked');
-		if(sandbox.S3SSLEnabled) {
+		if(sandbox.storage.S3SSLEnabled) {
 			S3SSLEnabled.should.equals(true);
 		} else {
 			S3SSLEnabled.should.equals(false);
@@ -96,7 +96,7 @@ describe('Storage Settings View', function() {
 	it('should have a "encryptionEnabled" field with the current value based on user settings', function *() {
 
 		var encryptionEnabled = yield browser.isExisting('input#encryptionEnabled:checked');
-		if(sandbox.encryptionEnabled) {
+		if(sandbox.storage.encryptionEnabled) {
 			encryptionEnabled.should.equals(true);
 		} else {
 			encryptionEnabled.should.equals(false);
@@ -107,7 +107,7 @@ describe('Storage Settings View', function() {
 	it('should have a "Encryption Key" field with the current value based on user settings', function *() {
 
 		var encryptionKey = yield browser.getValue('input#encryptionKey');
-		encryptionKey.should.be.equal(sandbox.encryptionKey);
+		encryptionKey.should.be.equal(sandbox.storage.encryptionKey);
 
 	});
 	*/
@@ -129,7 +129,7 @@ describe('Storage Settings View', function() {
 		var alert = yield browser.isExisting('.tab-pane.active > .alert strong');
 		alert.should.be.equal(false);
 
-		var currentValue = sandbox.retention.toString();
+		var currentValue = sandbox.storage.retention.toString();
 		var newValue = currentValue + '2';
 
 		var alert = yield browser.setValue('input#retention', newValue)

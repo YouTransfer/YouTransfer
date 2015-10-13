@@ -22,14 +22,14 @@
 		<div class="form-group">
 			<label for="title" class="col-sm-3 control-label">Title</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[title]" id="title" value="{{ title }}">
+				<input type="text" class="form-control" name="settings[general][title]" id="title" value="{{ general.title }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
 		<div class="form-group">
 			<label for="subtitle" class="col-sm-3 control-label">Tagline</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[subtitle]" id="subtitle" value="{{ subtitle }}">
+				<input type="text" class="form-control" name="settings[general][subtitle]" id="subtitle" value="{{ general.subtitle }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -37,7 +37,7 @@
 		<div class="form-group">
 			<label for="baseUrl" class="col-sm-3 control-label">Base URL</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[baseUrl]" id="baseUrl" value="{{ baseUrl }}">
+				<input type="text" class="form-control" name="settings[general][baseUrl]" id="baseUrl" value="{{ general.baseUrl }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -45,7 +45,7 @@
 		<div class="form-group">
 			<label for="cleanupSchedule" class="col-sm-3 control-label">Cleanup schedule</label>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" name="settings[cleanupSchedule]" id="cleanupSchedule" value="{{ cleanupSchedule }}">
+				<input type="text" class="form-control" name="settings[general][cleanupSchedule]" id="cleanupSchedule" value="{{ general.cleanupSchedule }}">
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
@@ -54,7 +54,7 @@
 			<div class="col-sm-offset-3 col-sm-9">
 				<div class="checkbox">
 					<label for="enableDownload">
-						<input type="checkbox" name="settings[enableDownload]" id="enableDownload" {{ "checked" if enableDownload }} value="true">
+						<input type="checkbox" name="settings[general][enableDownload]" id="enableDownload" {{ "checked" if general.enableDownload }} value="true">
 						Enable file download feature
 					</label>
 				</div>

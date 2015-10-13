@@ -25,9 +25,9 @@
 		<div class="form-group">
 			<label for="" class="col-sm-3 control-label">Location</label>
 			<div class="col-sm-6">
-				<select class="form-control" name="settings[StorageLocation]" id="StorageLocation" data-select>
-					<option value="local" {{ "selected" if StorageLocation == 'local' }}>Local file system</option>
-					<option value="s3" {{ "selected" if StorageLocation == 's3' }}>Amazon S3</option>
+				<select class="form-control" name="settings[storage][location]" id="StorageLocation" data-select>
+					<option value="local" {{ "selected" if storage.location == 'local' }}>Local file system</option>
+					<option value="s3" {{ "selected" if storage.location == 's3' }}>Amazon S3</option>
 				</select>
 			</div>
 			<div class="col-sm-3"></div>
@@ -36,49 +36,49 @@
 		<div class="form-group">
 			<label for="" class="col-sm-3 control-label">Retention</label>
 			<div class="col-sm-3">
-				<input type="text" class="form-control" name="settings[retention]" id="retention" value="{{ retention }}">
+				<input type="text" class="form-control" name="settings[storage][retention]" id="retention" value="{{ storage.retention }}">
 			</div>
 			<div class="col-sm-3">
-				<select class="form-control" name="settings[retentionUnit]" id="retentionUnit">
-					<option value="milliseconds" {{ "selected" if retentionUnit == 'milliseconds' }}>Milliseconds</option>
-					<option value="seconds" {{ "selected" if retentionUnit == 'seconds' }}>Seconds</option>
-					<option value="minutes" {{ "selected" if retentionUnit == 'minutes' }}>Minutes</option>
-					<option value="hours" {{ "selected" if retentionUnit == 'hours' }}>Hours</option>
-					<option value="days" {{ "selected" if retentionUnit == 'days' }}>Days</option>
-					<option value="weeks" {{ "selected" if retentionUnit == 'weeks' }}>Weeks</option>
-					<option value="months" {{ "selected" if retentionUnit == 'months' }}>Months</option>
-					<option value="years" {{ "selected" if retentionUnit == 'years' }}>Years</option>
+				<select class="form-control" name="settings[storage][retentionUnit]" id="retentionUnit">
+					<option value="milliseconds" {{ "selected" if storage.retentionUnit == 'milliseconds' }}>Milliseconds</option>
+					<option value="seconds" {{ "selected" if storage.retentionUnit == 'seconds' }}>Seconds</option>
+					<option value="minutes" {{ "selected" if storage.retentionUnit == 'minutes' }}>Minutes</option>
+					<option value="hours" {{ "selected" if storage.retentionUnit == 'hours' }}>Hours</option>
+					<option value="days" {{ "selected" if storage.retentionUnit == 'days' }}>Days</option>
+					<option value="weeks" {{ "selected" if storage.retentionUnit == 'weeks' }}>Weeks</option>
+					<option value="months" {{ "selected" if storage.retentionUnit == 'months' }}>Months</option>
+					<option value="years" {{ "selected" if storage.retentionUnit == 'years' }}>Years</option>
 				</select>
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
 
-		<div id="local" role="select-section" class="select-section {{ "active" if StorageLocation == 'local' }}">
+		<div id="local" role="select-section" class="select-section {{ "active" if storage.location == 'local' }}">
 			<h3>Local file system</h3>
 
 			<div class="form-group">
 				<label for="localstoragepath" class="col-sm-3 control-label">Path</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" name="settings[localstoragepath]" id="localstoragepath" value="{{ localstoragepath }}">
+					<input type="text" class="form-control" name="settings[storage][localstoragepath]" id="localstoragepath" value="{{ storage.localstoragepath }}">
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
 		</div>
 
-		<div id="s3" role="select-section" class="select-section {{ "active" if StorageLocation == 's3' }}">
+		<div id="s3" role="select-section" class="select-section {{ "active" if storage.location == 's3' }}">
 			<h3>Amazon S3</h3>
 
 			<div class="form-group">
 				<label for="S3AccessKeyId" class="col-sm-3 control-label">Access Key ID</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" name="settings[S3AccessKeyId]" id="S3AccessKeyId" value="{{ S3AccessKeyId }}">
+					<input type="text" class="form-control" name="settings[storage][S3AccessKeyId]" id="S3AccessKeyId" value="{{ storage.S3AccessKeyId }}">
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
 			<div class="form-group">
 				<label for="S3SecretAccessKey" class="col-sm-3 control-label">Secret Access Key</label>
 				<div class="col-sm-6">
-					<input type="password" class="form-control" name="settings[S3SecretAccessKey]" id="S3SecretAccessKey" value="{{ S3SecretAccessKey }}">
+					<input type="password" class="form-control" name="settings[storage][S3SecretAccessKey]" id="S3SecretAccessKey" value="{{ storage.S3SecretAccessKey }}">
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
@@ -86,14 +86,14 @@
 			<div class="form-group">
 				<label for="S3Bucket" class="col-sm-3 control-label">Bucket</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" name="settings[S3Bucket]" id="S3Bucket" value="{{ S3Bucket }}">
+					<input type="text" class="form-control" name="settings[storage][S3Bucket]" id="S3Bucket" value="{{ storage.S3Bucket }}">
 				</div>
 				<div class="col-sm-3"></div>
 			</div>	
 			<div class="form-group">
 				<label for="S3Region" class="col-sm-3 control-label">Region</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" name="settings[S3Region]" id="S3Region" value="{{ S3Region }}">
+					<input type="text" class="form-control" name="settings[storage][S3Region]" id="S3Region" value="{{ storage.S3Region }}">
 				</div>
 				<div class="col-sm-3"></div>
 			</div>
@@ -101,7 +101,7 @@
 				<div class="col-sm-offset-3 col-sm-9">
 					<div class="checkbox">
 						<label for="S3SSLEnabled">
-							<input type="checkbox" value="true" name="settings[S3SSLEnabled]" id="S3SSLEnabled" {{ "checked='checked'" if S3SSLEnabled }}>
+							<input type="checkbox" value="true" name="settings[storage][S3SSLEnabled]" id="S3SSLEnabled" {{ "checked='checked'" if storage.S3SSLEnabled }}>
 							SSL Enabled (https)
 						</label>
 					</div>
