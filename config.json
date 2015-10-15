@@ -30,6 +30,8 @@
 		"retentionUnit": "weeks",
 		"S3Region": "us-east-1",
 		"S3SSLEnabled": "true"
-	}
+	},
+
+	"state": {}
 
 }

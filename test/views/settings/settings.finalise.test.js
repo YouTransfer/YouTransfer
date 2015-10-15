@@ -62,7 +62,7 @@ describe('Finalise Settings View', function() {
 
 	it('should be able to finalise the settings', function *(done) {
 
-		var unlockCode = sandbox.general.unlockCode || 'unlock';
+		var unlockCode = sandbox.state.unlockCode || 'unlock';
 
 		var link = yield browser.setValue('input#unlockCode', unlockCode)
 								.submitForm('.tab-pane.active form')

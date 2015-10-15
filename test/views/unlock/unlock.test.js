@@ -65,7 +65,7 @@ describe('Unlock Settings View', function() {
 
 	it('should be able to unlock finalised settings', function *() {
 
-		var unlockCode = sandbox.general.unlockCode || 'unlock';
+		var unlockCode = sandbox.state.unlockCode || 'unlock';
 
 		var link = yield browser.url(sandbox.general.baseUrl + '/settings/finalise')
 								.setValue('input#unlockCode', unlockCode)

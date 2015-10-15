@@ -576,7 +576,7 @@ describe('YouTransfer Router module', function() {
 		var req = {
 				params: {
 					settings: {
-						general: {
+						state: {
 							unlockCode: 'MySecretCode'
 						}
 					}
@@ -590,8 +590,8 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
-			settings.general.finalised.should.equals(true);
-			settings.general.unlockCode.should.equals(req.params.settings.general.unlockCode);
+			settings.state.finalised.should.equals(true);
+			settings.state.unlockCode.should.equals(req.params.settings.state.unlockCode);
 			callback();
 		});
 
@@ -609,7 +609,7 @@ describe('YouTransfer Router module', function() {
 		var req = {
 				params: {
 					settings: {
-						general: {
+						state: {
 							unlockCode: 'MySecretCode'
 						}
 					}
@@ -623,8 +623,8 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
-			settings.general.finalised.should.equals(true);
-			settings.general.unlockCode.should.equals(req.params.settings.general.unlockCode);
+			settings.state.finalised.should.equals(true);
+			settings.state.unlockCode.should.equals(req.params.settings.state.unlockCode);
 			callback(new Error('error'));
 		});
 
@@ -654,7 +654,7 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: true,
 					unlockCode: req.params.unlockCode
 				}
@@ -668,8 +668,8 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
 			should.exist(settings);
-			should.not.exist(settings.general.unlockCode);
-			settings.general.finalised.should.equals(false);
+			should.not.exist(settings.state.unlockCode);
+			settings.state.finalised.should.equals(false);
 			callback();
 		});
 
@@ -693,7 +693,7 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: true,
 					unlockCode: 'MyOtherCode'
 				}
@@ -740,7 +740,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -781,7 +781,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: true
 				}
 			});
@@ -816,7 +816,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -852,7 +852,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -890,7 +890,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -940,7 +940,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: true
 				}
 			});
@@ -983,7 +983,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -1030,7 +1030,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -1062,7 +1062,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -1090,7 +1090,7 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: false
 				}
 			},
@@ -1127,7 +1127,7 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: false
 				}
 			}
@@ -1170,7 +1170,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: true
 				}
 			});
@@ -1200,7 +1200,7 @@ describe('YouTransfer Router module', function() {
 				render: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: false
 				}
 			},
@@ -1279,7 +1279,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: true
 				}
 			});
