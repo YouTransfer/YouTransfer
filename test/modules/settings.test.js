@@ -5,6 +5,7 @@ var sinon = require('sinon');
 var should = require('chai').should();
 var settings = require('../../lib/settings');
 var path = require('path');
+var crypto = require("crypto-js/sha256");
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
@@ -55,6 +56,10 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set title', function(done) {
 
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({}));
 		});
@@ -78,6 +83,10 @@ describe('YouTransfer Settings module', function() {
 
 	it('should still be possible to set title if settings file does not exist', function(done) {
 
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback('error', null);
 		});
@@ -100,6 +109,11 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should throw an error if it current settings file is not valid', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, 'this is not json and should produce an error');
 		});
@@ -116,6 +130,11 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should throw an error if it is not possible to write settings file', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({}));
 		});
@@ -137,7 +156,176 @@ describe('YouTransfer Settings module', function() {
 		});
 	});
 
+	// -------------------------------------------------------------------------------------- Testing read
+
+	it('should be possible to get title fom cache', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null, {
+				general: {
+					title: title,
+				},
+				storage: {
+					localstoragepath: path.join(__dirname, '/uploads/')
+				}
+			});
+		});
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			output.general.title.should.equal(title);
+			done();
+		});
+	});
+
+	it('should be possible to get title fom file system', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				general: {
+					title: title,
+				},
+				storage: {
+					localstoragepath: path.join(__dirname, '/uploads/')
+				}
+			}));
+		});
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			output.general.title.should.equal(title);
+			done();
+		});
+	});
+
+	it('should not be possible to get title if invalid JSON is returned', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, 'this is not JSON');
+		});
+
+		settings.get(function(err, output) {
+			should.exist(err);
+			err.message.should.equals('Unexpected token h');
+			done();
+		});
+	});
+
+	it('should still be possible to get title if settings file does not exist', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
+		});
+
+		sandbox.stub(nconf, 'get').returns({
+			general: {
+				title: 'title' 
+			},
+			storage: {
+				localstoragepath: path.join(__dirname, '/uploads/')
+			}
+		});
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			output.general.title.should.equals('title');
+			done();
+		});
+	});
+
+	it('should still be possible to get localstoragepath if settings file does not exist', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
+		});
+
+		sandbox.stub(nconf, 'get').returns({ 
+			general: {
+				title: 'title'
+			},
+			storage: {
+				localstoragepath: './somepath' 
+			}
+		});
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			output.storage.localstoragepath.should.equals(path.join(__dirname, '../../somepath'));
+			done();
+		});
+	});
+
+	// -------------------------------------------------------------------------------------- Testing localstoragepath
+
+	it('should be possible to set relative localstoragepath', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				general: {
+					basedir: __dirname
+				},
+				storage: {
+					localstoragepath: './uploads'
+				}
+			}));
+		});
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('should not be able to use invalid localstoragepath setting', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				general: {
+					basedir: __dirname
+				},
+				storage: {
+					localstoragepath: 100
+				}
+			}));
+		});
+
+		settings.get(function(err, output) {
+			should.exist(err);
+			done();
+		});
+	});
+
+	// -------------------------------------------------------------------------------------- Testing fixBooleanValues
+
 	it('should be possible to set boolean value to true explicitely', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
@@ -166,6 +354,10 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set boolean value to false explicitely', function(done) {
 
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
@@ -193,6 +385,10 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set boolean value to false by omission', function(done) {
 
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
@@ -218,6 +414,10 @@ describe('YouTransfer Settings module', function() {
 
 	it('should not be possible to set boolean value to false by omission if section does not exist', function(done) {
 
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
@@ -239,97 +439,67 @@ describe('YouTransfer Settings module', function() {
 
 	});
 
+	// -------------------------------------------------------------------------------------- Testing hashPasswords
 
-	// -------------------------------------------------------------------------------------- Testing read
 
-	it('should be possible to get title', function(done) {
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, JSON.stringify({
-				title: title,
-				localstoragepath: path.join(__dirname, '/uploads/')
-			}));
+	it('should be possible to set encrypted password', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
 		});
-
-		settings.get(function(err, output) {
-			should.not.exist(err);
-			output.title.should.equal(title);
-			done();
-		});
-	});
-
-	it('should not be possible to get title if invalid JSON is returned', function(done) {
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, 'this is not JSON');
-		});
-
-		settings.get(function(err, output) {
-			should.exist(err);
-			err.message.should.equals('Unexpected token h');
-			done();
-		});
-	});
-
-	it('should still be possible to get title if settings file does not exist', function(done) {
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback('error', null);
-		});
-
-		sandbox.stub(nconf, 'get').returns({ title: 'title' });
-
-		settings.get(function(err, output) {
-			should.not.exist(err);
-			output.title.should.equals('title');
-			done();
-		});
-	});
-
-	it('should still be possible to get localstoragepath if settings file does not exist', function(done) {
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback('error', null);
-		});
-
-		sandbox.stub(nconf, 'get').returns({ title: 'title', localstoragepath: './somepath' });
-
-		settings.get(function(err, output) {
-			should.not.exist(err);
-			output.localstoragepath.should.equals(path.join(__dirname, '../../somepath'));
-			done();
-		});
-	});
-
-	// -------------------------------------------------------------------------------------- Testing localstoragepath
-
-	it('should be possible to set relative localstoragepath', function(done) {
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
-				basedir: __dirname,
-				localstoragepath: './uploads'
+				security: {
+					encryptionKey: 'MySecretKey'
+				}
 			}));
 		});
 
-		settings.get(function(err, output) {
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			var encrypted = crypto('secret' + settings.security.encryptionKey).toString();
+			settings.general.myPassword.should.equals(encrypted);
+			callback(null);
+		});
+
+		settings.push({ 
+			general: {
+				myPassword: 'secret'
+			}
+		}, function(err) {
 			should.not.exist(err);
 			done();
 		});
+
 	});
 
-	it('should not be able to use invalid localstoragepath setting', function(done) {
+	it('should be possible to set encrypted password without salt', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, JSON.stringify({
-				basedir: __dirname,
-				localstoragepath: 100
-			}));
+			callback(null, JSON.stringify({}));
 		});
 
-		settings.get(function(err, output) {
-			should.exist(err);
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			var encrypted = crypto('secret').toString();
+			settings.general.myPassword.should.equals(encrypted);
+			callback(null);
+		});
+
+		settings.push({ 
+			general: {
+				myPassword: 'secret'
+			}
+		}, function(err) {
+			should.not.exist(err);
 			done();
 		});
+
 	});
 
 });

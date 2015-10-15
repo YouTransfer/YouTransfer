@@ -72,7 +72,9 @@ describe('General Settings View', function() {
 
 	it('should have a "Enable file download feature" field with the current value based on user settings', function *() {
 
-		var value = yield browser.getAttribute('input#enableDownload', 'checked')
+		var value = yield browser.waitForExist('input#enableDownload')
+								 .getAttribute('input#enableDownload', 'checked')
+
 		if(sandbox.general.enableDownload) {
 			should.exist(value);
 		} else {
@@ -80,7 +82,6 @@ describe('General Settings View', function() {
 		}
 
 	});
-
 
 	it('should be able to save the settings', function *() {
 

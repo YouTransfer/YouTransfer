@@ -1,6 +1,7 @@
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
+var _ = require('lodash');
 var sinon = require('sinon');
 var should = require('chai').should();
 var filesize = require("filesize");
@@ -34,6 +35,9 @@ describe('YouTransfer module', function() {
 				schedulerEnabled: true,
 				cleanupSchedule: 'cronschedule'
 			},
+			security: {
+				encryptionKey: 'MySecretKey'
+			},
 			on: function() {}
 		}
 
@@ -61,15 +65,122 @@ describe('YouTransfer module', function() {
 		youtransfer.initialize();
 	});
 
-	it('should continue if an error occurs while initializing module', function() {
+	it('should be possible to initialize module (incl. scheduling of background jobs) even when scheduler is disabled', function(done) {
+
+		var settings = {
+			general: {
+				schedulerEnabled: false,
+			},
+			security: {}
+		}
+
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
-			callback(new Error('error'), null);
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.settings, "push", function (settings, callback) {
+			settings.security.encryptionKeyMethod.should.equals('auto');
+			done();
 		});
 
 		youtransfer.initialize();
 	});
 
+	it('should be possible to initialize module (incl. scheduling of background jobs) without pre-set encryption key', function(done) {
 
+		var settings = {
+			general: {
+				schedulerEnabled: true,
+				cleanupSchedule: 'cronschedule'
+			},
+			security: {},
+			on: function() {}
+		}
+
+		var completed = _.after(2, done);
+
+		sandbox.stub(youtransfer.settings, "get", function (callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.settings, "push", function (settings, callback) {
+			settings.security.encryptionKeyMethod.should.equals('auto');
+			callback(null);
+			completed();
+		});
+
+		sandbox.stub(youtransfer.settings, "on", function (event, callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(scheduler, "add", function (name, schedule, job) {
+			name.should.equals('cleanup');
+			schedule.should.equals(settings.general.cleanupSchedule);
+			should.exist(job);
+		});
+
+		sandbox.stub(scheduler, "reschedule", function (name, schedule, job) {
+			name.should.equals('cleanup');
+			schedule.should.equals(settings.general.cleanupSchedule);
+			should.exist(job);
+			completed();
+		});
+
+		youtransfer.initialize();
+	});
+
+	it('should throw an error when such occurs during initialization of the module (incl. scheduling of background jobs) without pre-set encryption key', function(done) {
+
+		var settings = {
+			general: {
+				schedulerEnabled: true,
+				cleanupSchedule: 'cronschedule'
+			},
+			security: {},
+			on: function() {}
+		}
+
+		sandbox.stub(youtransfer.settings, "get", function (callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.settings, "push", function (settings, callback) {
+			callback(new Error('error'));
+		});
+
+		sandbox.stub(youtransfer.settings, "on", function (event, callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(scheduler, "add", function (name, schedule, job) {
+			name.should.equals('cleanup');
+			schedule.should.equals(settings.general.cleanupSchedule);
+			should.exist(job);
+		});
+
+		sandbox.stub(scheduler, "reschedule", function (name, schedule, job) {
+			name.should.equals('cleanup');
+			schedule.should.equals(settings.general.cleanupSchedule);
+			should.exist(job);
+		});
+
+		try {
+			youtransfer.initialize();
+			fail('Reached this breakpoint', 'should not have reached this breakpoint');
+		} catch(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		}
+	});
+
+	it('should continue if an error occurs while initializing module', function() {
+		sandbox.stub(youtransfer.settings, "get", function (callback) {
+			callback(new Error('error'), null);
+		});
+
+		youtransfer.initialize();
+	});
 
 	// -------------------------------------------------------------------------------------- Testing storageFactory
 
