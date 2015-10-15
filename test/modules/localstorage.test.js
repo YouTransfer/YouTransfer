@@ -24,7 +24,14 @@ describe('YouTransfer Local Storage module', function() {
 
 	beforeEach(function() {
 		sandbox = sinon.sandbox.create();
-		provider = localstorage({ localstoragepath: __dirname });
+		provider = localstorage({ 
+			storage: {
+				localstoragepath: __dirname 
+			},
+			security: {
+				encryptionEnabled: false
+			}
+		});
 	});
 
 	afterEach(function() {
@@ -35,7 +42,12 @@ describe('YouTransfer Local Storage module', function() {
 	// -------------------------------------------------------------------------------------- Testing constructor
 
 	it('should accept options by Object', function() {
-		var instance = localstorage({ localstoragepath: __dirname });
+		var instance = localstorage({ 
+			storage: {
+				localstoragepath: __dirname 
+			}
+		});
+
 		instance.localstoragepath.should.equals(__dirname);
 	});
 
@@ -157,10 +169,14 @@ describe('YouTransfer Local Storage module', function() {
 	});
 
 	it('should implement the "upload" method and enable local storage of an encrypted file', function(done) {
-		provider = localstorage({ 
-			localstoragepath: __dirname,
-			encryptionEnabled: true,
-			encryptionKey: 'MySecretEncryptionKey'
+		provider = localstorage({
+			storage: { 
+				localstoragepath: __dirname
+			},
+			security: {
+				encryptionEnabled: true,
+				encryptionKey: 'MySecretEncryptionKey'
+			}
 		});
 
 		var uploadedFile = {
@@ -351,9 +367,13 @@ describe('YouTransfer Local Storage module', function() {
 
 	it('should be possible to download an archive with encrypted files', function(done) {
 		provider = localstorage({ 
-			localstoragepath: __dirname,
-			encryptionEnabled: true,
-			encryptionKey: 'MySecretEncryptionKey'
+			storage: {
+				localstoragepath: __dirname
+			},
+			security: {
+				encryptionEnabled: true,
+				encryptionKey: 'MySecretEncryptionKey'
+			}
 		});
 
 		var data = "my binary data";
@@ -649,10 +669,14 @@ describe('YouTransfer Local Storage module', function() {
 	});
 
 	it('should be possible to download an encrypted file', function(done) {
-		provider = localstorage({ 
-			localstoragepath: __dirname,
-			encryptionEnabled: true,
-			encryptionKey: 'MySecretEncryptionKey'
+		provider = localstorage({
+			storage: {
+				localstoragepath: __dirname
+			},
+			security: {
+				encryptionEnabled: true,
+				encryptionKey: 'MySecretEncryptionKey'
+			}
 		});
 
 		var token = 'file',

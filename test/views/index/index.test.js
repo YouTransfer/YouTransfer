@@ -322,7 +322,7 @@ describe('Index View', function() {
 									.isExisting('.fallback');
 			fallback.should.be.equal(false);
 		}
-		
+
 	});
 
 });
