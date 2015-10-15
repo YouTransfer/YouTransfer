@@ -117,7 +117,8 @@ function testModulesTask() {
 							}
 						}))
 						.on('error', log);
-			   });
+			   })
+			   .on('error', log);
 }
 
 function testComponentsTask() {
