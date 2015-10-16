@@ -46,6 +46,7 @@
 			</div>
 
 			<div id="restricted" role="select-section" class="select-section {{ "active" if security.accessRights == 'restricted' }}">
+				{% if not security.rootAccount %}
 				<h4>Administrator account</h4>
 
 				<div class="form-group">
@@ -59,7 +60,7 @@
 				<div class="form-group">
 					<label for="rootPassword" class="col-sm-3 control-label">Password</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" name="settings[security][rootPassword]" id="rootPassword" value="{{ security.rootPassword }}">
+						<input type="password" class="form-control" name="settings[security][rootPassword]" id="rootPassword">
 					</div>
 					<div class="col-sm-3"></div>
 				</div>
@@ -71,7 +72,15 @@
 						</div>
 					</div>
 				</div>
-
+				{% else %}
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-3">
+						<div class="alert alert-info">
+							You can manage user accounts and groups in the <a href="/users/">Users section</a>.
+						</div>
+					</div>
+				</div>
+				{% endif %}
 			</div>
 		</div>
 

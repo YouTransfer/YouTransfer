@@ -4,7 +4,7 @@
 var _ = require('lodash');
 var sinon = require('sinon');
 var should = require('chai').should();
-var filesize = require("filesize");
+var filesize = require('filesize');
 var path = require('path');
 var youtransfer = require('../../lib/youtransfer');
 

@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var should = require('chai').should();
 var settings = require('../../lib/settings');
 var path = require('path');
-var crypto = require("crypto-js/sha256");
+var crypto = require('crypto-js/sha256');
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 

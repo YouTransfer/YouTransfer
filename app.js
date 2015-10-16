@@ -19,6 +19,7 @@ restify.cookieParser = require('restify-cookies');
 restify.compression = require('compression');
 
 // YouTransfer
+var passport = require('./lib/passport');
 var routes = require('./lib/routes');
 var middleware = require('./lib/middleware');
 var errors = require('./lib/errors');
@@ -33,6 +34,8 @@ app.use(restify.cookieParser.parse);
 app.use(restify.compression());
 app.use(errors);
 app.use(middleware);
+app.use(passport.initialize());
+app.use(passport.authenticate('remember-me'));
 
 // ------------------------------------------------------------------------------------------ App Routing
 
@@ -50,6 +53,7 @@ app.get('/settings/:name/:template', router.settingsGetTemplateByName());
 app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());
 app.post('/unlock', router.settingsUnlock());
+app.post('/login', passport.authenticate('local'), router.login());
 app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
 app.get(/^\/(.*)/, router.default());
 
