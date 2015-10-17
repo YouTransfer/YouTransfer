@@ -1,3 +1,4 @@
+'use strict';
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
@@ -528,7 +529,7 @@ describe('YouTransfer module', function() {
 
 		var bundle = {
 				id: 'bundle'
-			}
+			},
 			settings = {
 				general: {
 					baseUrl: ''
@@ -565,7 +566,7 @@ describe('YouTransfer module', function() {
 
 		var bundle = {
 				id: 'bundle'
-			}
+			},
 			settings = {
 				general: {
 					baseUrl: ''

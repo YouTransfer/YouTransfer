@@ -1,3 +1,4 @@
+'use strict';
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
@@ -1130,7 +1131,7 @@ describe('YouTransfer Router module', function() {
 				state: {
 					finalised: false
 				}
-			}
+			},
 			response = {
 				activeTab: 'dropzone',
 				dropzone: {}
@@ -1312,7 +1313,7 @@ describe('YouTransfer Router module', function() {
 			},
 			server = {
 				serveFile: function() {}
-			}
+			},
 			instance = new routes({
 				fileServer: server
 			});

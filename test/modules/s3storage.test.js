@@ -1,3 +1,4 @@
+'use strict';
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
@@ -668,7 +669,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -704,7 +705,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -741,7 +742,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -778,7 +779,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -815,7 +816,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
