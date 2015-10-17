@@ -6,6 +6,7 @@ var sinon = require('sinon');
 var should = require('chai').should();
 var filesize = require('filesize');
 var path = require('path');
+var SHA256 = require('crypto-js/sha256');
 var youtransfer = require('../../lib/youtransfer');
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
@@ -261,6 +262,125 @@ describe('YouTransfer module', function() {
 			should.exist(err);
 			should.not.exist(factory);
 			err.message.should.equals('Storage provider not supported');
+			done();
+		});
+
+	});
+
+	// -------------------------------------------------------------------------------------- Testing authenticate
+
+	it('should be possible to authenticate the admin user', function(done) {
+
+		var username = 'a',
+			password = 'a',
+			settings = {
+				security: {
+					encryptionKey: 'MySecretKey',
+					rootAccount: 'a',
+					rootPassword: SHA256(password + 'MySecretKey').toString()
+				}
+			}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.authenticate(username, password, function(err, user) {
+			should.not.exist(err);
+			should.exist(user);
+			user.username.should.equals(username);
+			done();
+		});
+
+	});
+
+	it('should be possible to authenticate the admin user even if the encryptionKey has not been set', function(done) {
+
+		var username = 'a',
+			password = 'a',
+			settings = {
+				security: {
+					rootAccount: 'a',
+					rootPassword: SHA256(password).toString()
+				}
+			}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.authenticate(username, password, function(err, user) {
+			should.not.exist(err);
+			should.exist(user);
+			user.username.should.equals(username);
+			done();
+		});
+
+	});
+
+	it('should not be possible to authenticate the admin user without security settings', function(done) {
+
+		var username = 'a',
+			password = 'a',
+			settings = {}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.authenticate(username, password, function(err, user) {
+			should.exist(err);
+			should.not.exist(user);
+			err.message.should.equals('Invalid username');
+			done();
+		});
+
+	});	
+	it('should not be possible to authenticate the admin user with a different username', function(done) {
+
+		var username = 'a',
+			password = 'a',
+			settings = {
+				security: {
+					encryptionKey: 'MySecretKey',
+					rootAccount: 'b',
+					rootPassword: SHA256(password + 'MySecretKey').toString()
+				}
+			}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.authenticate(username, password, function(err, user) {
+			should.exist(err);
+			should.not.exist(user);
+			err.message.should.equals('Invalid username');
+			done();
+		});
+
+	});
+
+	it('should not be possible to authenticate the admin user with an incorrect password', function(done) {
+
+		var username = 'a',
+			password = 'a',
+			settings = {
+				security: {
+					encryptionKey: 'MySecretKey',
+					rootAccount: 'a',
+					rootPassword: SHA256('b' + 'MySecretKey').toString()
+				}
+			}
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.authenticate(username, password, function(err, user) {
+			should.exist(err);
+			should.not.exist(user);
+			err.message.should.equals('Invalid password');
 			done();
 		});
 
