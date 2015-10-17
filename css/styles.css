@@ -1,0 +1,141 @@
+
+
+/*// ------------------------------------------------------------------------------------------ Fonts */
+
+@font-face {
+    font-family: 'proxima_novaregular';
+    src: url('fonts/proximanova-regular-webfont.eot');
+    src: url('fonts/proximanova-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/proximanova-regular-webfont.woff2') format('woff2'),
+         url('fonts/proximanova-regular-webfont.woff') format('woff'),
+         url('fonts/proximanova-regular-webfont.ttf') format('truetype'),
+         url('fonts/proximanova-regular-webfont.svg#proxima_novaregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*// ------------------------------------------------------------------------------------------ Global */
+
+body { 
+	font-family: "proxima_novaregular"; 
+   	line-height: 2; 
+	background-image: url("../assets/204H.jpg");
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+	background-color: #000;
+}
+
+header {
+	height: 100vh;
+}
+
+header .hero {
+	position: absolute;
+	top: 175px;
+	left: 75px;
+	text-shadow: 0.5px 0.5px #b8b8b8;
+	color: #fff;
+}
+
+header .button {
+	margin-top: 50px;
+}
+header .button .btn-outline {
+	background-color: transparent;
+	color: #fff;
+	font-size: 120%;
+}
+
+footer { 
+	min-height: 100px; 
+	background-color: rgb(51, 51, 51); 
+	border-top: 1px solid #e3e3e3; 
+	color: #666666;
+	padding-top: 20px;
+}
+
+/*// ------------------------------------------------------------------------------------------ Homepage */
+
+#about { 
+	background-color: #eee;
+	padding: 60px 0px;
+}
+
+#about p { 
+	font-size: 120%;
+}
+
+.takeaway { 
+	min-height: 150px; 
+	padding-top: 17px; 
+	color: #fff; 
+	text-align: center;
+	background-color: rgb(94, 163, 206); 
+	border-top: 1px solid #eee; 
+	border-bottom: 1px solid #eee; 
+}
+
+.takeaway a {
+	color: #eee;
+}
+
+.takeaway.social {
+	background-color: rgb(160, 160, 150);
+	min-height: 300px;
+	letter-spacing: 1.5px;
+	padding: 40px 0 50px 0;
+}
+
+.takeaway.social h1 {
+	margin-top: 30px;
+}
+
+.gallery {
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 100%;
+	height: 160px;
+}
+
+.icon {
+	margin-right: 20px;
+	display: inline-block;
+	background-repeat: no-repeat;
+	height: 32px;
+	width: 32px;
+}
+
+.icon-twitter {
+	background-image: url('../assets/twitter-white.png');
+	background-size: 32px auto;
+}
+
+.icon-facebook {
+	background-image: url('../assets/facebook-white.png');	
+}
+
+.icon-linkedin {
+	background-image: url('../assets/linkedin-white.png');	
+}
+
+#install {
+	padding: 50px 0;
+}
+#install pre {
+    background-color: #333;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) inset;
+    color: #fff;
+    font-size: 90%;
+}
+
+#blog {
+	padding: 40px 0;
+}
+
+section.well {
+	border-radius: none;
+	margin-bottom: 0;
+	border: none;
+}

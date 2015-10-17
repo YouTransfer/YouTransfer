@@ -1,128 +1,238 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Youtransfer by remie</title>
+	<head>
+		<title>YouTransfer.io - the simple &amp; elegant file-sharing solution</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/styles.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Youtransfer</h1>
-        <p>The simple but elegant self-hosted file transfer &amp; sharing solution</p>
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.0/jquery.scrollTo.min.js"></script>
+		<script type="text/javascript" src="js/main.js" /></script>
+	</head>
+	<body>
 
-        <p class="view"><a href="https://github.com/remie/YouTransfer">View the Project on GitHub <small>remie/YouTransfer</small></a></p>
+		<header>
+			<div class="bg"></div>
+			<div class="hero">
+				<h1>YouTransfer</h1>
+				<h3>The simple but elegant file-sharing solution</h3>
+				<div class="button">
+					<a href="#about" class="btn btn-default btn-large btn-outline">Learn more</a>
+				</div>
+			</div>
+		</header>
 
+		<section id="about" class="well">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<img src="assets/frame.png" />
+					</div>
+					<div class="col-md-offset-1 col-md-6">
+						<p>
+							YouTransfer is a simple but elegant self-hosted file transfer &amp; sharing solution. It is an alternative to paid services like Dropbox and WeTransfer by offering similar features but without limitations, price plans and a lengthy privacy policy. You remain in control of your files. 
+						</p>
+						<p>
+							Created to be installed behind the firewall on private servers, YouTransfer aims to empower organisations and individuals that wish to combine easy-to-use file transfer tooling with security and control. 
+						</p>					
+					</div>
+				</div>
+			</div>
+		</section>
 
-        <ul>
-          <li><a href="https://github.com/remie/YouTransfer/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/remie/YouTransfer/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/remie/YouTransfer">View On <strong>GitHub</strong></a></li>
-        </ul>
-        
-<blockquote class="twitter-tweet" data-partner="tweetdeck"><p lang="en" dir="ltr">&quot;Why Enterprise should choose Open Source file sharing solutions instead of Cloud providers&quot; on <a href="https://twitter.com/LinkedIn">@LinkedIn</a> <a href="https://t.co/mq2RAmU1zX">https://t.co/mq2RAmU1zX</a></p>&mdash; YouTransfer.io (@youtransfer) <a href="https://twitter.com/youtransfer/status/652190119391297536">October 8, 2015</a></blockquote>
-        
-      </header>
-      <section>
-        <h1>
-<a id="youtransfer" class="anchor" href="#youtransfer" aria-hidden="true"><span class="octicon octicon-link"></span></a>YouTransfer</h1>
+		<section class="takeaway">
+			<h1><em>"Gotta give this a try!"</em></h1>
+			@slhomme - <a href="http://bit.ly/1Nhq0z0">http://bit.ly/1Nhq0z0</a>
+		</section>
 
-<p><a href="http://www.iamsterdam.com/en/business/startupamsterdam">Made in Amsterdam</a>, with ♥</p>
-
-<p><a href="http://badge.fury.io/gh/remie%2Fyoutransfer"><img src="https://badge.fury.io/gh/remie%2Fyoutransfer.svg" alt="GitHub version"></a> <a href="http://badge.fury.io/js/youtransfer"><img src="https://badge.fury.io/js/youtransfer.svg" alt="npm version"></a> <a href="https://travis-ci.org/remie/YouTransfer"><img src="https://travis-ci.org/remie/YouTransfer.svg?branch=master" alt="Build Status"></a> <a href="https://codeclimate.com/github/remie/YouTransfer"><img src="https://codeclimate.com/github/remie/YouTransfer/badges/gpa.svg" alt="Code Climate"></a> <a href="https://codeclimate.com/github/remie/YouTransfer/coverage"><img src="https://codeclimate.com/github/remie/YouTransfer/badges/coverage.svg" alt="Test Coverage"></a> <a href="https://david-dm.org/remie/youtransfer"><img src="https://david-dm.org/remie/youtransfer.svg" alt="Dependency Status"></a> <a href="https://david-dm.org/remie/youtransfer#info=devDependencies"><img src="https://david-dm.org/remie/youtransfer/dev-status.svg" alt="devDependency Status"></a> <a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/github/license/remie/youtransfer.svg" alt="License"></a> <a href="https://twitter.com/intent/tweet?text=YouTransfer.io,%20the%20simple%20but%20elegant%20self-hosted%20file%20transfer%20solution!&amp;url=http%3A%2F%2Fyoutransfer.io"><img src="https://img.shields.io/twitter/url/http/youtransfer.io.svg?style=social" alt="Twitter URL"></a></p>
-
-<p>YouTransfer is a simple but elegant self-hosted file transfer &amp; sharing solution. It is an alternative to paid services like <a href="http://dropbox.com">Dropbox</a> and <a href="http://wetransfer.com">WeTransfer</a> by offering similar features but without limitations, price plans and a lengthy privacy policy. You remain in control of your files.</p>
-
-<p>Created to be installed behind the firewall on private servers, YouTransfer aims to empower organisations and individuals that wish to combine easy-to-use file transfer tooling with security and control.</p>
-
-<p>You can follow the project on <a href="https://twitter.com/youtransfer">Twitter</a>, or <a href="http://blog.youtransfer.io">read our blog</a>. </p>
-
-<h2>
-<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h2>
-
-<p>A live demo of YouTransfer is available on <a href="http://demo.youtransfer.io">http://demo.youtransfer.io</a><br>
-The demo is <a href="https://github.com/remie/YouTransfer/wiki/Demo">somewhat limited</a> so it is recommended to run it locally (see quick start section below).</p>
-
-<h2>
-<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
-
-<h3>
-<a id="quick-start-using-docker" class="anchor" href="#quick-start-using-docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start using Docker</h3>
-
-<p>If you wish to install YouTransfer in your own environment without any modifications, the <a href="http://hub.docker.com/r/remie/youtransfer/">Docker image</a> is the most quick and easy approach. Simply <a href="https://docs.docker.com/installation/">install docker</a> and run:</p>
-
-<p><code>docker pull remie/youtransfer:stable</code></p>
-
-<p>You can run the application with the following command:</p>
-
-<pre><code>docker run -d 
+		<section id="install" class="well">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Quick Start using Docker</h1>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<p>
+							If you wish to run YouTransfer in your own environment without any modifications, the <a href="http://hub.docker.com/r/remie/youtransfer/">Docker image</a> is the quickest and easiest approach. All you have to do is <a href="https://docs.docker.com/installation/">install docker</a> and run:
+						</p>
+						<kbd>docker pull remie/youtransfer:stable</kbd>
+						<p>
+							Once the image has been downloaded, start the application with the following command:
+						</p>
+						<pre>
+docker run -d 
 -v [path_to_upload_folder]:/opt/youtransfer/uploads 
 -v [path_to_config_folder]:/opt/youtransfer/config 
 -p 80:5000 
-remie/youtransfer:stable
-</code></pre>
+remie/youtransfer:stable</pre>
+						<p>
+							You can now connect to YouTransfer by browsing to <code>http://[docker_host_ip]/</code><br />
+							For more information on Docker deployment, please read the <a href="https://github.com/remie/YouTransfer/wiki/docker">Docker installation instructions</a>.
+						</p>
+					</div>
+					<div class="col-md-offset-1 col-md-3 text-center">
+						<img src="assets/docker.png" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<h3>Self-hosted using NodeJS</h3>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<p>
+							If you wish to install YouTransfer directly from source, you will need to install <a href="http://nodejs.org">NodeJS</a>. Download the <a href="https://github.com/remie/YouTransfer/releases">latest release</a> zip file from GitHub or clone the repository from <a href="https://github.com/remie/YouTransfer.git">https://github.com/remie/YouTransfer.git</a>
+						</p>
+						<p>
+							To install YouTransfer, run <kbd>npm install</kbd> in the application directory.<br />
+							After installation, start YouTransfer with <kbd>PORT=[port] npm start</kbd>.
+						</p>
+						<p>
+							You can now connect to YouTransfer by browsing to <code>http://localhost:[port]/</code><br />
+							For more information on hosting YouTransfer please read the <a href="https://github.com/remie/YouTransfer/wiki/hosting">hosting instructions</a>.
+						</p>							
+					</div>
+					<div class="col-md-offset-1 col-md-3 text-center">
+						<img src="assets/nodejs.png" />
+					</div>
+				</div>
+			</div>
+		</section>
 
-<p>You can now connect to YouTransfer by browsing to http://[docker_host_ip]/<br>
-For more information on Docker deployment, please read the <a href="https://github.com/remie/YouTransfer/wiki/docker">Docker installation instructions</a>.</p>
+		<section class="takeaway social">
+			<h1>Check out the live demo</h1>
+			<a href="http://bit.ly/1Nhq0z0">http://demo.youtransfer.io</a>
 
-<h3>
-<a id="additional-documentation" class="anchor" href="#additional-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional documentation</h3>
+			<h1>Share with your friends</h1>
+			<a href="https://twitter.com/intent/tweet?text=Check%20out%20YouTransfer!&amp;url=http://youtransfer.io">
+				<span class="icon icon-twitter"></span>
+			</a>
+			<a href="https://www.facebook.com/sharer/sharer.php?u=http://youtransfer.io">
+				<span class="icon icon-facebook" /></span>
+			</a>
+			<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A//youtransfer.io&amp;title=Check%20out%20YouTransfer,%20the%20simple%20but%20elegant%20file%20sharing%20solution!">
+				<span class="icon icon-linkedin" /></span>
+			</a>
 
-<p>You can find additional documentation (incl. installation and usage instructions) on the <a href="https://github.com/remie/YouTransfer/wiki">GitHub Wiki</a></p>
+			<h1>Follow on GitHub</h1>
+			<a href="http://github.com/remie/youtransfer"><img src="assets/github-white.png" /></a>
 
-<h2>
-<a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributors</h2>
+		</section>
 
-<ul>
-<li><a href="https://github.com/remie">Remie Bolte</a></li>
-</ul>
+		<section id="blog" class="well">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Read the latest blog posts</h1>
+					</div>
+				</div>
 
-<p>You can contribute by forking the project and sending pull requests.<br>
-If you do, please don't forget to add your name to this list!</p>
+				<div class="row">
+					<div class="col-md-4">
+						<a href="http://bit.ly/1jk6tEq">
+							<span class="gallery" style="background-image: url(https://s3-eu-west-1.amazonaws.com/youtransfer/2015/Oct/article-1444394898696.jpg);"></span>
+						</a>
+						<p>
+							<em>Why Enterprise should choose Open Source file sharing solutions instead of Cloud providers</em> - <a href="http://bit.ly/1jk6tEq">http://bit.ly/1jk6tEq</a>
+						</p>
+					</div>
+					<div class="col-md-4">
+						<a href="http://bit.ly/1GbrcV7">
+							<span class="gallery" style="background-image: url(https://s3-eu-west-1.amazonaws.com/youtransfer/2015/Oct/DSC_0005-1444565691907.jpg);"></span>
+						</a>
+						<p>
+							<em>Software-defined storage will help manage data growth</em> - <a href="http://bit.ly/1GbrcV7">http://bit.ly/1GbrcV7</a>
+						</p>
+					</div>
+					<div class="col-md-4">
+						<a href="http://bit.ly/1jLBVe4">
+							<span class="gallery" style="background-image: url(https://s3-eu-west-1.amazonaws.com/youtransfer/2015/Oct/google_datacenter_tech_02-1444594962836.jpg);"></span>
+						</a>
+						<p>
+							<em>Comparing the costs of traditional SAN versus software-defined storage</em> - <a href="http://bit.ly/1jLBVe4">http://bit.ly/1jLBVe4</a>
+						</p>
+					</div>
+				</div>
 
-<h2>
-<a id="license--other-legal-stuff" class="anchor" href="#license--other-legal-stuff" aria-hidden="true"><span class="octicon octicon-link"></span></a>License &amp; other legal stuff</h2>
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Additional resources</h1>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<h3>Documentation</h3>
+						<p>
+							You can read more about how to install and use YouTransfer on the <a href="https://github.com/remie/YouTransfer/wiki">project's GitHub wiki pages</a>. This includes instructions on how to create your own NodeJS project using YouTransfer as a template, which is especially useful for companies that want to apply custom branding and add additional features.
+						</p>
 
-<p>Licensed under the Apache License, Version 2.0 (the "License");
-You may obtain a copy of the License at <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+						<h3>Contribute</h3>
+						<p>
+							YouTransfer is an <a href="https://en.wikipedia.org/wiki/Open-source_software">Open Source</a> project hosted on <a href="https://github.com/remie/youtransfer">GitHub</a>. If you wish to contribute (hurray!) to YouTransfer, make sure to:
+						</p>
+						<ol>
+							<li><a href="https://github.com/remie/YouTransfer/">Fork the project on GitHub</a> and clone it</li>
+							<li>
+								Get your local development environment up and running with <kbd>npm install</kbd>, <kbd>npm run dev</kbd> and <kbd>npm run app</kbd>
+							</li>
+							<li>
+								Work on one of the existing <a href="https://github.com/remie/YouTransfer/issues">issues</a>, or on your own feature.
+							</li>
+							<li>
+								Discuss your work on <a href="https://gitter.im/remie/YouTransfer">Gitter</a>
+							<li>
+								Test your work with <kbd>npm test</kbd>
+							</li>
+							<li>
+								Make sure to upmerge the latest version of master into your fork / branch.
+							</li>
+							<li>
+								Send a pull request when you're done! Make sure to update / include unit tests (we aim to have <a href="https://codeclimate.com/github/remie/YouTransfer/coverage">100% code coverage</a>) and check JSHint (we're very proud of our <a href="https://codeclimate.com/github/remie/YouTransfer">4.0 GPA at Code Climate</a>). Pull requests will be automatically build by <a href="https://travis-ci.org/remie/YouTransfer">Travis CI</a>.
+							</li>
+						</ol>
+						<p>
+							You're pull requests will be reviewed and if approved it will be merged. Make sure to be available to discuss your pull request and make changes if required.
+						</p>
+					</div>
+					<div class="col-md-offset-1 col-md-4">
+						<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/youtransfer" data-widget-id="655463679081717760">Tweets by @youtransfer</a> 
+						<script>
+							!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+						</script>
+					</div>
+					<div class="col-md-12">
+						<h3>Support</h3>
+						<p>
+							YouTransfer is an open source project and as such supported by the community. Any issues or feature requests can be submitted to the project's <a href="https://github.com/remie/youtransfer/issues">issue tracker</a>.
+							If you have specific questions for support or custom implementations of YouTransfer, please contact us. You can send an email (info at youtransfer.io) or a direct message on Twitter (<a href="http://twitter.com/youtransfer">@youtransfer</a>).
+						</p>
 
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
+						<h3>Legal stuff</h3>
+						<p>
+							YouTransfer is licensed under the Apache License, Version 2.0 (the "License"); You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-<h3>
-<a id="important-usage-notice" class="anchor" href="#important-usage-notice" aria-hidden="true"><span class="octicon octicon-link"></span></a>Important usage notice</h3>
+							Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.See the License for the specific language governing permissions and limitations under the License.
+						</p>
+						<p>
+							The YouTransfer project relies heavily on 3rd-party Open Source projects. These projects all have their own licenses. Although commercial use of the YouTransfer project is permitted under the Apache 2.0 license, this right is limited to the "original content" created as part of this project. Please make sure you check the licenses of all 3rd-party components. The YouTransfer project cannot be held responsible for non-compliance with 3rd-party licenses when using this application. The use of 3rd-party projects is listed in the dependency section of the <code>package.json</code> file or inline in the code (when applicable).
+						</p>
+						<p>
+							Copyright 2015 - YouTransfer.io
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<p>The YouTransfer project relies heavily on 3rd party Open Source projects. These projects all have their own licenses. Although commercial use of the YouTransfer project is permitted under the Apache 2.0 license, this right is limited to the "original content" created as part of this project. Please make sure you check the licenses of all 3rd party components. The YouTransfer project cannot be held responsible for non-compliance with 3rd party licenses when using this application. The use of 3rd party projects is listed in the dependency section of the <code>package.json</code> or inline in the code (when applicable).</p>
-      </section>
-      <footer>
-        <p>
-          This project is maintained by <a href="https://github.com/remie">remie</a><br />
-          Follow YouTransfer on <a href="https://twitter.com/youtransfer">Twitter</a>.
-        </p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-33301474-11");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
-  </body>
+		<footer>
+			<div class="text-center">
+				<a href="http://foundedinholland.com"><img src="assets/holland.png" width="150" /></a><br />
+				Made in Amsterdam, with &#9829;
+			</div>
+		</footer>
+	</body>
 </html>
