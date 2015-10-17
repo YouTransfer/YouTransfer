@@ -1,0 +1,20 @@
+{
+  "name": "site.youtransfer.io",
+  "version": "0.0.1",
+  "main": "app.js",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "dependencies": {
+    "node-static": "^0.7.7",
+    "restify": "^2.8.2"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "YouTransfer",
+  "repository": {
+    "type": "git",
+    "url": "github.com/remie/youtransfer.git"
+  }
+}
