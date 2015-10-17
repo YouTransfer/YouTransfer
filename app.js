@@ -16,6 +16,7 @@ nconf.set('basedir', __dirname);
 // Restify
 var restify = require('restify');
 restify.cookieParser = require('restify-cookies');
+restify.cookieSession = require('cookie-session');
 restify.compression = require('compression');
 
 // YouTransfer
@@ -32,10 +33,18 @@ app.use(restify.bodyParser({ multiples: true }));
 app.use(restify.queryParser());
 app.use(restify.cookieParser.parse);
 app.use(restify.compression());
+app.use(restify.cookieSession({
+	name: 'session',
+	secret: nconf.get('ENCRYPTIONKEY') || 'NotSoVerySecretCookieKey',
+	expires: new Date().add({ minutes: 20 }),
+	secure: (nconf.get('NODE_ENV') == "production"),
+	maxAge: 1200000
+}));
+
 app.use(errors);
 app.use(middleware);
 app.use(passport.initialize());
-app.use(passport.authenticate('remember-me'));
+app.use(passport.session());
 
 // ------------------------------------------------------------------------------------------ App Routing
 
@@ -53,7 +62,7 @@ app.get('/settings/:name/:template', router.settingsGetTemplateByName());
 app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());
 app.post('/unlock', router.settingsUnlock());
-app.post('/login', passport.authenticate('local'), router.login());
+app.post('/login', passport.authenticate('local', { successRedirect: '/' }));
 app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
 app.get(/^\/(.*)/, router.default());
 
