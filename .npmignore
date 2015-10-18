@@ -4,3 +4,5 @@ uploads/
 Dockerfile
 settings.json
 *.log
+*.sublime*
+test/unit-test-coverage/

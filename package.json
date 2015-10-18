@@ -1,7 +1,12 @@
 {
   "name": "youtransfer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "YouTransfer, the self-hosted file transfer solution",
+  "author": "YouTransfer <info@youtransfer.io>",
+  "contributors": [{
+    "name": "Remie Bolte",
+    "email": "info@youtransfer.io"
+  }],
   "main": "app.js",
   "engines": {
     "node": ">=0.12.x"

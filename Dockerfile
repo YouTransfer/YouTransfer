@@ -1,7 +1,7 @@
 FROM node:0.12
 
-MAINTAINER Remie Bolte (r.bolte@gmail.com)
-LABEL version="1.0.5"
+MAINTAINER YouTransfer.io (info@youtransfer.io)
+LABEL version="1.0.6"
 
 VOLUME /opt/youtransfer/config
 VOLUME /opt/youtransfer/uploads
