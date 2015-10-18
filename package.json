@@ -9,6 +9,8 @@
   "dependencies": {
     "archiver": "^0.15.1",
     "aws-sdk": "^2.1.45",
+    "bunyan": "^1.5.1",
+    "bunyan-format": "^0.2.1",
     "commander": "^2.8.1",
     "compression": "^1.5.2",
     "date-utils": "^1.2.17",
