@@ -1,10 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="hp jumbotron {{"col-md-6" if not general.enableDownload }}" id="hp">
+<div class="hp jumbotron" id="hp">
 	{% include "title.html" %}
 	
-
 	{% if security.accessRights == 'restricted' and not username %}
 
 		<div class="container">
@@ -40,7 +39,7 @@
 
 	{% else %}
 
-		<div class="{{ "col-md-6" if success and general.enableDownload else "col-md-12" }}">
+		<div class="{{ "col-md-6" if isPostback or general.enableDownload else "col-md-12" }} dz-upload-container">
 			{%if isPostback %}
 
 				{% if success %}
@@ -64,7 +63,7 @@
 		</div>
 
 		{% if success %}
-		<div class="{{"col-md-6" if general.enableDownload else "col-md-12" }} dz-completed-container">
+		<div class="col-md-6 dz-completed-container">
 
 			{%if isPostback %}
 

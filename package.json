@@ -1,7 +1,12 @@
 {
   "name": "youtransfer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "YouTransfer, the self-hosted file transfer solution",
+  "author": "YouTransfer <info@youtransfer.io>",
+  "contributors": [{
+    "name": "Remie Bolte",
+    "email": "info@youtransfer.io"
+  }],
   "main": "app.js",
   "engines": {
     "node": ">=0.12.x"
@@ -9,6 +14,8 @@
   "dependencies": {
     "archiver": "^0.15.1",
     "aws-sdk": "^2.1.45",
+    "bunyan": "^1.5.1",
+    "bunyan-format": "^0.2.1",
     "commander": "^2.8.1",
     "compression": "^1.5.2",
     "cookie-session": "^1.2.0",

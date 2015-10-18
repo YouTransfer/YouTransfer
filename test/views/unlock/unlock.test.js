@@ -87,10 +87,10 @@ describe('Unlock Settings View', function() {
 
 	it('should have a link to the home page', function *() {
 
-		var link = yield browser.isExisting('#unlock a[href="/"]');
+		var link = yield browser.isExisting('#unlock > div > a[href="/"]');
 		link.should.be.equal(true);
 
-		var linkText = yield browser.getText('#unlock a[href="/"]');
+		var linkText = yield browser.getText('#unlock > div > a[href="/"]');
 		linkText.should.be.equal('or return to homepage');
 
 	});

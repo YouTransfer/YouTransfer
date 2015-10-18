@@ -65,10 +65,10 @@ describe('Download View', function() {
 
 	it('should have a link to the home page', function *() {
 
-		var link = yield browser.isExisting('#dl a[href="/"]');
+		var link = yield browser.isExisting('#dl > div > a[href="/"]');
 		link.should.be.equal(true);
 
-		var linkText = yield browser.getText('#dl a[href="/"]');
+		var linkText = yield browser.getText('#dl > div > a[href="/"]');
 		linkText.should.be.equal('or return to homepage');
 
 	});

@@ -43,6 +43,10 @@ describe('YouTransfer module', function() {
 			on: function() {}
 		}
 
+		var logMock = sandbox.mock(youtransfer.log);
+		logMock.expects('info').once().withArgs('Scheduled cleanup of expired files');
+		logMock.expects('info').once().withArgs('(Re)scheduled cleanup of expired files');
+
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
 		});
@@ -61,33 +65,83 @@ describe('YouTransfer module', function() {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
+			logMock.verify();
 			done();
 		});
 
 		youtransfer.initialize();
 	});
 
-	it('should be possible to initialize module (incl. scheduling of background jobs) even when scheduler is disabled', function(done) {
+	it('should be possible to initialize module (incl. scheduling of background jobs) and reschedule jobs when updating settings', function(done) {
+
+		var settings = {
+			general: {
+				schedulerEnabled: true,
+				cleanupSchedule: 'cronschedule'
+			},
+			security: {
+				encryptionKey: 'MySecretKey'
+			},
+			on: function() {}
+		}
+
+		var logMock = sandbox.mock(youtransfer.log);
+		logMock.expects('info').once().withArgs('Scheduled cleanup of expired files');
+		logMock.expects('info').once().withArgs('Disabled cleanup schedule');
+
+		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		sandbox.stub(youtransfer.settings, "on", function(event, callback) {
+			callback(null, {
+				general: {
+					schedulerEnabled: false
+				}
+			});
+		});
+
+		sandbox.stub(scheduler, "add", function(name, schedule, job) {
+			name.should.equals('cleanup');
+			schedule.should.equals(settings.general.cleanupSchedule);
+			should.exist(job);
+		});
+
+		sandbox.stub(scheduler, "remove", function(name) {
+			name.should.equals('cleanup');
+			logMock.verify();
+			done();
+		});
+
+		youtransfer.initialize();
+	});
+
+	it('should be possible to initialize module (incl. scheduling of background jobs) even when scheduler is disabled', function() {
 
 		var settings = {
 			general: {
 				schedulerEnabled: false,
 			},
-			security: {}
+			security: {
+				encryptionKey: 'MySecretKey'
+			}
 		}
 
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.settings, "push", function (settings, callback) {
-			settings.security.encryptionKeyMethod.should.equals('auto');
-			done();
+		youtransfer.initialize();
+	});
+
+	it('should continue if an error occurs while initializing module', function() {
+		sandbox.stub(youtransfer.settings, "get", function (callback) {
+			callback(new Error('error'), null);
 		});
 
 		youtransfer.initialize();
 	});
-
+	
 	it('should be possible to initialize module (incl. scheduling of background jobs) without pre-set encryption key', function(done) {
 
 		var settings = {
@@ -100,6 +154,9 @@ describe('YouTransfer module', function() {
 		}
 
 		var completed = _.after(2, done);
+
+		// Prevent log messages during test
+		sandbox.stub(youtransfer.log, 'info');
 
 		sandbox.stub(youtransfer.settings, "get", function (callback) {
 			callback(null, settings);
@@ -141,6 +198,9 @@ describe('YouTransfer module', function() {
 			security: {},
 			on: function() {}
 		}
+
+		// Prevent log messages during test
+		sandbox.stub(youtransfer.log, 'info');
 
 		sandbox.stub(youtransfer.settings, "get", function (callback) {
 			callback(null, settings);
@@ -184,6 +244,7 @@ describe('YouTransfer module', function() {
 		youtransfer.initialize();
 	});
 
+
 	// -------------------------------------------------------------------------------------- Testing storageFactory
 
 	it('should be possible to retrieve the default storage provider from the storage factory', function(done) {
@@ -219,8 +280,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.storage.location);
-			factory.options.storage.location.should.equals(settings.storage.location);
+			should.exist(factory.options.location);
+			factory.options.location.should.equals(settings.storage.location);
 			done();
 		});
 
@@ -240,8 +301,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.storage.location);
-			factory.options.storage.location.should.equals(settings.storage.location);
+			should.exist(factory.options.location);
+			factory.options.location.should.equals(settings.storage.location);
 			done();
 		});
 
@@ -653,18 +714,44 @@ describe('YouTransfer module', function() {
 				purge: function() {}
 			};
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, 'get', function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "purge", function(callback) {
-			callback(null, [ 'file' ]);
-		});
 
-		youtransfer.cleanup(function(err, files) {
-			should.exist(files);
-			files[0].should.equals('file');
+		sandbox.stub(youtransfer.log, 'info', function(msg) {
+			should.exist(msg);
+			msg.should.equals('The scheduled cleanup job has removed 0 files.');
 			done();
 		});
+
+		sandbox.stub(factory, 'purge', function(callback) {
+			callback(null, new Array());
+		});
+
+		youtransfer.cleanup();
+	});
+
+	it('should log an error when such occurs after triggering a purge', function(done) {
+
+		var factory = {
+				purge: function() {}
+			};
+
+		sandbox.stub(youtransfer.storageFactory, 'get', function(callback) {
+			callback(null, factory);
+		});
+
+		sandbox.stub(youtransfer.log, 'error', function(msg) {
+			should.exist(msg);
+			msg.should.equals('An error occurred while removing expired files: error');
+			done();
+		});
+
+		sandbox.stub(factory, 'purge', function(callback) {
+			callback(new Error('error'), new Array());
+		});
+
+		youtransfer.cleanup();
 	});
 
 	// -------------------------------------------------------------------------------------- Testing send

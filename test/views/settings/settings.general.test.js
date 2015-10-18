@@ -70,6 +70,17 @@ describe('General Settings View', function() {
 
 	});
 
+	it('should have a "Enable scheduled cleanup of files" field with the current value based on user settings', function *() {
+
+		var value = yield browser.getAttribute('input#schedulerEnabled', 'checked')
+		if(sandbox.general.schedulerEnabled) {
+			should.exist(value);
+		} else {
+			should.not.exist(value);
+		}
+
+	});
+
 	it('should have a "Enable file download feature" field with the current value based on user settings', function *() {
 
 		var value = yield browser.waitForExist('input#enableDownload')

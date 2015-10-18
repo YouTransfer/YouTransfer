@@ -53,6 +53,17 @@
 		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-9">
 				<div class="checkbox">
+					<label for="schedulerEnabled">
+						<input type="checkbox" name="settings[general][schedulerEnabled]" id="schedulerEnabled" {{ "checked" if general.schedulerEnabled }} value="true">
+						Enable scheduled cleanup of files
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<div class="checkbox">
 					<label for="enableDownload">
 						<input type="checkbox" name="settings[general][enableDownload]" id="enableDownload" {{ "checked" if general.enableDownload }} value="true">
 						Enable file download feature

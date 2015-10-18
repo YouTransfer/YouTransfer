@@ -57,6 +57,9 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set title', function(done) {
 
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
+
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
 		});
@@ -83,6 +86,9 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should still be possible to set title if settings file does not exist', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
@@ -131,6 +137,9 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should throw an error if it is not possible to write settings file', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
@@ -324,6 +333,9 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set boolean value to true explicitely', function(done) {
 
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
+
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
 		});
@@ -354,6 +366,9 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should be possible to set boolean value to false explicitely', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
@@ -386,6 +401,9 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set boolean value to false by omission', function(done) {
 
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
+
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
 		});
@@ -414,6 +432,9 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should not be possible to set boolean value to false by omission if section does not exist', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
@@ -444,6 +465,9 @@ describe('YouTransfer Settings module', function() {
 
 
 	it('should be possible to set encrypted password', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
@@ -476,6 +500,9 @@ describe('YouTransfer Settings module', function() {
 	});
 
 	it('should be possible to set encrypted password without salt', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);

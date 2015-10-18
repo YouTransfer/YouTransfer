@@ -50,6 +50,16 @@ describe('Index View', function() {
 
 	});
 
+	it('should have a link to the home page', function *() {
+
+		var link = yield browser.isExisting('#hp header a[href="/"]');
+		link.should.be.equal(true);
+
+		var linkText = yield browser.getText('#hp header a[href="/"]');
+		linkText.should.be.equal(sandbox.general.title);
+
+	});
+
 	it('should have a link to the settings page', function *() {
 
 		var link = yield browser.isExisting('ul.nav > li > a');

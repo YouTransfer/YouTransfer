@@ -1,5 +1,4 @@
 # YouTransfer
-[Made in Amsterdam](http://www.iamsterdam.com/en/business/startupamsterdam), with ♥
 
 [![GitHub version](https://badge.fury.io/gh/remie%2Fyoutransfer.svg)](http://badge.fury.io/gh/remie%2Fyoutransfer) [![npm version](https://badge.fury.io/js/youtransfer.svg)](http://badge.fury.io/js/youtransfer) [![Build Status](https://travis-ci.org/remie/YouTransfer.svg?branch=master)](https://travis-ci.org/remie/YouTransfer) [![Code Climate](https://codeclimate.com/github/remie/YouTransfer/badges/gpa.svg)](https://codeclimate.com/github/remie/YouTransfer) [![Test Coverage](https://codeclimate.com/github/remie/YouTransfer/badges/coverage.svg)](https://codeclimate.com/github/remie/YouTransfer/coverage) [![Dependency Status](https://david-dm.org/remie/youtransfer.svg)](https://david-dm.org/remie/youtransfer) [![devDependency Status](https://david-dm.org/remie/youtransfer/dev-status.svg)](https://david-dm.org/remie/youtransfer#info=devDependencies) [![License](https://img.shields.io/github/license/remie/youtransfer.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/remie/YouTransfer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -59,4 +58,7 @@ limitations under the License.
 
 ### Important usage notice
 
-The YouTransfer project relies heavily on 3rd party Open Source projects. These projects all have their own licenses. Although commercial use of the YouTransfer project is permitted under the Apache 2.0 license, this right is limited to the "original content" created as part of this project. Please make sure you check the licenses of all 3rd party components. The YouTransfer project cannot be held responsible for non-compliance with 3rd party licenses when using this application. The use of 3rd party projects is listed in the dependency section of the `package.json` or inline in the code (when applicable).
+The YouTransfer project relies heavily on 3rd party Open Source projects. These projects all have their own licenses. Although commercial use of the YouTransfer project is permitted under the Apache 2.0 license, this right is limited to the "original content" created as part of this project. Please make sure you check the licenses of all 3rd party components. The YouTransfer project cannot be held responsible for non-compliance with 3rd party licenses when using this application. The use of 3rd party projects is listed in the dependency section of the `package.json` or inline in the code (when applicable).  
+
+<img src="http://youtransfer.io/assets/holland.png" alt="Founded in Holland" width="150">  
+[Made in Amsterdam](http://www.iamsterdam.com/en/business/startupamsterdam), with ♥
