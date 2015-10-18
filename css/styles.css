@@ -66,6 +66,12 @@ footer {
 	font-size: 120%;
 }
 
+#about img {
+	width: 100%;
+	max-width:470px;
+	max-height:150px;
+}
+
 .takeaway { 
 	min-height: 150px; 
 	padding-top: 17px; 
