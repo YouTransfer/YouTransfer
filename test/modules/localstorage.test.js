@@ -118,40 +118,48 @@ describe('YouTransfer Local Storage module', function() {
 
 	it('should implement the "upload" method and enable local storage of a file', function(done) {
 		var uploadedFile = {
-			path: path.join(__dirname, 'file.tmp'),
-			data: 'my awesome content',
-			context: {
-				path: path.join(__dirname, 'file.binary'),
-				jsonPath: path.join(__dirname, 'file.json')
+				path: path.join(__dirname, 'file.tmp'),
+				data: 'my awesome content',
+				context: {
+					path: path.join(__dirname, 'file.binary'),
+					jsonPath: path.join(__dirname, 'file.json')
+				}
+			},
+			stream = {
+				on: function() {},
+				pipe: function() {}
 			}
-		}
 
 		sandbox.stub(fs, 'mkdir', function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'createReadStream', function (file) {
 			file.should.equals(uploadedFile.path);
-			callback(null, uploadedFile.data);
+			return stream;
+		});
+
+		sandbox.stub(fs, 'createWriteStream', function (file) {
+			file.should.equals(uploadedFile.context.path);
+			return stream;
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			if(typeof encoding == "string") {
-				file.should.equals(uploadedFile.context.jsonPath);
-				data.should.equals(JSON.stringify(uploadedFile.context));
-				callback(null);				
-			} else {
-				callback = encoding;
-				file.should.equals(uploadedFile.context.path);
-				data.should.equals(uploadedFile.data);
-				callback(null);
-			}
+			file.should.equals(uploadedFile.context.jsonPath);
+			data.should.equals(JSON.stringify(uploadedFile.context));
+			callback(null);
 		});
+
+		var streamMock = sandbox.mock(stream);
+		streamMock.expects('pipe').once().returns(stream);
+		streamMock.expects('on').withArgs('error').twice();
+		streamMock.expects('on').withArgs('finish').once().callsArgAsync(1);
 
 		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
 			should.not.exist(err);
 			context.should.equals(uploadedFile.context);
+			streamMock.verify();
 			done();
 		});
 	});
@@ -164,112 +172,151 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 		var uploadedFile = {
-			path: path.join(__dirname, 'file.tmp'),
-			data: 'my awesome content',
-			context: {
-				path: path.join(__dirname, 'file.binary'),
-				jsonPath: path.join(__dirname, 'file.json')
+				path: path.join(__dirname, 'file.tmp'),
+				data: 'my awesome content',
+				context: {
+					path: path.join(__dirname, 'file.binary'),
+					jsonPath: path.join(__dirname, 'file.json')
+				}
+			},
+			stream = {
+				on: function() {},
+				pipe: function() {}
 			}
-		}
 
 		sandbox.stub(fs, 'mkdir', function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'createReadStream', function (file) {
 			file.should.equals(uploadedFile.path);
-			callback(null, uploadedFile.data);
+			return stream;
+		});
+
+		sandbox.stub(fs, 'createWriteStream', function (file) {
+			file.should.equals(uploadedFile.context.path);
+			return stream;
 		});
 
 		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			if(typeof encoding == "string") {
-				file.should.equals(uploadedFile.context.jsonPath);
-				data.should.equals(JSON.stringify(uploadedFile.context));
-				callback(null);				
-			} else {
-				callback = encoding;
-				file.should.equals(uploadedFile.context.path);
-
-				var decipher = crypto.createDecipher('aes-256-ctr', 'MySecretEncryptionKey');
-				var buffer = Buffer.concat([decipher.update(data) , decipher.final()]);
-				data = buffer.toString();
-
-				data.should.equals(uploadedFile.data);
-				callback(null);
-			}
+			file.should.equals(uploadedFile.context.jsonPath);
+			data.should.equals(JSON.stringify(uploadedFile.context));
+			callback(null);
 		});
+
+		var cryptoMock = sandbox.mock(crypto);
+		cryptoMock.expects('createCipher').once().returns(stream);
+
+		var streamMock = sandbox.mock(stream);
+		streamMock.expects('pipe').twice().returns(stream);
+		streamMock.expects('on').withArgs('error').twice();
+		streamMock.expects('on').withArgs('finish').once().callsArgAsync(1);
 
 		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
 			should.not.exist(err);
 			context.should.equals(uploadedFile.context);
+			cryptoMock.verify();
+			streamMock.verify();
 			done();
 		});
 	});
 
 	it('should continue with erronous callback if uploaded file cannot be read', function(done) {
 		var uploadedFile = {
-			path: path.join(__dirname, 'file.tmp'),
-			data: 'my awesome content',
-			context: {
-				path: path.join(__dirname, 'file.binary'),
-				jsonPath: path.join(__dirname, 'file.json')
+				path: path.join(__dirname, 'file.tmp'),
+				data: 'my awesome content',
+				context: {
+					path: path.join(__dirname, 'file.binary'),
+					jsonPath: path.join(__dirname, 'file.json')
+				}
+			},
+			readStream = {
+				on: function() {},
+				pipe: function() {}
+			},
+			writeStream = {
+				on: function() {},
+				pipe: function() {}
 			}
-		}
 
 		sandbox.stub(fs, 'mkdir', function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'createReadStream', function (file) {
 			file.should.equals(uploadedFile.path);
-			callback('error', null);
+			return readStream;
 		});
+
+		sandbox.stub(fs, 'createWriteStream', function (file) {
+			file.should.equals(uploadedFile.context.path);
+			return writeStream;
+		});
+
+		var streamMock = sandbox.mock(readStream);
+		streamMock.expects('pipe').once().returns(readStream);
+		streamMock.expects('on').withArgs('error').once().callsArgWithAsync(1, new Error('error'));
+
+		var writeStreamMock = sandbox.mock(writeStream);
+		writeStreamMock.expects('on').withArgs('finish').once();
+		writeStreamMock.expects('on').withArgs('error').once();
 
 		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
 			should.exist(err);
-			err.should.equals('error');
+			err.message.should.equals('error');
+			streamMock.verify();
+			writeStreamMock.verify();
 			done();
 		});
 	});
 
 	it('should continue with erronous callback if uploaded file cannot be written', function(done) {
 		var uploadedFile = {
-			path: path.join(__dirname, 'file.tmp'),
-			data: 'my awesome content',
-			context: {
-				path: path.join(__dirname, 'file.binary'),
-				jsonPath: path.join(__dirname, 'file.json')
+				path: path.join(__dirname, 'file.tmp'),
+				data: 'my awesome content',
+				context: {
+					path: path.join(__dirname, 'file.binary'),
+					jsonPath: path.join(__dirname, 'file.json')
+				}
+			},
+			readStream = {
+				on: function() {},
+				pipe: function() {}
+			},
+			writeStream = {
+				on: function() {}
 			}
-		}
 
 		sandbox.stub(fs, 'mkdir', function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'createReadStream', function (file) {
 			file.should.equals(uploadedFile.path);
-			callback(null, uploadedFile.data);
+			return readStream;
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			if(typeof encoding == "string") {
-				file.should.equals(uploadedFile.context.jsonPath);
-				data.should.equals(JSON.stringify(uploadedFile.context));
-				callback('error');
-			} else {
-				callback = encoding;
-				file.should.equals(uploadedFile.context.path);
-				data.should.equals(uploadedFile.data);
-				callback('error');
-			}
+		sandbox.stub(fs, 'createWriteStream', function (file) {
+			file.should.equals(uploadedFile.context.path);
+			return writeStream;
 		});
+
+		var streamMock = sandbox.mock(readStream);
+		streamMock.expects('pipe').once().returns(readStream);
+		streamMock.expects('on').withArgs('error').once();
+
+		var writeStreamMock = sandbox.mock(writeStream);
+		writeStreamMock.expects('on').withArgs('finish').once();
+		writeStreamMock.expects('on').withArgs('error').once().callsArgWithAsync(1, new Error('error'));
 
 		provider.upload(uploadedFile, uploadedFile.context, function(err, context) {
 			should.exist(err);
-			err.should.equals('error');
+			err.message.should.equals('error');
+			streamMock.verify();
+			writeStreamMock.verify();
 			done();
 		});
 	});

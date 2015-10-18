@@ -246,7 +246,9 @@ describe('YouTransfer Settings module', function() {
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				title: title,
-				localstoragepath: path.join(__dirname, '/uploads/')
+				storage: {
+					localstoragepath: path.join(__dirname, '/uploads/')
+				}
 			}));
 		});
 
@@ -276,7 +278,7 @@ describe('YouTransfer Settings module', function() {
 			callback('error', null);
 		});
 
-		sandbox.stub(nconf, 'get').returns({ title: 'title' });
+		sandbox.stub(nconf, 'get').returns({ title: 'title', storage: {} });
 
 		settings.get(function(err, output) {
 			should.not.exist(err);
@@ -291,11 +293,16 @@ describe('YouTransfer Settings module', function() {
 			callback('error', null);
 		});
 
-		sandbox.stub(nconf, 'get').returns({ title: 'title', localstoragepath: './somepath' });
+		sandbox.stub(nconf, 'get').returns({ 
+			title: 'title', 
+			storage: {
+				localstoragepath: './somepath' 
+			}
+		});
 
 		settings.get(function(err, output) {
 			should.not.exist(err);
-			output.localstoragepath.should.equals(path.join(__dirname, '../../somepath'));
+			output.storage.localstoragepath.should.equals(path.join(__dirname, '../../somepath'));
 			done();
 		});
 	});
@@ -307,7 +314,9 @@ describe('YouTransfer Settings module', function() {
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				basedir: __dirname,
-				localstoragepath: './uploads'
+				storage: {
+					localstoragepath: './uploads'
+				}
 			}));
 		});
 
@@ -322,7 +331,9 @@ describe('YouTransfer Settings module', function() {
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				basedir: __dirname,
-				localstoragepath: 100
+				storage: {
+					localstoragepath: 100
+				}
 			}));
 		});
 

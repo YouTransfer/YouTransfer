@@ -61,13 +61,29 @@ describe('YouTransfer module', function() {
 		youtransfer.initialize();
 	});
 
-	it('should continue if an error occurs while initializing module', function() {
+	it('should be possible to initialize module (incl. scheduling of background jobs) even when scheduler is disabled', function() {
+
+		var settings = {
+			general: {
+				schedulerEnabled: false,
+			}
+		}
+
 		sandbox.stub(youtransfer.settings, "get", function(callback) {
+			callback(null, settings);
+		});
+
+		youtransfer.initialize();
+	});
+
+	it('should continue if an error occurs while initializing module', function() {
+		sandbox.stub(youtransfer.settings, "get", function (callback) {
 			callback(new Error('error'), null);
 		});
 
 		youtransfer.initialize();
 	});
+
 
 
 
@@ -106,8 +122,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.storage.location);
-			factory.options.storage.location.should.equals(settings.storage.location);
+			should.exist(factory.options.location);
+			factory.options.location.should.equals(settings.storage.location);
 			done();
 		});
 
@@ -127,8 +143,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.storage.location);
-			factory.options.storage.location.should.equals(settings.storage.location);
+			should.exist(factory.options.location);
+			factory.options.location.should.equals(settings.storage.location);
 			done();
 		});
 
