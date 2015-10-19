@@ -280,8 +280,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.location);
-			factory.options.location.should.equals(settings.storage.location);
+			should.exist(factory.options.storage.location);
+			factory.options.storage.location.should.equals(settings.storage.location);
 			done();
 		});
 
@@ -301,8 +301,8 @@ describe('YouTransfer module', function() {
 
 		youtransfer.storageFactory.get(function(err, factory) {
 			should.not.exist(err);
-			should.exist(factory.options.location);
-			factory.options.location.should.equals(settings.storage.location);
+			should.exist(factory.options.storage.location);
+			factory.options.storage.location.should.equals(settings.storage.location);
 			done();
 		});
 
