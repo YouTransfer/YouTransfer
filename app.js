@@ -63,6 +63,7 @@ app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());
 app.post('/unlock', router.settingsUnlock());
 app.post('/login', passport.authenticate('local', { successRedirect: '/' }));
+app.get('/signout', router.signout());
 app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
 app.get(/^\/(.*)/, router.default());
 

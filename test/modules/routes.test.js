@@ -1325,7 +1325,30 @@ describe('YouTransfer Router module', function() {
 		serverMock.verify();
 	});
 
-	// -------------------------------------------------------------------------------------- Testing defalt routes
+	// -------------------------------------------------------------------------------------- Testing signout
+
+	it('should be possible to sign out', function() {
+
+		var req = {
+				logout: function() {}
+			},
+			res = {
+				redirect: function() {}
+			}
+
+		var reqMock = sandbox.mock(req);
+		reqMock.expects('logout').once();
+
+		var resMock = sandbox.mock(res);
+		resMock.expects('redirect').once();
+
+		router.signout()(req, res);
+		reqMock.verify();
+		resMock.verify();
+		
+	});
+
+	// -------------------------------------------------------------------------------------- Testing default routes
 
 	it('should be possible to retrieve a page', function(done) {
 
