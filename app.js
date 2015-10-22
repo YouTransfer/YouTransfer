@@ -20,6 +20,7 @@ restify.cookieSession = require('cookie-session');
 restify.compression = require('compression');
 
 // YouTransfer
+var youtransfer = require('./lib/youtransfer');
 var passport = require('./lib/passport');
 var routes = require('./lib/routes');
 var middleware = require('./lib/middleware');
@@ -73,6 +74,7 @@ app.get(/^\/(.*)/, router.default());
 var port = Number(nconf.get('PORT'));
 app.listen(port, function() {
 	console.log('%s listening at %s', app.name, app.url);
+	youtransfer.initialize();
 });
 
 // ------------------------------------------------------------------------------------------ Module Exposure

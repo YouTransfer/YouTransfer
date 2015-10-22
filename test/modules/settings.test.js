@@ -53,9 +53,78 @@ describe('YouTransfer Settings module', function() {
 		}
 	});
 
+	// -------------------------------------------------------------------------------------- Testing defaults
+
+	it('should be possible to get defaults from cache', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null, {
+				key: 'value'
+			});
+		});
+
+		settings.defaults(function(err, output) {
+			should.not.exist(err);
+			output.key.should.equal('value');
+			done();
+		});
+	});
+
+	it('should be possible to get defaults from file system', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				key: 'value'
+			}));
+		});
+
+		settings.defaults(function(err, output) {
+			should.not.exist(err);
+			output.key.should.equal('value');
+			done();
+		});
+	});
+
+	it('should not be possible to get defaults if invalid JSON is returned', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, 'this is not JSON');
+		});
+
+		settings.defaults(function(err, output) {
+			should.exist(err);
+			err.message.should.equals('Unexpected token h');
+			done();
+		});
+	});	
+
+	it('should still be possible to get title if settings file does not exist', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
+		});
+
+		settings.defaults(function(err, output) {
+			should.not.exist(err);
+			done();
+		});
+	});
+
 	// -------------------------------------------------------------------------------------- Testing get
 
-	it('should be possible to get title fom cache', function(done) {
+	it('should be possible to get title from cache', function(done) {
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null, {
@@ -75,10 +144,14 @@ describe('YouTransfer Settings module', function() {
 		});
 	});
 
-	it('should be possible to get title fom file system', function(done) {
+	it('should be possible to get title from file system', function(done) {
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
+		});
+
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, {});
 		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
@@ -105,6 +178,10 @@ describe('YouTransfer Settings module', function() {
 			callback(null);
 		});
 
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, {});
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, 'this is not JSON');
 		});
@@ -122,17 +199,19 @@ describe('YouTransfer Settings module', function() {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback('error', null);
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, {
+				general: {
+					title: 'title' 
+				},
+				storage: {
+					localstoragepath: path.join(__dirname, '/uploads/')
+				}
+			});
 		});
 
-		sandbox.stub(nconf, 'get').returns({
-			general: {
-				title: 'title' 
-			},
-			storage: {
-				localstoragepath: path.join(__dirname, '/uploads/')
-			}
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
 		});
 
 		settings.get(function(err, output) {
@@ -148,17 +227,19 @@ describe('YouTransfer Settings module', function() {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback('error', null);
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, { 
+				general: {
+					title: 'title'
+				},
+				storage: {
+					localstoragepath: './somepath' 
+				}
+			});
 		});
 
-		sandbox.stub(nconf, 'get').returns({ 
-			general: {
-				title: 'title'
-			},
-			storage: {
-				localstoragepath: './somepath' 
-			}
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
 		});
 
 		settings.get(function(err, output) {
@@ -172,6 +253,10 @@ describe('YouTransfer Settings module', function() {
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
 			callback(null);
+		});
+
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, {});
 		});
 
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
@@ -197,6 +282,10 @@ describe('YouTransfer Settings module', function() {
 			callback(null);
 		});
 
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, {});
+		});
+
 		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
@@ -214,6 +303,43 @@ describe('YouTransfer Settings module', function() {
 		});
 	});
 
+	it('should still be possible to use encryptionKey from environment variables', function(done) {
+
+		sandbox.stub(nconf, 'get', function (name) {
+			if(name === 'ENCRYPTIONKEY') {
+				return 'MySecretKey';
+			} else {
+				return null;
+			}
+		});
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(settings, 'defaults', function (callback) {
+			callback(null, {
+				general: {
+					title: 'title' 
+				},
+				storage: {
+					localstoragepath: path.join(__dirname, '/uploads/')
+				}
+			});
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
+		});
+
+		settings.get(function(err, output) {
+			should.not.exist(err);
+			output.general.title.should.equals('title');
+			output.security.encryptionKey.should.equals('MySecretKey');
+			output.security.encryptionKeyMethod.should.equals('env');
+			done();
+		});
+	});
 	// -------------------------------------------------------------------------------------- Testing push
 
 	it('should be possible to set title', function(done) {
