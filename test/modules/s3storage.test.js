@@ -1,3 +1,4 @@
+'use strict';
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
@@ -26,12 +27,14 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 
 	beforeEach(function() {
 		sandbox = sinon.sandbox.create();
-		provider = s3storage({ 
-			S3AccessKeyId: 'AccessKeyId',
-			S3SecretAccessKey: 'SecretAccessKey',
-			S3Region: 'Region',
-			S3SSLEnabled: true,
-			S3Bucket: 'MyBucket'
+		provider = s3storage({
+			storage: {
+				S3AccessKeyId: 'AccessKeyId',
+				S3SecretAccessKey: 'SecretAccessKey',
+				S3Region: 'Region',
+				S3SSLEnabled: true,
+				S3Bucket: 'MyBucket'
+			}
 		});
 	});
 
@@ -44,11 +47,13 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 
 	it('should accept options by Object', function() {
 		var instance = s3storage({ 
-			S3AccessKeyId: 'AccessKeyId',
-			S3SecretAccessKey: 'SecretAccessKey',
-			S3Region: 'Region',
-			S3SSLEnabled: true,
-			S3Bucket: 'MyBucket'
+			storage: {
+				S3AccessKeyId: 'AccessKeyId',
+				S3SecretAccessKey: 'SecretAccessKey',
+				S3Region: 'Region',
+				S3SSLEnabled: true,
+				S3Bucket: 'MyBucket'
+			}
 		});
 		should.exist(instance.s3obj);
 		instance.s3obj.config.credentials.accessKeyId.should.equals('AccessKeyId');
@@ -664,7 +669,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -700,7 +705,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -737,7 +742,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -774,7 +779,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},
@@ -811,7 +816,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 						name: 'file'
 					})
 				}
-			}
+			},
 			s3obj = {
 				listObjects: function() {},
 				headObject: function() {},

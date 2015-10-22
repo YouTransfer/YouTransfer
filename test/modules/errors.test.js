@@ -1,9 +1,11 @@
+'use strict';
+
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
 var _ = require('lodash');
 var sinon = require('sinon');
 var should = require('chai').should();
-var filesize = require("filesize");
+var filesize = require('filesize');
 var path = require('path');
 var errors = require('../../lib/errors');
 
@@ -295,9 +297,8 @@ describe('Errors module', function() {
 		var result = req.errors.get();
 		result.length.should.equals(1);
 		result[0].should.equals(error);
-
 	});
-
+	
 	it('should return the default error message if there was no matching error registered', function() {
 
 		var req = {};
@@ -403,6 +404,25 @@ describe('Errors module', function() {
 		req.errors.reset();
 		var result = req.errors.get();
 		result.length.should.equals(0);
+
+	});
+
+	// -------------------------------------------------------------------------------------- Testing custom errors
+
+	it('should be possible to create a custom error', function(done) {
+
+		var req = {};
+
+		errors(req, null, function() {
+
+			should.exist(req.errors);
+			var error = req.errors.custom('code', 'message');
+			should.exist(error);
+			error.code.should.equals('code');
+			error.message.should.equals('message');
+			done();
+
+		});
 
 	});
 

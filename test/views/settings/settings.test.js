@@ -42,13 +42,13 @@ describe('Settings View', function() {
 
 	});
 
-	it('should have a tabbed menu with 5 tabs', function *() {
+	it('should have a tabbed menu with 6 tabs', function *() {
 
 		var menu = yield browser.isExisting('.settings ul[role="tablist"]')
 		menu.should.be.equal(true);
 
 		var items = yield browser.elements('.settings ul[role="tablist"] li a');
-		items.value.length.should.be.equal(5);
+		items.value.length.should.be.equal(6);
 
 	});
 
@@ -61,6 +61,18 @@ describe('Settings View', function() {
 								  .waitForExist('.tab-pane.active h1')
 								  .getText('.tab-pane.active h1');
 		header.should.be.equal('General');
+
+	});
+
+	it('should have a "Security" tab', function *() {
+
+		var item = yield browser.isExisting('.settings ul[role="tablist"] li a[href="/settings/security"]');
+		item.should.be.equal(true);
+
+		var header = yield browser.click('.settings ul[role="tablist"] li a[href="/settings/security"]')
+								  .waitForExist('.tab-pane.active h1')
+								  .getText('.tab-pane.active h1');
+		header.should.be.equal('Security');
 
 	});
 

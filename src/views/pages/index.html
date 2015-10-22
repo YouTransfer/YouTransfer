@@ -4,47 +4,55 @@
 <div class="hp jumbotron" id="hp">
 	{% include "title.html" %}
 	
-	<div class="{{ "col-md-6" if isPostback or general.enableDownload else "col-md-12" }} dz-upload-container">
-		{%if isPostback %}
+	{% if security.accessRights == 'restricted' and not user %}
 
-			{% if success %}
+		{% include "login.html" %}
 
-				{% import "dropzone.html" as dropzone %}
-				{{ dropzone.preview(bundle, isPostback)}}
+	{% else %}
+
+		<div class="{{ "col-md-6" if isPostback or general.enableDownload else "col-md-12" }} dz-upload-container">
+			{%if isPostback %}
+
+				{% if success %}
+
+					{% import "dropzone.html" as dropzone %}
+					{{ dropzone.preview(bundle, isPostback)}}
+
+				{% else %}
+
+					{% import "errors.html" as err %}
+					{{ err.show(errors) }}
+					<a href="/" data-async data-target="hp">Return to homepage</a>
+
+				{% endif %}
 
 			{% else %}
 
-				{% import "errors.html" as err %}
-				{{ err.show(errors) }}
-				<a href="/" data-async data-target="hp">Return to homepage</a>
+			{% include "fileupload.html" %}
 
 			{% endif %}
-
-		{% else %}
-
-		{% include "fileupload.html" %}
-
-		{% endif %}
-	</div>
-
-	{% if success %}
-	<div class="col-md-6 dz-completed-container">
-
-		{%if isPostback %}
-
-			{% include "sendmail.html" %}
-
-		{% elif general.enableDownload %}
-
-		<div class="separator text-center">
-			<h6 class="separator-text"><em>or</em></h6>
-			<hr class="separator-ruler visible-xs-block visible-sm-block" />
 		</div>
 
-		{% include "gettoken.html" %}
+		{% if success %}
+		<div class="col-md-6 dz-completed-container">
 
+			{%if isPostback %}
+
+				{% include "sendmail.html" %}
+
+			{% elif general.enableDownload %}
+
+			<div class="separator text-center">
+				<h6 class="separator-text"><em>or</em></h6>
+				<hr class="separator-ruler visible-xs-block visible-sm-block" />
+			</div>
+
+			{% include "gettoken.html" %}
+
+			{% endif %}
+		</div>
 		{% endif %}
-	</div>
+
 	{% endif %}
 </div>
 {% endblock %}

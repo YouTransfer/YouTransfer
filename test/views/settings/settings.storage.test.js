@@ -92,6 +92,7 @@ describe('Storage Settings View', function() {
 		}
 	});
 
+	/*
 	it('should have a "encryptionEnabled" field with the current value based on user settings', function *() {
 
 		var encryptionEnabled = yield browser.isExisting('input#encryptionEnabled:checked');
@@ -109,7 +110,8 @@ describe('Storage Settings View', function() {
 		encryptionKey.should.be.equal(sandbox.storage.encryptionKey);
 
 	});
-
+	*/
+	
 	it('should be able to save the settings', function *() {
 
 		var alert = yield browser.isExisting('.tab-pane.active > .alert strong');

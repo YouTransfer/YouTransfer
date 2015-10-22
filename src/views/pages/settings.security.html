@@ -1,0 +1,167 @@
+{% extends "settings.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="general">
+	<h1>Security</h1>
+
+	{%if isPostback %}
+		{%if success %}
+		<div class="alert alert-success alert-dismissible fade in" role="alert">
+			<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<strong>Success!</strong> Your changes have been saved.
+		</div>
+		{% else %}
+		<div class="alert alert-danger alert-dismissible fade in" role="alert">
+			<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<strong>Error!</strong> Your changes could not be saved.
+		</div>
+		{% endif %}
+	{% endif %}
+
+	<form class="form-horizontal" method="post" data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true">
+
+		<div id="access" data-select-content>
+			<h3>Access Control</h3>
+
+			<div class="form-group">
+				<label for="" class="col-sm-3 control-label">Type</label>
+				<div class="col-sm-6">
+					<select class="form-control" name="settings[security][accessRights]" id="accessRights" data-select>
+						<option value="anon" {{ "selected" if security.accessRights == 'anon' }}>Anonymous access</option>
+						<option value="restricted" {{ "selected" if security.accessRights == 'restricted' }}>Restricted access</option>
+					</select>
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+
+			<div id="anon" role="select-section" class="select-section {{ "active" if security.accessRights == 'anon' }}">
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-3">
+						<div class="alert alert-info">
+							Your instance of YouTransfer is publically available. Anyone can upload &amp; share files without having to authenticate. 
+							If access restriction is required, you will enforce this through other means like IP whitelisting in the firewall or access control through a reverse proxy.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="restricted" role="select-section" class="select-section {{ "active" if security.accessRights == 'restricted' }}">
+				{% if not security.rootAccount %}
+				<h4>Administrator account</h4>
+
+				<div class="form-group">
+					<label for="rootAccount" class="col-sm-3 control-label">Username</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" name="settings[security][rootAccount]" id="rootAccount" value="{{ security.rootAccount }}">
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="rootPassword" class="col-sm-3 control-label">Password</label>
+					<div class="col-sm-6">
+						<input type="password" class="form-control" name="settings[security][rootPassword]" id="rootPassword">
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-3">
+						<div class="alert alert-info">
+							You will be able to manage user accounts and groups once you've logged in as administrator.
+						</div>
+					</div>
+				</div>
+				{% else %}
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-offset-3">
+						<div class="alert alert-info">
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+
+		<div id="encryption">
+			<h3>Encryption</h3>
+
+			{#####################################################################################}
+			{# This is a workaround because Nunjucks does not support value-based if expressions #}
+			{#####################################################################################}
+
+			{% if not security.encryptionKeyMethod %}
+			{% set isNotSet = "true" %}
+			{% elif security.encryptionKeyMethod == 'env' %}
+			{% set isEnvKey = "true" %}
+			{% elif security.encryptionKeyMethod == 'auto' %}
+			{% set isAutoKey = "true" %}
+			{% else %}
+			{% set isManualKey = "true" %}
+			{% endif %}
+
+			<input type="hidden" name="settings[security][encryptionKeyMethod]" value="{{ "manual" if not isEnvKey else "env" }}" />
+
+			<div class="form-group">
+				<label for="encryptionKey" class="col-sm-3 control-label">Encryption Key</label>
+				<div class="col-sm-6">
+					<input type="password" class="form-control" name="settings[security][encryptionKey]" id="encryptionKey" value="{{ security.encryptionKey }}" {{ "disabled" if not isAutoKey and not isNotSet }}>
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<div class="checkbox">
+						<label for="encryptionEnabled">
+							<input type="checkbox" value="true" name="settings[security][encryptionEnabled]" id="encryptionEnabled" {{ "checked='checked'" if security.encryptionEnabled }}>
+							Enable file encryption
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-6 col-sm-offset-3">
+					{% if security.encryptionKeyMethod == 'auto' %}
+					<div class="alert alert-info">
+						<p>
+							The encryption key was automatically generated.
+						</p>
+						<p>
+							For security reasons, it is recommended to set the encryption key using the 'ENCRYPTIONKEY' <a href="http://stackoverflow.com/a/22312793">environment variable</a>.
+						</p>
+						<p>
+							Please note that once it has been used, changing the encryption key will prevent you from accessing passwords and files that already have been encrypted.
+						</p>
+					</div>
+					{% elif security.encryptionKeyMethod == 'manual' %}
+					<div class="alert alert-warning">
+						<p>
+							You have manually set the encryption key. For security reasons, it is recommended to restrict access to the 'settings.json' file in the application home directoy.
+						</p>
+						<p>
+							This key will also be used for password encryption or as <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salt</a> in hash generation.
+						</p>
+					</div>
+					{% elif security.encryptionKeyMethod == 'env' %}
+					<div class="alert alert-info">
+						<p>
+							The encryption key has been set using an environment variable. Cool beans! This key will also be used for password encryption or as <a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salt</a> in hash generation.
+						</p>
+					</div>
+					{% endif %}
+				</div>
+				<div class="col-sm-3"></div>
+			</div>
+		</div>		
+
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-6 text-right">
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>		
+	</form>
+</div>
+{% endblock %}

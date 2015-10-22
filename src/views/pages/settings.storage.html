@@ -53,38 +53,6 @@
 			<div class="col-sm-3"></div>
 		</div>
 
-		<div id="encryption">
-			<h3>Encryption</h3>
-
-			<div class="form-group">
-				<div class="col-sm-offset-3 col-sm-9">
-					<div class="checkbox">
-						<label for="encryptionEnabled">
-							<input type="checkbox" value="true" name="settings[storage][encryptionEnabled]" id="encryptionEnabled" {{ "checked='checked'" if storage.encryptionEnabled }}>
-							Enable file encryption
-						</label>
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="encryptionKey" class="col-sm-3 control-label">Encryption Key</label>
-				<div class="col-sm-6">
-					<input type="password" class="form-control" name="settings[storage][encryptionKey]" id="encryptionKey" value="{{ storage.encryptionKey }}">
-				</div>
-				<div class="col-sm-3"></div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-sm-6 col-sm-offset-3">
-					<div class="alert alert-info">
-						It is recommended to set the encryption key using the 'encryptionKey' environment variable.
-					</div>
-				</div>
-				<div class="col-sm-3"></div>
-			</div>
-		</div>
-
 		<div id="local" role="select-section" class="select-section {{ "active" if storage.location == 'local' }}">
 			<h3>Local file system</h3>
 

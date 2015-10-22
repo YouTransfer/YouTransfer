@@ -15,6 +15,12 @@
 			</div>
 		{% endif %}
 
+		{% if security.encryptionKeyMethod == 'auto' %}
+			<div class="baseurl alert alert-warning">
+				<strong>Warning</strong>: the encryption key has not been set and as such it has been automatically generated. Please make sure to change it prior to using YouTransfer. <a href="/settings/security/">Update security settings</a>.
+			</div>
+		{% endif %}
+
 		<header>
 			{% block header %}
 				{% include "header.html" %}

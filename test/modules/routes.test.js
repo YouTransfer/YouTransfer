@@ -1,3 +1,4 @@
+'use strict';
 
 // ------------------------------------------------------------------------------------------ Test Dependencies
 
@@ -15,7 +16,6 @@ nconf.set('basedir', __dirname);
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
-var fs = require('fs');
 var nstatic = require('node-static');
 var youtransfer = require('../../lib/youtransfer');
 
@@ -572,11 +572,12 @@ describe('YouTransfer Router module', function() {
 
 	// -------------------------------------------------------------------------------------- Testing settingsFinalise
 
-	it('should be possible to finalise settings', function() {
+	it('should be possible to finalise settings', function(done) {
+
 		var req = {
 				params: {
 					settings: {
-						general: {
+						state: {
 							unlockCode: 'MySecretCode'
 						}
 					}
@@ -588,28 +589,28 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
-			should.exist(settings);
-			settings.general.finalised.should.equals(true);
-			settings.general.unlockCode.should.equals(req.params.settings.general.unlockCode);
+		sandbox.stub(youtransfer.settings, 'finalise', function (code, callback) {
+			should.exist(code);
+			code.should.equals(req.params.settings.state.unlockCode);
 			callback();
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("redirect").once().withArgs('/');
+		resMock.expects("redirect").once();
 
-		router.settingsFinalise()(req, res);
-
-		req.errors.exist().should.equals(false);
-		resMock.verify();
+		router.settingsFinalise()(req, res, function() {
+			resMock.verify();
+			done();
+		});
 
 	});
 
 	it('should provide feedback when an error occurs while trying to finalise settings', function(done) {
+
 		var req = {
 				params: {
 					settings: {
-						general: {
+						state: {
 							unlockCode: 'MySecretCode'
 						}
 					}
@@ -621,15 +622,14 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
-			should.exist(settings);
-			settings.general.finalised.should.equals(true);
-			settings.general.unlockCode.should.equals(req.params.settings.general.unlockCode);
+		sandbox.stub(youtransfer.settings, 'finalise', function (code, callback) {
+			should.exist(code);
+			code.should.equals(req.params.settings.state.unlockCode);
 			callback(new Error('error'));
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("process").once().withArgs("settings.finalise.html").callsArg(2);
+		resMock.expects("process").once().withArgs('settings.finalise.html', null).callsArgAsync(2);
 
 		router.settingsFinalise()(req, res, function() {
 			resMock.verify();
@@ -645,42 +645,32 @@ describe('YouTransfer Router module', function() {
 	// -------------------------------------------------------------------------------------- Testing settingsUnlock
 
 	it('should be possible to unlock settings', function(done) {
+
 		var req = {
 				params: {
 					unlockCode: 'MySecretCode'
 				}
 			},
 			res = {
-				process: function() {}
-			},
-			settings = {
-				general: {
-					finalised: true,
-					unlockCode: req.params.unlockCode
-				}
+				redirect: function() {}
 			}
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, settings);
-		});
-
-		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
-			should.exist(settings);
-			should.not.exist(settings.general.unlockCode);
-			settings.general.finalised.should.equals(false);
+		sandbox.stub(youtransfer.settings, 'unlock', function (code, callback) {
+			should.exist(code);
+			code.should.equals(req.params.unlockCode);
 			callback();
 		});
 
 		var resMock = sandbox.mock(res);
-		resMock.expects("process").once().withArgs("index.html", null).callsArg(2);
+		resMock.expects("redirect").once();
 
 		router.settingsUnlock()(req, res, function() {
-			req.errors.exist().should.equals(false);
 			resMock.verify();
 			done();
 		});
+
 	});
 
 	it('should not be possible to unlock settings if code is incorrect', function(done) {
@@ -693,7 +683,7 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: true,
 					unlockCode: 'MyOtherCode'
 				}
@@ -701,8 +691,10 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, settings);
+		sandbox.stub(youtransfer.settings, 'unlock', function (code, callback) {
+			should.exist(code);
+			code.should.equals(req.params.unlockCode);
+			callback(new Error('INVALID_CODE'));
 		});
 
 		var resMock = sandbox.mock(res);
@@ -738,17 +730,9 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: false
-				}
-			});
-		});
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			should.exist(file);
-			file.should.equals('./src/templates/' + req.params.template);
+		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+			should.exist(name);
+			name.should.equals(req.params.template);
 			callback(null, 'source');
 		});
 
@@ -770,7 +754,8 @@ describe('YouTransfer Router module', function() {
 
 		var req = {
 				params: {
-					name: 'template'
+					name: 'template',
+					template: 'someTemplate'
 				}
 			},
 			res = {
@@ -779,12 +764,10 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: true
-				}
-			});
+		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+			should.exist(name);
+			name.should.equals(req.params.template);
+			callback(new Error('SETTINGS_FINALISED'));
 		});
 
 		var resMock = sandbox.mock(res);
@@ -814,16 +797,10 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: false
-				}
-			});
-		});
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(new Error('error'), null);
+		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+			should.exist(name);
+			name.should.equals(req.params.template);
+			callback(new Error('Error'));
 		});
 
 		var resMock = sandbox.mock(res);
@@ -850,12 +827,9 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: false
-				}
-			});
+		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+			should.not.exist(name);
+			callback(new Error('ENOENT'));
 		});
 
 		var resMock = sandbox.mock(res);
@@ -888,21 +862,11 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: false
-				}
-			});
-		});
-
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			should.exist(file);
-			file.should.equals('./src/templates/' + req.params.template);
-
-			should.exist(data);
-			data.should.equals(req.params.body);
-
+		sandbox.stub(youtransfer.templates, 'push', function (name, content, callback) {
+			should.exist(name);
+			should.exist(content);
+			name.should.equals(req.params.template);
+			content.should.equals(req.params.body);
 			callback(null);
 		});
 
@@ -913,9 +877,6 @@ describe('YouTransfer Router module', function() {
 				next();
 			};
 		});
-
-		var resMock = sandbox.mock(res);
-		resMock.expects('process').once().withArgs('settings.template.html', null).callsArg(2);
 
 		router.settingsSaveTemplate()(req, res, function() {
 			req.errors.exist().should.equals(false);
@@ -938,20 +899,25 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: true
+		var req = {
+				params: {
+					name: 'template',
+					template: 'someTemplate',
+					body: 'this is my template'
 				}
-			});
-		});
+			},
+			res = {
+				process: function() {}
+			}
 
-		sandbox.stub(router, "settingsGetByName", function() {
-			return function(req, res, next) {
-				should.exist(req.params.name);
-				req.params.name.should.equals('template');
-				next();
-			};
+		errors(req, null, function() {});
+
+		sandbox.stub(youtransfer.templates, 'push', function (name, content, callback) {
+			should.exist(name);
+			should.exist(content);
+			name.should.equals(req.params.template);
+			content.should.equals(req.params.body);
+			callback(new Error('SETTINGS_FINALISED'));
 		});
 
 		var resMock = sandbox.mock(res);
@@ -981,12 +947,11 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: false
-				}
-			});
+		sandbox.stub(youtransfer.templates, 'push', function (name, content, callback) {
+			should.not.exist(name);
+			should.exist(content);
+			content.should.equals(req.params.body);
+			callback(new Error('ENOENT'));
 		});
 
 		sandbox.stub(router, "settingsGetByName", function() {
@@ -1030,7 +995,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -1062,7 +1027,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: false
 				}
 			});
@@ -1090,7 +1055,7 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: false
 				}
 			},
@@ -1127,10 +1092,10 @@ describe('YouTransfer Router module', function() {
 				process: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: false
 				}
-			}
+			},
 			response = {
 				activeTab: 'dropzone',
 				dropzone: {}
@@ -1170,7 +1135,7 @@ describe('YouTransfer Router module', function() {
 
 		sandbox.stub(youtransfer.settings, 'get', function (callback) {
 			callback(null, {
-				general: {
+				state: {
 					finalised: true
 				}
 			});
@@ -1200,7 +1165,7 @@ describe('YouTransfer Router module', function() {
 				render: function() {}
 			},
 			settings = {
-				general: {
+				state: {
 					finalised: false
 				}
 			},
@@ -1277,12 +1242,10 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
-			callback(null, {
-				general: {
-					finalised: true
-				}
-			});
+		sandbox.stub(youtransfer.settings, 'push', function (value, callback) {
+			should.exist(value);
+			value.should.equals(req.params.settings);
+			callback(new Error('SETTINGS_FINALISED'));
 		});
 
 		sandbox.stub(router, "settingsGetByName", function() {
@@ -1312,7 +1275,7 @@ describe('YouTransfer Router module', function() {
 			},
 			server = {
 				serveFile: function() {}
-			}
+			},
 			instance = new routes({
 				fileServer: server
 			});
@@ -1324,7 +1287,30 @@ describe('YouTransfer Router module', function() {
 		serverMock.verify();
 	});
 
-	// -------------------------------------------------------------------------------------- Testing defalt routes
+	// -------------------------------------------------------------------------------------- Testing signout
+
+	it('should be possible to sign out', function() {
+
+		var req = {
+				logout: function() {}
+			},
+			res = {
+				redirect: function() {}
+			}
+
+		var reqMock = sandbox.mock(req);
+		reqMock.expects('logout').once();
+
+		var resMock = sandbox.mock(res);
+		resMock.expects('redirect').once();
+
+		router.signout()(req, res);
+		reqMock.verify();
+		resMock.verify();
+		
+	});
+
+	// -------------------------------------------------------------------------------------- Testing default routes
 
 	it('should be possible to retrieve a page', function(done) {
 
