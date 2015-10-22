@@ -12,6 +12,7 @@ var youtransfer = require('../../lib/youtransfer');
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
+var fs = require('fs');
 var scheduler = require('../../lib/scheduler');
 var nodemailer = require('nodemailer');
 
@@ -753,6 +754,215 @@ describe('YouTransfer module', function() {
 
 		youtransfer.cleanup();
 	});
+
+	// -------------------------------------------------------------------------------------- Testing templates.get
+
+	it('should be possible to get template source', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: false
+				}
+			});
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			should.exist(file);
+			file.should.equals('./src/templates/myTemplate')
+			callback(null, 'template');
+		});
+
+		youtransfer.templates.get('myTemplate', function(err, data) {
+			should.not.exist(err);
+			should.exist(data);
+			data.should.equals('template');
+			done();
+		});
+	});
+
+	it('should provide feedback when trying to get template source if settings are finalised', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: true
+				}
+			});
+		});
+
+		youtransfer.templates.get('myTemplate', function(err, data) {
+			should.exist(err);
+			err.message.should.equals('SETTINGS_FINALISED');
+			done();
+		});
+
+	});	
+
+	it('should provide feedback if an error occures while trying to read template source', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: false
+				}
+			});
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			should.exist(file);
+			file.should.equals('./src/templates/myTemplate')
+			callback(new Error('error'));
+		});
+
+		youtransfer.templates.get('myTemplate', function(err, data) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+
+	});	
+
+	it('should provide feedback if template does not exist', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: false
+				}
+			});
+		});
+
+		youtransfer.templates.get(null, function(err, data) {
+			should.exist(err);
+			err.message.should.equals('ENOENT');
+			done();
+		});
+
+	});		
+
+	it('should provide feedback if an error occurs while retrieving settings', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(new Error('error'));
+		});
+
+		youtransfer.templates.get(null, function(err, data) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+
+	});		
+
+	// -------------------------------------------------------------------------------------- Testing templates.push
+
+	it('should be possible to set template source', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'push', function (callback) {
+			callback(null, {
+				state: {
+					finalised: false
+				}
+			});
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			should.exist(file);
+			should.exist(data);
+			should.exist(encoding);
+
+			file.should.equals('./src/templates/myTemplate')
+			data.should.equals('template');
+			encoding.should.equals('utf8');
+			callback();
+		});
+
+		youtransfer.templates.push('myTemplate', 'template', function(err) {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('should provide feedback when trying to set template source if settings are finalised', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: true
+				}
+			});
+		});
+
+		youtransfer.templates.push('myTemplate', 'template', function(err) {
+			should.exist(err);
+			err.message.should.equals('SETTINGS_FINALISED');
+			done();
+		});
+
+	});	
+
+	it('should provide feedback if an error occures while trying to write template source', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: false
+				}
+			});
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			should.exist(file);
+			should.exist(data);
+			should.exist(encoding);
+
+			file.should.equals('./src/templates/myTemplate')
+			data.should.equals('template');
+			encoding.should.equals('utf8');
+			callback(new Error('error'));
+		});
+
+		youtransfer.templates.push('myTemplate', 'template', function(err, data) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+
+	});	
+
+	it('should provide feedback if template does not exist', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: false
+				}
+			});
+		});
+
+		youtransfer.templates.push(null, 'template', function(err, data) {
+			should.exist(err);
+			err.message.should.equals('ENOENT');
+			done();
+		});
+
+	});		
+
+	it('should provide feedback if an error occurs while retrieving settings', function(done) {
+
+		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+			callback(new Error('error'));
+		});
+
+		youtransfer.templates.push(null, 'template', function(err, data) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+
+	});		
+
 
 	// -------------------------------------------------------------------------------------- Testing send
 

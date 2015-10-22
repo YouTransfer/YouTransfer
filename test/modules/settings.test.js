@@ -53,120 +53,7 @@ describe('YouTransfer Settings module', function() {
 		}
 	});
 
-	// -------------------------------------------------------------------------------------- Testing write
-
-	it('should be possible to set title', function(done) {
-
-		// Prevent push event during test
-		sandbox.stub(settings, 'emit').withArgs('settings.push');
-
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
-			callback(null);
-		});
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, JSON.stringify({}));
-		});
-
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			var settings = JSON.parse(data);
-			settings.general.title.should.equals('title');
-			callback(null);
-		});
-
-		settings.push({ 
-			general: {
-				title: 'title'
-			}
-		}, function(err) {
-			should.not.exist(err);
-			done();
-		});
-
-	});
-
-	it('should still be possible to set title if settings file does not exist', function(done) {
-
-		// Prevent push event during test
-		sandbox.stub(settings, 'emit').withArgs('settings.push');
-
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
-			callback(null);
-		});
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback('error', null);
-		});
-
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			var settings = JSON.parse(data);
-			settings.general.title.should.equals('title');
-			callback(null);
-		});
-
-		settings.push({ 
-			general: {
-				title: 'title'
-			}
-		}, function(err) {
-			should.not.exist(err);
-			done();
-		});
-
-	});
-
-	it('should throw an error if it current settings file is not valid', function(done) {
-
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
-			callback(null);
-		});
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, 'this is not json and should produce an error');
-		});
-
-		settings.push({ 
-			general: {
-				title: 'title'
-			}
-		}, function(err) {
-			should.exist(err);
-			err.message.should.equals('Unexpected token h');
-			done();
-		});
-	});
-
-	it('should throw an error if it is not possible to write settings file', function(done) {
-
-		// Prevent push event during test
-		sandbox.stub(settings, 'emit').withArgs('settings.push');
-
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
-			callback(null);
-		});
-
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
-			callback(null, JSON.stringify({}));
-		});
-
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
-			var settings = JSON.parse(data);
-			settings.general.title.should.equals('title');
-			callback(new Error('error'));
-		});
-
-		settings.push({ 
-			general: {
-				title: 'title'
-			}
-		}, function(err) {
-			should.exist(err);
-			err.message.should.equals('error');
-			done();
-		});
-	});
-
-	// -------------------------------------------------------------------------------------- Testing read
+	// -------------------------------------------------------------------------------------- Testing get
 
 	it('should be possible to get title fom cache', function(done) {
 
@@ -281,8 +168,6 @@ describe('YouTransfer Settings module', function() {
 		});
 	});
 
-	// -------------------------------------------------------------------------------------- Testing localstoragepath
-
 	it('should be possible to set relative localstoragepath', function(done) {
 
 		sandbox.stub(settings.cache, 'get', function (name, callback) {
@@ -328,6 +213,218 @@ describe('YouTransfer Settings module', function() {
 			done();
 		});
 	});
+
+	// -------------------------------------------------------------------------------------- Testing push
+
+	it('should be possible to set title', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.title.should.equals('title');
+			callback(null);
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should still be possible to set title if settings file does not exist', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback('error', null);
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.title.should.equals('title');
+			callback(null);
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.not.exist(err);
+			done();
+		});
+
+	});
+
+	it('should throw an error if it the settings are finalised', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({
+				state: {
+					finalised: true
+				}
+			}));
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.exist(err);
+			err.message.should.equals('SETTINGS_FINALISED');
+			done();
+		});
+	});
+
+	it('should throw an error if it current settings file is not valid', function(done) {
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, 'this is not json and should produce an error');
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.exist(err);
+			err.message.should.equals('Unexpected token h');
+			done();
+		});
+	});
+
+	it('should throw an error if it is not possible to write settings file', function(done) {
+
+		// Prevent push event during test
+		sandbox.stub(settings, 'emit').withArgs('settings.push');
+
+		sandbox.stub(settings.cache, 'get', function (name, callback) {
+			callback(null);
+		});
+
+		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+			callback(null, JSON.stringify({}));
+		});
+
+		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+			var settings = JSON.parse(data);
+			settings.general.title.should.equals('title');
+			callback(new Error('error'));
+		});
+
+		settings.push({ 
+			general: {
+				title: 'title'
+			}
+		}, function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+	});
+
+	// -------------------------------------------------------------------------------------- Testing finalise
+
+	it('should be possible to finalise settings', function(done) {
+		var code = 'MySecretCode';
+
+		sandbox.stub(settings, 'push', function (settings, callback) {
+			should.exist(settings);
+			settings.state.finalised.should.equals(true);
+			settings.state.unlockCode.should.equals(code);
+			done();
+		});
+
+		settings.finalise(code);
+	});		
+
+	// -------------------------------------------------------------------------------------- Testing unlock
+
+	it('should be possible to unlock settings', function(done) {
+		var code = 'MySecretCode';
+
+		sandbox.stub(settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					finalised: true,
+					unlockCode: code
+				}
+			});
+		});
+
+		sandbox.stub(settings, 'push', function (settings, callback) {
+			should.exist(settings);
+			should.not.exist(settings.state.unlockCode)
+			settings.state.finalised.should.equals(false);
+			callback();
+		});
+
+		settings.unlock(code, function(err) {
+			should.not.exist(err);
+			done();
+		});
+	});		
+
+	it('should continue with erronous callback if an invalid code was provided', function(done) {
+		var code = 'MySecretCode';
+
+		sandbox.stub(settings, 'get', function (callback) {
+			callback(null, {
+				state: {
+					unlockCode: 'MyActualSecretCode'
+				}
+			});
+		});
+
+		settings.unlock(code, function(err) {
+			should.exist(err);
+			err.message.should.equals('INVALID_CODE');
+			done();
+		});
+	});		
+
+	it('should continue with erronous callback if an error occurs while unlocking the settings', function(done) {
+		var code = 'MySecretCode';
+
+		sandbox.stub(settings, 'get', function (callback) {
+			callback(new Error('error'));
+		});
+
+		settings.unlock(code, function(err) {
+			should.exist(err);
+			err.message.should.equals('error');
+			done();
+		});
+	});		
 
 	// -------------------------------------------------------------------------------------- Testing fixBooleanValues
 
