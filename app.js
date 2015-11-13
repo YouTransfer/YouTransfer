@@ -53,12 +53,12 @@ var router = routes('./dist');
 app.post('/', router.upload());
 app.post('/upload', router.upload());
 app.post('/upload/bundle', router.uploadBundle());
-app.post(/^\/send/, router.send());
 app.get('/download/:token', router.download());
 app.post('/download', router.download());
 app.get('/bundle/:token', router.download());
+app.post('/send', router.send());
+
 app.get('/settings', router.settingsRedirect());
-app.post('/settings/finalise', router.settingsFinalise());
 app.get('/settings/:name/:template', router.settingsGetTemplateByName());
 app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());

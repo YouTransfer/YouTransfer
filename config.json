@@ -33,6 +33,8 @@
 		"S3SSLEnabled": "true"
 	},
 
-	"state": {}
+	"state": {},
+
+	"security": {}
 
 }
