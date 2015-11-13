@@ -66,8 +66,12 @@ app.post('/unlock', router.settingsUnlock());
 
 app.get('/accounts', router.accounts.redirect());
 app.get('/accounts/:name', router.accounts.byName());
+app.post('/accounts/providers', router.providers.push());
 app.post('/login', passport.authenticate('local', { successRedirect: '/' }));
+app.get('/auth/:provider', router.authenticate());
+app.get('/auth/:provider/callback', router.authenticate());
 app.get('/signout', router.signout());
+
 app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
 app.get(/^\/(.*)/, router.default());
 

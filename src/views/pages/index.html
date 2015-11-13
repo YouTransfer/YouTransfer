@@ -1,10 +1,22 @@
 {% extends "layout.html" %}
 
+{#############################################################################################}
+{# This is a workaround because Nunjucks does not support complex value-based if expressions #}
+{#############################################################################################}
+
+{% if security.accessRights == 'restricted' %}
+	{% if user and user.status == 'allowed' %}
+		{% set authorized = "true" %}
+	{% endif %}
+{% else %}
+	{% set authorized = "true" %}
+{% endif %}
+
 {% block content %}
 <div class="hp jumbotron" id="hp">
 	{% include "title.html" %}
 	
-	{% if security.accessRights == 'restricted' and not user %}
+	{% if not authorized %}
 
 		{% include "login.html" %}
 
@@ -26,14 +38,18 @@
 
 				{% endif %}
 
+			{% elif authorized %}
+
+				{% include "fileupload.html" %}
+
 			{% else %}
 
-			{% include "fileupload.html" %}
+				<p>Some nice text that will tell you that you have to wait for approval2</p>
 
 			{% endif %}
 		</div>
 
-		{% if success %}
+		{% if success and authorized %}
 		<div class="col-md-6 dz-completed-container">
 
 			{%if isPostback %}

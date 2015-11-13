@@ -1,0 +1,148 @@
+{% extends "accounts.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="providers">
+
+	<div class="container">
+		<div class="row">
+
+			<div class="col-md-4">
+				<h1>Providers</h1>
+				<p clas="help-block">
+					Providers are external services that can authenticate users, like Facebook or Google+.
+					Most providers will require you to register your application if you wish to use their service.
+				<p>
+				<p clas="help-block">
+					You can enable multiple providers, users will be able to choose their preferred service.
+				</p>
+			</div>
+			<div class="col-md-3" data-js-only>
+				<h3>Select provider</h3>
+
+				{{ provider('Facebook', 'facebook') }}
+				{{ provider('Google', 'google-oauth') }}
+				{{ provider('Twitter', 'twitter') }}
+				{{ provider('Reddit', 'reddit') }}
+				{{ provider('Instagram', 'instagram') }}
+				{{ provider('Dropbox', 'dropbox') }}
+				{{ provider('Evernote', 'evernote') }}
+				{{ provider('Slack', 'slack') }}
+				{{ provider('Soundcloud', 'soundcloud') }}
+				{{ provider('Spotify', 'spotify') }}
+				{{ provider('Windows Live', 'windows') }}
+			</div>
+			<div class="col-md-4">
+
+				<form method="post" data-xhrform data-xhrform-target="providers" data-xhrform-replace="true">
+
+				{%if isPostback %}
+					{%if success %}
+					<div class="alert alert-success alert-dismissible fade in" role="alert">
+						<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Success!</strong> Your changes have been saved.
+					</div>
+					{% else %}
+					<div class="alert alert-danger alert-dismissible fade in" role="alert">
+						<button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<strong>Error!</strong> Your changes could not be saved.
+					</div>
+					{% endif %}
+				{% endif %}
+
+					<!-- facebook -->
+					{{ oauth('Facebook', 'facebook') }}
+
+					<!-- Google -->
+					{{ oauth('Google', 'google-oauth') }}
+
+					<!-- Twitter -->
+					{{ oauth('Twitter', 'twitter') }}
+
+					<!-- Reddit -->
+					{{ oauth('Reddit', 'reddit') }}
+
+					<!-- Instagram -->
+					{{ oauth('Instagram', 'instagram') }}
+
+					<!-- Dropbox -->
+					{{ oauth('Dropbox', 'dropbox') }}
+
+					<!-- Evernote -->
+					{{ oauth('Evernote', 'evernote') }}
+
+					<!-- Slack -->
+					{{ oauth('Slack', 'slack') }}
+
+					<!-- SoundCloud -->
+					{{ oauth('SoundCloud', 'soundcloud') }}
+
+					<!-- Spotify -->
+					{{ oauth('Spotify', 'spotify') }}
+
+					<!-- Windows Live -->
+					{{ oauth('Windows Live', 'windows') }}
+
+				</form>
+
+			</div>
+	</div>
+
+</div>
+{% endblock %}
+
+
+{% macro provider(name, handle) %}
+<div class="provider provider-{{ handle }}">
+	<a href="#{{ handle }}" data-sideways>
+		<span class="icon icon-{{ handle }}"><span>{{ name }}</span></span>
+	</a>
+</div>
+{% endmacro %}
+
+{% macro oauth(name, handle) %}
+<div class="provider-details" id="{{ handle }}">
+	<h3><span class="icon icon-{{ handle }}"><span>{{ name }}</span></span></h3>
+
+	<div class="form-group">
+		<label for="settings[providers][{{ handle }}][clientID]" class="control-label">Client ID</label>
+		<input type="text" class="form-control" name="settings[providers][{{ handle }}][clientID]" value="{{ providers[handle].clientID }}">
+	</div>
+	<div class="form-group">
+		<label for="settings[providers][facebook][clientSecret]" class="control-label">Client Secret</label>
+		<input type="password" class="form-control" name="settings[providers][{{ handle }}][clientSecret]" value="{{ providers[handle].clientSecret }}">
+	</div>
+	<div class="form-group">
+		<label for="settings[providers][facebook][callback]" class="control-label">Redirect URI</label>
+		<p>{{ general.baseUrl }}/auth/{{ handle }}/callback</p>
+		<div class="help-block">This URL is required for OAuth configuration</div>
+	</div>
+	<label class="control-label">Settings</label>
+	<div class="form-group">
+		<div class="checkbox">
+			<label for="settings[providers][{{ handle }}][allowRegistration]">
+				<input type="checkbox" name="settings[providers][{{ handle }}][allowRegistration]" {{ "checked" if providers[handle].allowRegistration }} value="true">
+				Allow new users to register
+			</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="checkbox">
+			<label for="settings[providers][{{ handle }}][requireApproval]">
+				<input type="checkbox" name="settings[providers][{{ handle }}][requireApproval]" {{ "checked" if providers[handle].requireApproval }} value="true">
+				Require approval for new users
+			</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="checkbox">
+			<label for="settings[providers][{{ handle }}][enabled]">
+				<input type="checkbox" name="settings[providers][{{ handle }}][enabled]" {{ "checked" if providers[handle].enabled }} value="true">
+				Enable provider
+			</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
+</div>
+{% endmacro %}
