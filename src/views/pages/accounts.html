@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% if user and user.group == 'su' %}
+	{% if not isXMLHttpRequest %}
+		<div class="accounts" id="accounts">
+			<nav class="navbar navbar-default">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav" role="tablist">
+						<li role="presentation" class="{{ "active" if activeTab == 'users' }}">
+							<a href="/accounts/users" aria-controls="users" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-user"></span> Users</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right" role="tablist">
+						<li role="presentation">
+							<a href="/" role="tab"><span class="glyphicon glyphicon-home"></span></a>
+						</li>							
+					</ul>
+				</div>
+			</nav>
+		{% endif %}
+			<div class="tab-content" id="tab-content">
+				{% block tabcontent %}
+				{% endblock %}
+			</div>
+		{% if not isXMLHttpRequest %}
+		</div>
+	{% endif %}
+{% else %}
+	<div class="accounts jumbotron" id="accounts">
+		<h2>You are so not authorized to access this page right now.</h2>
+		<a href="/" data-async data-target="accounts">return to homepage</a>
+	</div>
+{% endif %}
+{% endblock %}

@@ -76,6 +76,7 @@
 				<div class="form-group">
 					<div class="col-sm-6 col-sm-offset-3">
 						<div class="alert alert-info">
+							You can manage user accounts and groups in the <a href="/accounts">Accounts section</a>.
 						</div>
 					</div>
 				</div>
@@ -86,9 +87,9 @@
 		<div id="encryption">
 			<h3>Encryption</h3>
 
-			{#####################################################################################}
-			{# This is a workaround because Nunjucks does not support value-based if expressions #}
-			{#####################################################################################}
+			{#############################################################################################}
+			{# This is a workaround because Nunjucks does not support complex value-based if expressions #}
+			{#############################################################################################}
 
 			{% if not security.encryptionKeyMethod %}
 			{% set isNotSet = "true" %}

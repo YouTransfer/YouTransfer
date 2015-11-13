@@ -5,10 +5,14 @@
 				Powered by YouTransfer.io
 			</a>
 		</div>
-		{% if not state.finalised %}
 		<ul class="nav navbar-nav navbar-right">
+
+			{% if security.accessRights == 'restricted' and user.group == 'su' %}
+			<li><a href="/accounts">Accounts</a></li>
+			{% endif %}
+			{% if not state.finalised %}
 			<li><a href="/settings">Settings</a></li>
+			{% endif %}
 		</ul>
-		{% endif %}
 	</div>
 </nav>

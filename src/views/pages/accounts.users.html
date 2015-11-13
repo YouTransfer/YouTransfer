@@ -1,0 +1,28 @@
+{% extends "accounts.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="users">
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th width="16"></th>
+				<th>Name</th>
+				<th>Provider</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for item in users %}
+			<tr>
+				<td><img class="thumb" src="{{ item.thumbnail }}" /></td>
+				<td>{{ item.displayName }}</td>
+				<td><span class="icon icon-small icon-{{ item.provider }}"></span></td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="3">There are currently no registered users</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}

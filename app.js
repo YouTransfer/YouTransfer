@@ -63,6 +63,9 @@ app.get('/settings/:name/:template', router.settingsGetTemplateByName());
 app.get('/settings/:name', router.settingsGetByName());
 app.post('/settings/:name', router.settingsSaveByName());
 app.post('/unlock', router.settingsUnlock());
+
+app.get('/accounts', router.accounts.redirect());
+app.get('/accounts/:name', router.accounts.byName());
 app.post('/login', passport.authenticate('local', { successRedirect: '/' }));
 app.get('/signout', router.signout());
 app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
