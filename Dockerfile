@@ -11,4 +11,6 @@ RUN npm install youtransfer -g
 RUN youtransfer init
 RUN npm install
 
+EXPOSE 5000
+
 CMD npm run dockerized
