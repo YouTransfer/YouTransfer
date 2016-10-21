@@ -37,7 +37,7 @@ describe('Alerts component', function() {
 		new alerts(fixture, {
 			timeout: 500,
 			callback: function() {
-				fixture.getAttribute('style').should.equals('display: none; ');
+				fixture.getAttribute('style').should.equals('display: none;');
 				done();
 			}
 		});
