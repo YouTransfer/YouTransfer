@@ -1,0 +1,30 @@
+{% extends "accounts.html" %}
+
+{% block tabcontent %}
+<div role="tabpanel" class="tab-pane active" id="approval">
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th width="16"></th>
+				<th>Name</th>
+				<th>Provider</th>
+				<th width="200"></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for item in users %}
+			<tr>
+				<td><img class="thumb" src="{{ item.thumbnail }}" /></td>
+				<td>{{ item.displayName }}</td>
+				<td><span class="icon icon-small icon-{{ item.provider }}"></span></td>
+				<td class="text-right"><a href="/accounts/approve/{{ item.id }}"><span class="glyphicon glyphicon-ok"></span> Approve</a> | <a href="/accounts/deny/{{ item.id }}" /><span class="glyphicon glyphicon-remove"></span> Deny</a></td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="4">There are currently no users pending approval</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}

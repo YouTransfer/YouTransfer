@@ -11,10 +11,22 @@
 						<li role="presentation" class="{{ "active" if activeTab == 'users' }}">
 							<a href="/accounts/users" aria-controls="users" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-user"></span> Users</a>
 						</li>
+						<li role="presentation" class="{{ "active" if activeTab == 'groups' }}">
+							<a href="/accounts/groups" aria-controls="groups" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-folder-open"></span> Groups</a>
+						</li>
+						<li role="presentation" class="{{ "active" if activeTab == 'invites' }}">
+							<a href="/accounts/invites" aria-controls="invites" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-envelope"></span> Invitations</a>
+						</li>
+						<li role="presentation" class="{{ "active" if activeTab == 'approval' }}">
+							<a href="/accounts/approval" aria-controls="approval" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-hourglass"></span> Pending Approval</a>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right" role="tablist">
 						<li role="presentation" class="{{ "active" if activeTab == 'providers' }}">
 							<a href="/accounts/providers" aria-controls="providers" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-lock"></span> Providers</a>
+						</li>
+						<li role="presentation" class="{{ "active" if activeTab == 'settings' }}">
+							<a href="/accounts/settings" aria-controls="settings" role="tab" data-async data-target="tab-content"><span class="glyphicon glyphicon-cog"></span> Settings</a>
 						</li>
 						<li role="presentation">
 							<a href="/" role="tab"><span class="glyphicon glyphicon-home"></span></a>
