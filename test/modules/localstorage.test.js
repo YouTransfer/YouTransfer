@@ -697,7 +697,7 @@ describe('YouTransfer Local Storage module', function() {
 		streamMock.expects("pipe").once();
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
-		sandbox.stub(mime, 'lookup').returns(context.type);
+		sandbox.stub(mime, 'getType').returns(context.type);
 
 		var res = {
 			setHeader: function() {},
@@ -748,7 +748,7 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null, JSON.stringify(context));
 		});
 
-		sandbox.stub(mime, 'lookup').returns(context.type);
+		sandbox.stub(mime, 'getType').returns(context.type);
 
 		sandbox.stub(crypto, "createDecipher").returns(stream);
 
@@ -791,7 +791,7 @@ describe('YouTransfer Local Storage module', function() {
 		streamMock.expects("pipe").once();
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
-		sandbox.stub(mime, 'lookup').returns(context.type);
+		sandbox.stub(mime, 'getType').returns(context.type);
 
 		var res = {
 			setHeader: function() {},
@@ -832,7 +832,7 @@ describe('YouTransfer Local Storage module', function() {
 		streamMock.expects("pipe").once();
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
-		sandbox.stub(mime, 'lookup').returns(null);
+		sandbox.stub(mime, 'getType').returns(null);
 
 		var res = {
 			setHeader: function() {},
