@@ -141,17 +141,12 @@ function testViewsTask() {
 
 function testWebdriverTask(callback) {
 	selenium.install({
-		baseURL: 'http://selenium-release.storage.googleapis.com',
-		drivers: {
-			chrome: {
-				version: '2.15',
-				arch: process.arch,
-				baseURL: 'http://chromedriver.storage.googleapis.com'
-			}
-		}
+		version: '3.5.3'
 	}, function(err) {
 		if(!err) {
-			selenium.start(function(err, child) {
+			selenium.start({
+				version: '3.5.3'
+			}, function(err, child) {
 				if(!err) {
 					selenium.app = require('./app');
 					selenium.server = child;
