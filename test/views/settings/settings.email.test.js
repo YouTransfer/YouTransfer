@@ -15,12 +15,14 @@ describe('Email Settings View', function() {
 
 	var sandbox;
 
-	before(function (done) {
-		settings.get(function(err, settings) {
-			should.exist(settings);
-			should.not.exist(err);
-			sandbox = settings;
-			done();
+	before(function () {
+		return new Promise(function(resolve, reject) {
+			settings.get(function(err, settings) {
+				should.exist(settings);
+				should.not.exist(err);
+				sandbox = settings;
+				resolve();
+			});
 		});
 	});
 
