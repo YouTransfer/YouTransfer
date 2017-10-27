@@ -45,19 +45,19 @@ describe('YouTransfer Router module', function() {
 	it('should accept options by Null Object', function() {
 		var instance = routes(null);
 		should.exist(instance.fileServer);
-		instance.fileServer.serverInfo.should.equals('node-static/0.7.7');
+		instance.fileServer.serverInfo.should.equals('node-static/0.7.9');
 	});
 
 	it('should accept options by empty Object', function() {
 		var instance = routes({});
 		should.exist(instance.fileServer);
-		instance.fileServer.serverInfo.should.equals('node-static/0.7.7');
+		instance.fileServer.serverInfo.should.equals('node-static/0.7.9');
 	});
 
 	it('should accept options by String', function() {
 		var instance = routes('./path');
 		should.exist(instance.fileServer);
-		instance.fileServer.serverInfo.should.equals('node-static/0.7.7');
+		instance.fileServer.serverInfo.should.equals('node-static/0.7.9');
 	});
 
 	it('should throw an error when setting options by Integer', function() {
