@@ -25,7 +25,7 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm test"
+      "pre-push": "npm test"
     }
   },
   "dependencies": {
