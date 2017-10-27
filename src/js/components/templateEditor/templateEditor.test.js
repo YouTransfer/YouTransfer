@@ -27,7 +27,7 @@ describe('TemplateEditor component', function() {
 
 	it('should try to retrieve the url using JQuery XHR and replace target content with result', function() {
 
-		sandbox.stub($, 'get', function (url) {
+		sandbox.stub($, 'get').callsFake(function (url) {
 			should.exist(url);
 			url.should.equals('http://someurl/');
 

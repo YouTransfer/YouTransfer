@@ -80,7 +80,7 @@ describe('YouTransfer Local Storage module', function() {
 			key: 'value'
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, callback) {
 			file.should.equals(path.join(provider.localstoragepath, 'file.json'));
 			callback(null, JSON.stringify(metadata));
 		});
@@ -97,7 +97,7 @@ describe('YouTransfer Local Storage module', function() {
 			key: 'value'
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, callback) {
 			file.should.equals(path.join(provider.localstoragepath, 'file.json'));
 			callback(new Error('error'));
 		});
@@ -115,7 +115,7 @@ describe('YouTransfer Local Storage module', function() {
 			key: 'value'
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, callback) {
 			file.should.equals(path.join(provider.localstoragepath, 'file.json'));
 			callback(null, 'this is not JSON');
 		});
@@ -143,22 +143,22 @@ describe('YouTransfer Local Storage module', function() {
 				pipe: function() {}
 			}
 
-		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+		sandbox.stub(fs, 'mkdir').callsFake(function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'createReadStream', function (file) {
+		sandbox.stub(fs, 'createReadStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.path);
 			return stream;
 		});
 
-		sandbox.stub(fs, 'createWriteStream', function (file) {
+		sandbox.stub(fs, 'createWriteStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.context.path);
 			return stream;
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			file.should.equals(uploadedFile.context.jsonPath);
 			data.should.equals(JSON.stringify(uploadedFile.context));
 			callback(null);
@@ -201,22 +201,22 @@ describe('YouTransfer Local Storage module', function() {
 				pipe: function() {}
 			}
 
-		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+		sandbox.stub(fs, 'mkdir').callsFake(function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'createReadStream', function (file) {
+		sandbox.stub(fs, 'createReadStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.path);
 			return stream;
 		});
 
-		sandbox.stub(fs, 'createWriteStream', function (file) {
+		sandbox.stub(fs, 'createWriteStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.context.path);
 			return stream;
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			file.should.equals(uploadedFile.context.jsonPath);
 			data.should.equals(JSON.stringify(uploadedFile.context));
 			callback(null);
@@ -257,17 +257,17 @@ describe('YouTransfer Local Storage module', function() {
 				pipe: function() {}
 			}
 
-		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+		sandbox.stub(fs, 'mkdir').callsFake(function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'createReadStream', function (file) {
+		sandbox.stub(fs, 'createReadStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.path);
 			return readStream;
 		});
 
-		sandbox.stub(fs, 'createWriteStream', function (file) {
+		sandbox.stub(fs, 'createWriteStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.context.path);
 			return writeStream;
 		});
@@ -306,17 +306,17 @@ describe('YouTransfer Local Storage module', function() {
 				on: function() {}
 			}
 
-		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+		sandbox.stub(fs, 'mkdir').callsFake(function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'createReadStream', function (file) {
+		sandbox.stub(fs, 'createReadStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.path);
 			return readStream;
 		});
 
-		sandbox.stub(fs, 'createWriteStream', function (file) {
+		sandbox.stub(fs, 'createWriteStream').callsFake(function (file) {
 			file.should.equals(uploadedFile.context.path);
 			return writeStream;
 		});
@@ -345,12 +345,12 @@ describe('YouTransfer Local Storage module', function() {
 			path: path.join(__dirname, 'file.json')
 		}
 
-		sandbox.stub(fs, 'mkdir', function (dir, callback) {
+		sandbox.stub(fs, 'mkdir').callsFake(function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(bundle.path);
 			data.should.equals(JSON.stringify(bundle));
@@ -387,7 +387,7 @@ describe('YouTransfer Local Storage module', function() {
 				setHeader: function() {},
 			};
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
@@ -450,7 +450,7 @@ describe('YouTransfer Local Storage module', function() {
 			}
 
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			if(file.match(/.json$/)) {
 				encoding.should.equals('utf8');
 				file.should.equals(path.join(__dirname, token + '.json'));
@@ -494,7 +494,7 @@ describe('YouTransfer Local Storage module', function() {
 			]
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
@@ -563,7 +563,7 @@ describe('YouTransfer Local Storage module', function() {
 				]
 			}
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback('error', null);
@@ -589,7 +589,7 @@ describe('YouTransfer Local Storage module', function() {
 			]
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, '{}');
@@ -616,7 +616,7 @@ describe('YouTransfer Local Storage module', function() {
 			]
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
@@ -643,7 +643,7 @@ describe('YouTransfer Local Storage module', function() {
 			]
 		}
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(bundle));
@@ -684,7 +684,7 @@ describe('YouTransfer Local Storage module', function() {
 			type: 'binary'
 		};
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
@@ -742,7 +742,7 @@ describe('YouTransfer Local Storage module', function() {
 				pipe: function() {}
 			}
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
@@ -778,7 +778,7 @@ describe('YouTransfer Local Storage module', function() {
 			type: 'binary'
 		};
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
@@ -819,7 +819,7 @@ describe('YouTransfer Local Storage module', function() {
 			type: 'binary'
 		};
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
@@ -865,7 +865,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		var token = 'file';
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback('error', null);
@@ -889,7 +889,7 @@ describe('YouTransfer Local Storage module', function() {
 				type: 'binary'
 			};
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			encoding.should.equals('utf8');
 			file.should.equals(path.join(__dirname, token + '.json'));
 			callback(null, JSON.stringify(context));
@@ -917,11 +917,11 @@ describe('YouTransfer Local Storage module', function() {
 	// -------------------------------------------------------------------------------------- Testing file purge
 
 	it('should purge files with expire date in the past', function(done) {
-		sandbox.stub(fs, 'readdir', function (path, callback) {
+		sandbox.stub(fs, 'readdir').callsFake(function (path, callback) {
 			callback(null, ['file.json', 'file.tmp']);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			file.should.equals(path.join(__dirname, 'file.json'));
 			callback(null, JSON.stringify({ expires: 1234, path: 'file.binary', jsonPath: 'file.json' }));
 		});
@@ -931,15 +931,14 @@ describe('YouTransfer Local Storage module', function() {
 			paths.should.equals('["file.binary","file.json"]');
 			done();
 		});
-
 	});
 
 	it('should not purge files if there is no expire date set', function(done) {
-		sandbox.stub(fs, 'readdir', function (path, callback) {
+		sandbox.stub(fs, 'readdir').callsFake(function (path, callback) {
 			callback(null, ['file.json', 'file.tmp']);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			file.should.equals(path.join(__dirname, 'file.json'));
 			callback(null, JSON.stringify({ path: 'file.binary', jsonPath: 'file.json' }));
 		});
@@ -952,11 +951,11 @@ describe('YouTransfer Local Storage module', function() {
 	});
 
 	it('should not purge files if there is expire date is set in the future', function(done) {
-		sandbox.stub(fs, 'readdir', function (path, callback) {
+		sandbox.stub(fs, 'readdir').callsFake(function (path, callback) {
 			callback(null, ['file.json', 'file.tmp']);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			file.should.equals(path.join(__dirname, 'file.json'));
 			callback(null, JSON.stringify({ expires: Date.tomorrow(), path: 'file.binary', jsonPath: 'file.json' }));
 		});

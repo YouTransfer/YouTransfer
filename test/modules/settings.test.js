@@ -57,7 +57,7 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to get defaults from cache', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null, {
 				key: 'value'
 			});
@@ -72,11 +72,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to get defaults from file system', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				key: 'value'
 			}));
@@ -91,11 +91,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should not be possible to get defaults if invalid JSON is returned', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, 'this is not JSON');
 		});
 
@@ -108,11 +108,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should still be possible to get title if settings file does not exist', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback('error', null);
 		});
 
@@ -126,7 +126,7 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to get title from cache', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null, {
 				general: {
 					title: title,
@@ -146,15 +146,15 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to get title from file system', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, {});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					title: title,
@@ -174,15 +174,15 @@ describe('YouTransfer Settings module', function() {
 
 	it('should not be possible to get title if invalid JSON is returned', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, {});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, 'this is not JSON');
 		});
 
@@ -195,11 +195,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should still be possible to get title if settings file does not exist', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					title: 'title' 
@@ -210,7 +210,7 @@ describe('YouTransfer Settings module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback('error', null);
 		});
 
@@ -223,11 +223,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should still be possible to get localstoragepath if settings file does not exist', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, { 
 				general: {
 					title: 'title'
@@ -238,7 +238,7 @@ describe('YouTransfer Settings module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback('error', null);
 		});
 
@@ -251,15 +251,15 @@ describe('YouTransfer Settings module', function() {
 
 	it('should be possible to set relative localstoragepath', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, {});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					basedir: __dirname
@@ -278,15 +278,15 @@ describe('YouTransfer Settings module', function() {
 
 	it('should not be able to use invalid localstoragepath setting', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, {});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					basedir: __dirname
@@ -305,7 +305,7 @@ describe('YouTransfer Settings module', function() {
 
 	it('should still be possible to use encryptionKey from environment variables', function(done) {
 
-		sandbox.stub(nconf, 'get', function (name) {
+		sandbox.stub(nconf, 'get').callsFake(function (name) {
 			if(name === 'ENCRYPTIONKEY') {
 				return 'MySecretKey';
 			} else {
@@ -313,11 +313,11 @@ describe('YouTransfer Settings module', function() {
 			}
 		});
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(settings, 'defaults', function (callback) {
+		sandbox.stub(settings, 'defaults').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					title: 'title' 
@@ -328,7 +328,7 @@ describe('YouTransfer Settings module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback('error', null);
 		});
 
@@ -347,15 +347,15 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.title.should.equals('title');
 			callback(null);
@@ -377,15 +377,15 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback('error', null);
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.title.should.equals('title');
 			callback(null);
@@ -404,11 +404,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should throw an error if it the settings are finalised', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				state: {
 					finalised: true
@@ -429,11 +429,11 @@ describe('YouTransfer Settings module', function() {
 
 	it('should throw an error if it current settings file is not valid', function(done) {
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, 'this is not json and should produce an error');
 		});
 
@@ -453,15 +453,15 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.title.should.equals('title');
 			callback(new Error('error'));
@@ -483,7 +483,7 @@ describe('YouTransfer Settings module', function() {
 	it('should be possible to finalise settings', function(done) {
 		var code = 'MySecretCode';
 
-		sandbox.stub(settings, 'push', function (settings, callback) {
+		sandbox.stub(settings, 'push').callsFake(function (settings, callback) {
 			should.exist(settings);
 			settings.state.finalised.should.equals(true);
 			settings.state.unlockCode.should.equals(code);
@@ -498,7 +498,7 @@ describe('YouTransfer Settings module', function() {
 	it('should be possible to unlock settings', function(done) {
 		var code = 'MySecretCode';
 
-		sandbox.stub(settings, 'get', function (callback) {
+		sandbox.stub(settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: true,
@@ -507,7 +507,7 @@ describe('YouTransfer Settings module', function() {
 			});
 		});
 
-		sandbox.stub(settings, 'push', function (settings, callback) {
+		sandbox.stub(settings, 'push').callsFake(function (settings, callback) {
 			should.exist(settings);
 			should.not.exist(settings.state.unlockCode)
 			settings.state.finalised.should.equals(false);
@@ -523,7 +523,7 @@ describe('YouTransfer Settings module', function() {
 	it('should continue with erronous callback if an invalid code was provided', function(done) {
 		var code = 'MySecretCode';
 
-		sandbox.stub(settings, 'get', function (callback) {
+		sandbox.stub(settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					unlockCode: 'MyActualSecretCode'
@@ -541,7 +541,7 @@ describe('YouTransfer Settings module', function() {
 	it('should continue with erronous callback if an error occurs while unlocking the settings', function(done) {
 		var code = 'MySecretCode';
 
-		sandbox.stub(settings, 'get', function (callback) {
+		sandbox.stub(settings, 'get').callsFake(function (callback) {
 			callback(new Error('error'));
 		});
 
@@ -559,11 +559,11 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					booleanValue: true
@@ -571,7 +571,7 @@ describe('YouTransfer Settings module', function() {
 			}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.booleanValue.should.equals(true);
 			callback(null);
@@ -593,11 +593,11 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					booleanValue: true
@@ -605,7 +605,7 @@ describe('YouTransfer Settings module', function() {
 			}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.booleanValue.should.equals(false);
 			callback(null);
@@ -627,11 +627,11 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					booleanValue: true
@@ -639,7 +639,7 @@ describe('YouTransfer Settings module', function() {
 			}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.booleanValue.should.equals(false);
 			callback(null);
@@ -659,11 +659,11 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				general: {
 					booleanValue: true
@@ -671,7 +671,7 @@ describe('YouTransfer Settings module', function() {
 			}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			settings.general.booleanValue.should.equals(true);
 			callback(null);
@@ -692,11 +692,11 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({
 				security: {
 					encryptionKey: 'MySecretKey'
@@ -704,7 +704,7 @@ describe('YouTransfer Settings module', function() {
 			}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			var encrypted = crypto('secret' + settings.security.encryptionKey).toString();
 			settings.general.myPassword.should.equals(encrypted);
@@ -727,15 +727,15 @@ describe('YouTransfer Settings module', function() {
 		// Prevent push event during test
 		sandbox.stub(settings, 'emit').withArgs('settings.push');
 
-		sandbox.stub(settings.cache, 'get', function (name, callback) {
+		sandbox.stub(settings.cache, 'get').callsFake(function (name, callback) {
 			callback(null);
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			callback(null, JSON.stringify({}));
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			var settings = JSON.parse(data);
 			var encrypted = crypto('secret').toString();
 			settings.general.myPassword.should.equals(encrypted);

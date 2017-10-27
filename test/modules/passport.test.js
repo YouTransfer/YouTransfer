@@ -48,7 +48,7 @@ describe('YouTransfer Passport module', function() {
 			}),
 			res = {};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				security: {
 					encryptionKey: 'MySecretKey',
@@ -80,7 +80,7 @@ describe('YouTransfer Passport module', function() {
 			}),
 			res = {};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				security: {
 					rootAccount: 'a',
@@ -113,7 +113,7 @@ describe('YouTransfer Passport module', function() {
 			}),
 			res = {};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				security: {
 					encryptionKey: 'MySecretKey',
@@ -141,7 +141,7 @@ describe('YouTransfer Passport module', function() {
 			}),
 			res = {};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {});
 		});
 
@@ -164,7 +164,7 @@ describe('YouTransfer Passport module', function() {
 			}),
 			res = {};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				security: {
 					encryptionKey: 'MySecretKey',

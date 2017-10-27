@@ -32,7 +32,7 @@ describe('Form component', function() {
 		var fixture = getFixture();
 		new form(fixture);
 
-		sandbox.stub($, 'ajax', function (options) {
+		sandbox.stub($, 'ajax').callsFake(function (options) {
 			options.success({
 				output: '<div id="target">My Awesome Response</div>'
 			});
@@ -53,7 +53,7 @@ describe('Form component', function() {
 		var fixture = getFixture();
 		new form(fixture);
 
-		sandbox.stub($, 'ajax', function (options) {
+		sandbox.stub($, 'ajax').callsFake(function (options) {
 			options.success({
 				output: '<div id="anotherTarget">My Awesome Response</div>'
 			});

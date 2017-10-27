@@ -193,7 +193,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		s.push(null);
 		sandbox.stub(fs, 'createReadStream').returns(s);
 
-		sandbox.stub(provider.s3obj, 'upload', function (options, callback) {
+		sandbox.stub(provider.s3obj, 'upload').callsFake(function (options, callback) {
 			should.exist(options);
 			options.Key.should.equals(file.id);
 			options.Metadata.json.should.equals(JSON.stringify(file.context));
@@ -232,7 +232,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 			path: path.join(__dirname, 'file.json')
 		}
 
-		sandbox.stub(provider.s3obj, 'upload', function (options, callback) {
+		sandbox.stub(provider.s3obj, 'upload').callsFake(function (options, callback) {
 			should.exist(options);
 			options.Key.should.equals(bundle.id);
 			callback(null, bundle);
@@ -512,7 +512,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		provider.s3obj = s3obj;
 		var s3objMock = sandbox.mock(s3obj);
 		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, data);
-		sandbox.stub(zlib, 'gunzip', function(data, callback) {
+		sandbox.stub(zlib, 'gunzip').callsFake(function(data, callback) {
 			callback(null, data);
 		});
 
@@ -560,7 +560,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 		provider.s3obj = s3obj;
 		var s3objMock = sandbox.mock(s3obj);
 		s3objMock.expects('getObject').once().withArgs(s3obj.params).callsArgWith(1, null, data);
-		sandbox.stub(zlib, 'gunzip', function(data, callback) {
+		sandbox.stub(zlib, 'gunzip').callsFake(function(data, callback) {
 			callback(null, data);
 		});
 

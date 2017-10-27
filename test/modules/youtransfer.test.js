@@ -48,21 +48,21 @@ describe('YouTransfer module', function() {
 		logMock.expects('info').once().withArgs('Scheduled cleanup of expired files');
 		logMock.expects('info').once().withArgs('(Re)scheduled cleanup of expired files');
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.settings, "on", function(event, callback) {
+		sandbox.stub(youtransfer.settings, "on").callsFake(function(event, callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(scheduler, "add", function(name, schedule, job) {
+		sandbox.stub(scheduler, "add").callsFake(function(name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
 		});
 
-		sandbox.stub(scheduler, "reschedule", function(name, schedule, job) {
+		sandbox.stub(scheduler, "reschedule").callsFake(function(name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
@@ -90,11 +90,11 @@ describe('YouTransfer module', function() {
 		logMock.expects('info').once().withArgs('Scheduled cleanup of expired files');
 		logMock.expects('info').once().withArgs('Disabled cleanup schedule');
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.settings, "on", function(event, callback) {
+		sandbox.stub(youtransfer.settings, "on").callsFake(function(event, callback) {
 			callback(null, {
 				general: {
 					schedulerEnabled: false
@@ -102,13 +102,13 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(scheduler, "add", function(name, schedule, job) {
+		sandbox.stub(scheduler, "add").callsFake(function(name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
 		});
 
-		sandbox.stub(scheduler, "remove", function(name) {
+		sandbox.stub(scheduler, "remove").callsFake(function(name) {
 			name.should.equals('cleanup');
 			logMock.verify();
 			done();
@@ -128,7 +128,7 @@ describe('YouTransfer module', function() {
 			}
 		}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -136,7 +136,7 @@ describe('YouTransfer module', function() {
 	});
 
 	it('should continue if an error occurs while initializing module', function() {
-		sandbox.stub(youtransfer.settings, "get", function (callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function (callback) {
 			callback(new Error('error'), null);
 		});
 
@@ -159,27 +159,27 @@ describe('YouTransfer module', function() {
 		// Prevent log messages during test
 		sandbox.stub(youtransfer.log, 'info');
 
-		sandbox.stub(youtransfer.settings, "get", function (callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function (callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.settings, "push", function (settings, callback) {
+		sandbox.stub(youtransfer.settings, "push").callsFake(function (settings, callback) {
 			settings.security.encryptionKeyMethod.should.equals('auto');
 			callback(null);
 			completed();
 		});
 
-		sandbox.stub(youtransfer.settings, "on", function (event, callback) {
+		sandbox.stub(youtransfer.settings, "on").callsFake(function (event, callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(scheduler, "add", function (name, schedule, job) {
+		sandbox.stub(scheduler, "add").callsFake(function (name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
 		});
 
-		sandbox.stub(scheduler, "reschedule", function (name, schedule, job) {
+		sandbox.stub(scheduler, "reschedule").callsFake(function (name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
@@ -203,25 +203,25 @@ describe('YouTransfer module', function() {
 		// Prevent log messages during test
 		sandbox.stub(youtransfer.log, 'info');
 
-		sandbox.stub(youtransfer.settings, "get", function (callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function (callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.settings, "push", function (settings, callback) {
+		sandbox.stub(youtransfer.settings, "push").callsFake(function (settings, callback) {
 			callback(new Error('error'));
 		});
 
-		sandbox.stub(youtransfer.settings, "on", function (event, callback) {
+		sandbox.stub(youtransfer.settings, "on").callsFake(function (event, callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(scheduler, "add", function (name, schedule, job) {
+		sandbox.stub(scheduler, "add").callsFake(function (name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
 		});
 
-		sandbox.stub(scheduler, "reschedule", function (name, schedule, job) {
+		sandbox.stub(scheduler, "reschedule").callsFake(function (name, schedule, job) {
 			name.should.equals('cleanup');
 			schedule.should.equals(settings.general.cleanupSchedule);
 			should.exist(job);
@@ -238,7 +238,7 @@ describe('YouTransfer module', function() {
 	});
 
 	it('should continue if an error occurs while initializing module', function() {
-		sandbox.stub(youtransfer.settings, "get", function (callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function (callback) {
 			callback(new Error('error'), null);
 		});
 
@@ -255,7 +255,7 @@ describe('YouTransfer module', function() {
 			}
 		}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -275,7 +275,7 @@ describe('YouTransfer module', function() {
 				}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -296,7 +296,7 @@ describe('YouTransfer module', function() {
 				}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -317,7 +317,7 @@ describe('YouTransfer module', function() {
 			}
 		}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -344,7 +344,7 @@ describe('YouTransfer module', function() {
 				}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -368,7 +368,7 @@ describe('YouTransfer module', function() {
 				}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -387,7 +387,7 @@ describe('YouTransfer module', function() {
 			password = 'a',
 			settings = {}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -411,7 +411,7 @@ describe('YouTransfer module', function() {
 				}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -436,7 +436,7 @@ describe('YouTransfer module', function() {
 				}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -478,13 +478,13 @@ describe('YouTransfer module', function() {
 				upload: function() {}
 			};
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "upload", function(file, context, callback) {
+		sandbox.stub(factory, "upload").callsFake(function(file, context, callback) {
 			should.exist(file);
 			should.exist(context);
 			context.size.should.equals(file.size);
@@ -525,13 +525,13 @@ describe('YouTransfer module', function() {
 				upload: function() {}
 			};
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "upload", function(file, context, callback) {
+		sandbox.stub(factory, "upload").callsFake(function(file, context, callback) {
 			should.exist(file);
 			should.exist(context);
 			context.size.should.equals(file.size);
@@ -574,7 +574,7 @@ describe('YouTransfer module', function() {
 				upload: function() {}
 			};
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
@@ -606,13 +606,13 @@ describe('YouTransfer module', function() {
 				bundle: function() {}
 			};
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "bundle", function(context, callback) {
+		sandbox.stub(factory, "bundle").callsFake(function(context, callback) {
 			should.exist(context);
 			context.id.should.equals(bundle.id);
 			context.path.should.equals(path.join(__dirname, bundle.id + '.json'));
@@ -642,13 +642,13 @@ describe('YouTransfer module', function() {
 				bundle: function() {}
 			};
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "bundle", function(context, callback) {
+		sandbox.stub(factory, "bundle").callsFake(function(context, callback) {
 			should.exist(context);
 			context.id.should.equals(bundle.id);
 			context.path.should.equals(path.join(__dirname, bundle.id + '.json'));
@@ -670,10 +670,10 @@ describe('YouTransfer module', function() {
 				download: function() {}
 			};
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "download", function(file, res, callback) {
+		sandbox.stub(factory, "download").callsFake(function(file, res, callback) {
 			should.exist(token);
 			file.should.equals(token)
 			callback();
@@ -693,10 +693,10 @@ describe('YouTransfer module', function() {
 				archive: function() {}
 			};
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
-		sandbox.stub(factory, "archive", function(file, res, callback) {
+		sandbox.stub(factory, "archive").callsFake(function(file, res, callback) {
 			should.exist(token);
 			file.should.equals(token)
 			callback();
@@ -715,17 +715,17 @@ describe('YouTransfer module', function() {
 				purge: function() {}
 			};
 
-		sandbox.stub(youtransfer.storageFactory, 'get', function(callback) {
+		sandbox.stub(youtransfer.storageFactory, 'get').callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(youtransfer.log, 'info', function(msg) {
+		sandbox.stub(youtransfer.log, 'info').callsFake(function(msg) {
 			should.exist(msg);
 			msg.should.equals('The scheduled cleanup job has removed 0 files.');
 			done();
 		});
 
-		sandbox.stub(factory, 'purge', function(callback) {
+		sandbox.stub(factory, 'purge').callsFake(function(callback) {
 			callback(null, new Array());
 		});
 
@@ -738,17 +738,17 @@ describe('YouTransfer module', function() {
 				purge: function() {}
 			};
 
-		sandbox.stub(youtransfer.storageFactory, 'get', function(callback) {
+		sandbox.stub(youtransfer.storageFactory, 'get').callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(youtransfer.log, 'error', function(msg) {
+		sandbox.stub(youtransfer.log, 'error').callsFake(function(msg) {
 			should.exist(msg);
 			msg.should.equals('An error occurred while removing expired files: error');
 			done();
 		});
 
-		sandbox.stub(factory, 'purge', function(callback) {
+		sandbox.stub(factory, 'purge').callsFake(function(callback) {
 			callback(new Error('error'), new Array());
 		});
 
@@ -759,7 +759,7 @@ describe('YouTransfer module', function() {
 
 	it('should be possible to get template source', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -767,7 +767,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			should.exist(file);
 			file.should.equals('./src/templates/myTemplate')
 			callback(null, 'template');
@@ -783,7 +783,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback when trying to get template source if settings are finalised', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: true
@@ -801,7 +801,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback if an error occures while trying to read template source', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -809,7 +809,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'readFile', function (file, encoding, callback) {
+		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			should.exist(file);
 			file.should.equals('./src/templates/myTemplate')
 			callback(new Error('error'));
@@ -825,7 +825,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback if template does not exist', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -843,7 +843,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback if an error occurs while retrieving settings', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(new Error('error'));
 		});
 
@@ -859,7 +859,7 @@ describe('YouTransfer module', function() {
 
 	it('should be possible to set template source', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'push', function (callback) {
+		sandbox.stub(youtransfer.settings, 'push').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -867,7 +867,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			should.exist(file);
 			should.exist(data);
 			should.exist(encoding);
@@ -886,7 +886,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback when trying to set template source if settings are finalised', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: true
@@ -904,7 +904,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback if an error occures while trying to write template source', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -912,7 +912,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(fs, 'writeFile', function (file, data, encoding, callback) {
+		sandbox.stub(fs, 'writeFile').callsFake(function (file, data, encoding, callback) {
 			should.exist(file);
 			should.exist(data);
 			should.exist(encoding);
@@ -933,7 +933,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback if template does not exist', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -951,7 +951,7 @@ describe('YouTransfer module', function() {
 
 	it('should provide feedback if an error occurs while retrieving settings', function(done) {
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(new Error('error'));
 		});
 
@@ -1001,15 +1001,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(null, {
 				files: {
@@ -1020,7 +1020,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+		sandbox.stub(res, 'renderTemplate').callsFake(function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
 			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
@@ -1029,7 +1029,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
 
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
+		sandbox.stub(transporter, "sendMail").callsFake(function(email, callback) {
 			email.from.should.equals(settings.email.sender);
 			email.to.should.equals(req.params.email.to);
 			email.subject.should.equals(settings.email.subject);
@@ -1074,15 +1074,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(null, {
 				files: {
@@ -1093,7 +1093,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+		sandbox.stub(res, 'renderTemplate').callsFake(function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
 			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
@@ -1102,7 +1102,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
 
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
+		sandbox.stub(transporter, "sendMail").callsFake(function(email, callback) {
 			email.from.should.equals(settings.email.sender);
 			email.to.should.equals(req.params.email.to);
 			email.subject.should.equals(settings.email.subject);
@@ -1145,15 +1145,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(null, {
 				files: {
@@ -1164,7 +1164,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+		sandbox.stub(res, 'renderTemplate').callsFake(function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
 			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
@@ -1173,7 +1173,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
 
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
+		sandbox.stub(transporter, "sendMail").callsFake(function(email, callback) {
 			email.from.should.equals(settings.email.sender);
 			email.to.should.equals(req.params.email.to);
 			email.subject.should.equals(settings.email.subject);
@@ -1216,15 +1216,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(null, {
 				files: {
@@ -1235,7 +1235,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+		sandbox.stub(res, 'renderTemplate').callsFake(function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
 			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
@@ -1244,7 +1244,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
 
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
+		sandbox.stub(transporter, "sendMail").callsFake(function(email, callback) {
 			email.from.should.equals(settings.email.sender);
 			email.to.should.equals(req.params.email.to);
 			email.subject.should.equals(settings.email.subject);
@@ -1287,15 +1287,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(null, {
 				files: {
@@ -1306,7 +1306,7 @@ describe('YouTransfer module', function() {
 			});
 		});
 
-		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+		sandbox.stub(res, 'renderTemplate').callsFake(function(template, fields, callback) {
 			fields.bundle.id.should.equals(req.params.bundle);
 			fields.bundle.link.should.equals(settings.general.baseUrl + '/bundle/' + req.params.bundle);
 			fields.files[0].id.should.equals('file');
@@ -1315,7 +1315,7 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
 
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
+		sandbox.stub(transporter, "sendMail").callsFake(function(email, callback) {
 			email.from.should.equals(settings.email.sender);
 			email.to.should.equals(req.params.email.to);
 			email.subject.should.equals(settings.email.subject);
@@ -1333,7 +1333,7 @@ describe('YouTransfer module', function() {
 		var req = {},
 			res = {}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(new Error('error'), null);
 		});
 
@@ -1357,11 +1357,11 @@ describe('YouTransfer module', function() {
 				}
 			}				
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(new Error('error'), null);
 		});
 
@@ -1403,15 +1403,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(new Error('error'), null);
 		});
@@ -1453,15 +1453,15 @@ describe('YouTransfer module', function() {
 				sendMail: function() {}
 			}
 
-		sandbox.stub(youtransfer.settings, "get", function(callback) {
+		sandbox.stub(youtransfer.settings, "get").callsFake(function(callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.storageFactory, "get", function(callback) {
+		sandbox.stub(youtransfer.storageFactory, "get").callsFake(function(callback) {
 			callback(null, factory);
 		});
 
-		sandbox.stub(factory, "getJSON", function(token, callback) {
+		sandbox.stub(factory, "getJSON").callsFake(function(token, callback) {
 			token.should.equals(req.params.bundle);
 			callback(null, {
 				files: {
@@ -1474,11 +1474,11 @@ describe('YouTransfer module', function() {
 
 		sandbox.stub(nodemailer, "createTransport").returns(transporter);
 
-		sandbox.stub(res, 'renderTemplate', function(template, fields, callback) {
+		sandbox.stub(res, 'renderTemplate').callsFake(function(template, fields, callback) {
 			callback(new Error('error'), null);
 		});
 
-		sandbox.stub(transporter, "sendMail", function(email, callback) {
+		sandbox.stub(transporter, "sendMail").callsFake(function(email, callback) {
 			callback();
 		});
 

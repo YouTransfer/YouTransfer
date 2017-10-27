@@ -93,7 +93,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -101,7 +101,7 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+		sandbox.stub(youtransfer, 'upload').callsFake(function (file, bundle, callback) {
 			should.exist(file);
 			should.exist(bundle);
 			file.should.equals(req.files.payload);
@@ -109,7 +109,7 @@ describe('YouTransfer Router module', function() {
 			callback(null, context);
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			should.exist(bundle);
 			should.exist(bundle.id);
 			should.exist(bundle.files[0])
@@ -148,7 +148,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -156,7 +156,7 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+		sandbox.stub(youtransfer, 'upload').callsFake(function (file, bundle, callback) {
 			should.exist(file);
 			should.exist(bundle);
 			file.should.match(/file1|file2/	);
@@ -164,7 +164,7 @@ describe('YouTransfer Router module', function() {
 			callback(null, context);
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			should.exist(bundle);
 			should.exist(bundle.id);
 			should.exist(bundle.files[0])
@@ -206,7 +206,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -214,7 +214,7 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+		sandbox.stub(youtransfer, 'upload').callsFake(function (file, bundle, callback) {
 			should.exist(file);
 			should.exist(bundle);
 			file.should.equals(req.files['dz-payload']);
@@ -222,7 +222,7 @@ describe('YouTransfer Router module', function() {
 			callback(null, context);
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			should.exist(bundle);
 			should.exist(bundle.id);
 			should.exist(bundle.files[0])
@@ -264,7 +264,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -272,11 +272,11 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+		sandbox.stub(youtransfer, 'upload').callsFake(function (file, bundle, callback) {
 			callback(new Error('error'), context);
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			callback();
 		});
 
@@ -316,7 +316,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -324,11 +324,11 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'upload', function (file, bundle, callback) {
+		sandbox.stub(youtransfer, 'upload').callsFake(function (file, bundle, callback) {
 			callback(new Error('error'), context);
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			callback();
 		});
 
@@ -363,7 +363,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			callback(null);
 		});
 
@@ -394,7 +394,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -402,7 +402,7 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			callback(new Error("error"));
 		});
 
@@ -434,7 +434,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				general: {
 					baseUrl: ''
@@ -442,7 +442,7 @@ describe('YouTransfer Router module', function() {
 			});
 		});
 
-		sandbox.stub(youtransfer, 'bundle', function (bundle, callback) {
+		sandbox.stub(youtransfer, 'bundle').callsFake(function (bundle, callback) {
 			callback(new Error("error"));
 		});
 
@@ -470,7 +470,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer, 'send', function (req, res, callback) {
+		sandbox.stub(youtransfer, 'send').callsFake(function (req, res, callback) {
 			callback();
 		});
 
@@ -502,13 +502,13 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer, 'download', function (token, res, callback) {
+		sandbox.stub(youtransfer, 'download').callsFake(function (token, res, callback) {
 			should.exist(token);
 			token.should.equals(req.params.token);
 			callback();
 		});
 
-		sandbox.stub(res, "process", function (name, context, callback) {
+		sandbox.stub(res, "process").callsFake(function (name, context, callback) {
 			name.should.equals('download.html');
 			should.not.exist(context);
 			callback();
@@ -534,13 +534,13 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer, 'archive', function (token, res, callback) {
+		sandbox.stub(youtransfer, 'archive').callsFake(function (token, res, callback) {
 			should.exist(token);
 			token.should.equals(req.params.token);
 			callback();
 		});
 
-		sandbox.stub(res, "process", function (name, context, callback) {
+		sandbox.stub(res, "process").callsFake(function (name, context, callback) {
 			req.errors.exist().should.equals(false);
 			name.should.equals('download.html');
 			should.not.exist(context);
@@ -589,7 +589,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'finalise', function (code, callback) {
+		sandbox.stub(youtransfer.settings, 'finalise').callsFake(function (code, callback) {
 			should.exist(code);
 			code.should.equals(req.params.settings.state.unlockCode);
 			callback();
@@ -622,7 +622,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'finalise', function (code, callback) {
+		sandbox.stub(youtransfer.settings, 'finalise').callsFake(function (code, callback) {
 			should.exist(code);
 			code.should.equals(req.params.settings.state.unlockCode);
 			callback(new Error('error'));
@@ -657,7 +657,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'unlock', function (code, callback) {
+		sandbox.stub(youtransfer.settings, 'unlock').callsFake(function (code, callback) {
 			should.exist(code);
 			code.should.equals(req.params.unlockCode);
 			callback();
@@ -691,7 +691,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'unlock', function (code, callback) {
+		sandbox.stub(youtransfer.settings, 'unlock').callsFake(function (code, callback) {
 			should.exist(code);
 			code.should.equals(req.params.unlockCode);
 			callback(new Error('INVALID_CODE'));
@@ -730,7 +730,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+		sandbox.stub(youtransfer.templates, 'get').callsFake(function (name, callback) {
 			should.exist(name);
 			name.should.equals(req.params.template);
 			callback(null, 'source');
@@ -764,7 +764,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+		sandbox.stub(youtransfer.templates, 'get').callsFake(function (name, callback) {
 			should.exist(name);
 			name.should.equals(req.params.template);
 			callback(new Error('SETTINGS_FINALISED'));
@@ -797,7 +797,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+		sandbox.stub(youtransfer.templates, 'get').callsFake(function (name, callback) {
 			should.exist(name);
 			name.should.equals(req.params.template);
 			callback(new Error('Error'));
@@ -827,7 +827,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'get', function (name, callback) {
+		sandbox.stub(youtransfer.templates, 'get').callsFake(function (name, callback) {
 			should.not.exist(name);
 			callback(new Error('ENOENT'));
 		});
@@ -862,7 +862,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'push', function (name, content, callback) {
+		sandbox.stub(youtransfer.templates, 'push').callsFake(function (name, content, callback) {
 			should.exist(name);
 			should.exist(content);
 			name.should.equals(req.params.template);
@@ -870,7 +870,7 @@ describe('YouTransfer Router module', function() {
 			callback(null);
 		});
 
-		sandbox.stub(router, "settingsGetByName", function() {
+		sandbox.stub(router, "settingsGetByName").callsFake(function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('template');
@@ -912,7 +912,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'push', function (name, content, callback) {
+		sandbox.stub(youtransfer.templates, 'push').callsFake(function (name, content, callback) {
 			should.exist(name);
 			should.exist(content);
 			name.should.equals(req.params.template);
@@ -947,14 +947,14 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.templates, 'push', function (name, content, callback) {
+		sandbox.stub(youtransfer.templates, 'push').callsFake(function (name, content, callback) {
 			should.not.exist(name);
 			should.exist(content);
 			content.should.equals(req.params.body);
 			callback(new Error('ENOENT'));
 		});
 
-		sandbox.stub(router, "settingsGetByName", function() {
+		sandbox.stub(router, "settingsGetByName").callsFake(function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('template');
@@ -993,7 +993,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -1025,7 +1025,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: false
@@ -1066,7 +1066,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
@@ -1103,7 +1103,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
@@ -1133,7 +1133,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, {
 				state: {
 					finalised: true
@@ -1175,17 +1175,17 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
-		sandbox.stub(youtransfer.settings, 'push', function (settings, callback) {
+		sandbox.stub(youtransfer.settings, 'push').callsFake(function (settings, callback) {
 			should.exist(settings);
 			settings.should.equals(req.params.settings);
 			callback(null);
 		});
 
-		sandbox.stub(router, "settingsGetByName", function() {
+		sandbox.stub(router, "settingsGetByName").callsFake(function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('general');
@@ -1210,7 +1210,7 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(router, "settingsSaveTemplate", function() {
+		sandbox.stub(router, "settingsSaveTemplate").callsFake(function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('template');
@@ -1242,13 +1242,13 @@ describe('YouTransfer Router module', function() {
 
 		errors(req, null, function() {});
 
-		sandbox.stub(youtransfer.settings, 'push', function (value, callback) {
+		sandbox.stub(youtransfer.settings, 'push').callsFake(function (value, callback) {
 			should.exist(value);
 			value.should.equals(req.params.settings);
 			callback(new Error('SETTINGS_FINALISED'));
 		});
 
-		sandbox.stub(router, "settingsGetByName", function() {
+		sandbox.stub(router, "settingsGetByName").callsFake(function() {
 			return function(req, res, next) {
 				should.exist(req.params.name);
 				req.params.name.should.equals('general');

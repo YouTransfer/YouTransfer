@@ -113,7 +113,7 @@ describe('YouTransfer Middleware module', function() {
 				isXMLHttpRequest: false
 			};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
@@ -122,7 +122,7 @@ describe('YouTransfer Middleware module', function() {
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
-		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (template, variables, callback) {
 			template.should.equals(name);
 			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
@@ -165,7 +165,7 @@ describe('YouTransfer Middleware module', function() {
 			};
 
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
@@ -174,7 +174,7 @@ describe('YouTransfer Middleware module', function() {
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
-		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (template, variables, callback) {
 			template.should.equals(name);
 			variables.general.baseUrl.should.equals(context.general.baseUrl);
 			variables.host.should.equals(context.host);
@@ -220,7 +220,7 @@ describe('YouTransfer Middleware module', function() {
 			};
 
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
@@ -229,7 +229,7 @@ describe('YouTransfer Middleware module', function() {
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
-		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (template, variables, callback) {
 			template.should.equals(name);
 			variables.general.baseUrl.should.equals(context.general.baseUrl);
 			variables.host.should.equals(context.host);
@@ -277,7 +277,7 @@ describe('YouTransfer Middleware module', function() {
 			};
 
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
@@ -286,7 +286,7 @@ describe('YouTransfer Middleware module', function() {
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
-		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (template, variables, callback) {
 			template.should.equals(name);
 			variables.general.baseUrl.should.equals(context.general.baseUrl);
 			variables.host.should.equals(context.host);
@@ -319,7 +319,7 @@ describe('YouTransfer Middleware module', function() {
 				isXMLHttpRequest: false
 			};
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback('error', null);
 		});
 
@@ -328,7 +328,7 @@ describe('YouTransfer Middleware module', function() {
 		//Adding stub to avoid test execution getting blocked by Nunjucks fs watch
 		sandbox.stub(nunjucks, 'configure').returns(null);
 
-		sandbox.stub(nunjucks, 'render', function (template, variables, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (template, variables, callback) {
 			template.should.equals(name);
 			variables.isXMLHttpRequest.should.equals(context.isXMLHttpRequest);
 			callback();
@@ -375,21 +375,21 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(nunjucks, 'render', function (name, context, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (name, context, callback) {
 			return template.content;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -443,17 +443,17 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(false);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(nunjucks, 'render', function (name, context, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (name, context, callback) {
 			context.invalidHost.should.equals(false);
 			context.general.baseUrl.should.equals(settings.general.baseUrl);
 			context.host.should.equals(settings.general.baseUrl);
@@ -461,7 +461,7 @@ describe('YouTransfer Middleware module', function() {
 			return template.content;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -517,17 +517,17 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(nunjucks, 'render', function (name, context, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (name, context, callback) {
 			context.invalidHost.should.equals(false);
 			context.general.baseUrl.should.equals(settings.general.baseUrl);
 			context.host.should.equals(settings.general.baseUrl);
@@ -535,7 +535,7 @@ describe('YouTransfer Middleware module', function() {
 			return template.content;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -589,17 +589,17 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(nunjucks, 'render', function (name, context, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (name, context, callback) {
 			context.invalidHost.should.equals(true);
 			context.general.baseUrl.should.equals(settings.general.baseUrl);
 			context.host.should.equals('http://anotherhost');
@@ -607,7 +607,7 @@ describe('YouTransfer Middleware module', function() {
 			return template.content;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -654,21 +654,21 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback('this is an error', {});
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(nunjucks, 'render', function (name, context, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (name, context, callback) {
 			return template.content;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -714,21 +714,21 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(nunjucks, 'render', function (templateName, context, callback) {
+		sandbox.stub(nunjucks, 'render').callsFake(function (templateName, context, callback) {
 			return template.content;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -773,19 +773,19 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).returns(template);
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
 		sandbox.stub(nunjucks, 'render').throws('some random error');
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.content);
 		});
@@ -831,17 +831,17 @@ describe('YouTransfer Middleware module', function() {
 		var viewEngineMock = sandbox.mock(viewEngine);
 		viewEngineMock.expects("getTemplate").once().withArgs(name).throws(template.err)
 
-		sandbox.stub(youtransfer.settings, 'get', function (callback) {
+		sandbox.stub(youtransfer.settings, 'get').callsFake(function (callback) {
 			callback(null, settings);
 		});
 
 		sandbox.stub(req.errors, 'exist').returns(true);
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
-		sandbox.stub(res, 'end', function (content) {
+		sandbox.stub(res, 'end').callsFake(function (content) {
 			should.exist(content);
 			content.should.equals(template.err.message);
 		});
@@ -879,7 +879,7 @@ describe('YouTransfer Middleware module', function() {
 				getTemplate: function() {}
 			};
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
@@ -888,7 +888,7 @@ describe('YouTransfer Middleware module', function() {
 
 			sandbox.stub(req.errors, 'exist').returns(true);
 
-			sandbox.stub(res, 'render', function (template, variables, callback) {
+			sandbox.stub(res, 'render').callsFake(function (template, variables, callback) {
 				template.should.equals(name);
 				variables.success.should.equals(context.success);
 				variables.isPostback.should.equals(context.isPostback);
@@ -924,7 +924,7 @@ describe('YouTransfer Middleware module', function() {
 				getTemplate: function() {}
 			};
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
@@ -933,11 +933,11 @@ describe('YouTransfer Middleware module', function() {
 
 			sandbox.stub(req.errors, 'exist').returns(true);
 
-			sandbox.stub(res, 'renderTemplate', function (template, variables, callback) {
+			sandbox.stub(res, 'renderTemplate').callsFake(function (template, variables, callback) {
 				callback(null, 'my template content');
 			});
 
-			sandbox.stub(res, 'json', function (variables) {
+			sandbox.stub(res, 'json').callsFake(function (variables) {
 				variables.success.should.equals(context.success);
 				variables.isPostback.should.equals(context.isPostback);
 				variables.errors.should.equals(context.errors);
@@ -971,7 +971,7 @@ describe('YouTransfer Middleware module', function() {
 				getTemplate: function() {}
 			};
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 
@@ -980,11 +980,11 @@ describe('YouTransfer Middleware module', function() {
 
 			sandbox.stub(req.errors, 'exist').returns(true);
 
-			sandbox.stub(res, 'renderTemplate', function (template, variables, callback) {
+			sandbox.stub(res, 'renderTemplate').callsFake(function (template, variables, callback) {
 				callback(null, 'my template content');
 			});
 
-			sandbox.stub(res, 'json', function (variables) {
+			sandbox.stub(res, 'json').callsFake(function (variables) {
 				variables.success.should.equals(context.success);
 				variables.isPostback.should.equals(context.isPostback);
 				variables.errors.should.equals(context.errors);
@@ -1020,7 +1020,7 @@ describe('YouTransfer Middleware module', function() {
 				getTemplate: function() {}
 			};
 
-		sandbox.stub(nunjucks, 'configure', function (files, options) {
+		sandbox.stub(nunjucks, 'configure').callsFake(function (files, options) {
 			return viewEngine;
 		});
 

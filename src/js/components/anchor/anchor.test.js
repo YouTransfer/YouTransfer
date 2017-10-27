@@ -35,7 +35,7 @@ describe('Anchor component', function() {
 		var fixture = getFixture();
 		new anchor(fixture);
 
-		sandbox.stub($, 'get', function (url) {
+		sandbox.stub($, 'get').callsFake(function (url) {
 			should.exist(url);
 			url.should.equals('http://someurl/');
 
@@ -66,7 +66,7 @@ describe('Anchor component', function() {
 		var fixture = getFixture();
 		new anchor(fixture);
 
-		sandbox.stub($, 'get', function (url) {
+		sandbox.stub($, 'get').callsFake(function (url) {
 			should.exist(url);
 			url.should.equals('http://someurl/');
 
