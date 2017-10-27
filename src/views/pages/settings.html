@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% if not isXMLHttpRequest %}{% extends 'layout.html' %}{% else %}{% extends 'xhr.html' %}{% endif -%}
 
 {% block content %}
 {% if not isXMLHttpRequest %}
