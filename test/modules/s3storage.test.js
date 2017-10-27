@@ -75,7 +75,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 
 	it('should accept options by empty Object', function() {
 		var instance = s3storage({});
-		should.not.exist(instance.s3obj.config.credentials);
+		instance.options.should.be.empty;
 	});
 
 	it('should throw an error when setting options by Integer', function() {
