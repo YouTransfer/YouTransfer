@@ -122,7 +122,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		provider.getJSON('file', function(err, value) {
 			should.exist(err);
-			err.message.should.equals('Unexpected token h');
+			err.message.should.equals('Unexpected token h in JSON at position 1');
 			done();
 		});
 	});

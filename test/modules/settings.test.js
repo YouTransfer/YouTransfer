@@ -101,7 +101,7 @@ describe('YouTransfer Settings module', function() {
 
 		settings.defaults(function(err, output) {
 			should.exist(err);
-			err.message.should.equals('Unexpected token h');
+			err.message.should.equals('Unexpected token h in JSON at position 1');
 			done();
 		});
 	});	
@@ -188,7 +188,7 @@ describe('YouTransfer Settings module', function() {
 
 		settings.get(function(err, output) {
 			should.exist(err);
-			err.message.should.equals('Unexpected token h');
+			err.message.should.equals('Unexpected token h in JSON at position 1');
 			done();
 		});
 	});
@@ -443,7 +443,7 @@ describe('YouTransfer Settings module', function() {
 			}
 		}, function(err) {
 			should.exist(err);
-			err.message.should.equals('Unexpected token h');
+			err.message.should.equals('Unexpected token h in JSON at position 1');
 			done();
 		});
 	});
