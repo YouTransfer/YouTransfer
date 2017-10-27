@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------------------------ Component Dependencies
 
 var $ = require('jquery');
-var $form = require('../../../../node_modules/jquery-form/jquery.form.js');
+require('jquery-form')(window, $);
 
 // ------------------------------------------------------------------------------------------ Component Variables
 
