@@ -60,5 +60,6 @@ limitations under the License.
 
 The YouTransfer project relies heavily on 3rd party Open Source projects. These projects all have their own licenses. Although commercial use of the YouTransfer project is permitted under the Apache 2.0 license, this right is limited to the "original content" created as part of this project. Please make sure you check the licenses of all 3rd party components. The YouTransfer project cannot be held responsible for non-compliance with 3rd party licenses when using this application. The use of 3rd party projects is listed in the dependency section of the `package.json` or inline in the code (when applicable).  
 
-<img src="http://youtransfer.io/assets/holland.png" alt="Founded in Holland" width="150">  
-[Made in Amsterdam](http://www.iamsterdam.com/en/business/startupamsterdam), with ♥
+<img src="http://youtransfer.io/assets/holland.png" alt="Founded in Holland" width="150" />
+
+[Made in Amsterdam](https://www.iamsterdam.com/en/business/startupamsterdam) with ♥
