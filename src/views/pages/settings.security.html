@@ -18,7 +18,7 @@
 		{% endif %}
 	{% endif %}
 
-	<form class="form-horizontal" method="post" data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true">
+	<form class="form-horizontal" method="post" action="{{ general.baseUrl }}/settings/security" data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true">
 
 		<div id="access" data-select-content>
 			<h3>Access Control</h3>
@@ -46,7 +46,6 @@
 			</div>
 
 			<div id="restricted" role="select-section" class="select-section {{ "active" if security.accessRights == 'restricted' }}">
-				{% if not security.rootAccount %}
 				<h4>Administrator account</h4>
 
 				<div class="form-group">
@@ -72,14 +71,6 @@
 						</div>
 					</div>
 				</div>
-				{% else %}
-				<div class="form-group">
-					<div class="col-sm-6 col-sm-offset-3">
-						<div class="alert alert-info">
-						</div>
-					</div>
-				</div>
-				{% endif %}
 			</div>
 		</div>
 

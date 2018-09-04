@@ -3,7 +3,7 @@
 <div class="download text-center">
 	<p>Submit token to retrieve your file or archive</p>
 
-	<form method="POST" action="/download" class="form-inline">
+	<form method="POST" action="{{ general.baseUrl }}/download" class="form-inline">
 
 		<div class="form-group">
 			<input type="text" class="form-control" name="token" value="{{ token }}" />

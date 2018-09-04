@@ -6,27 +6,27 @@
 	<div class="col-md-3">
 		<ul class="nav nav-tabs nav-stacked">
 			<li>
-				<a href="/"><span class="glyphicon glyphicon-menu-left"></span> Return to homepage</a>
+				<a href="{{ general.baseUrl }}/"><span class="glyphicon glyphicon-menu-left"></span> Return to homepage</a>
 			</li>
 		</ul>
 		<ul class="nav nav-tabs nav-stacked nav-pills" role="tablist">
 			<li role="presentation" class="{{ "active" if activeTab == 'general' }}">
-				<a href="/settings/general" aria-controls="general" role="tab" data-async data-target="tab-content">General</a>
+				<a href="{{ general.baseUrl }}/settings/general" aria-controls="general" role="tab" data-async data-target="tab-content">General</a>
 			</li>
 			<li role="presentation" class="{{ "active" if activeTab == 'security' }}">
-				<a href="/settings/security" aria-controls="security" role="tab" data-async data-target="tab-content">Security</a>
+				<a href="{{ general.baseUrl }}/settings/security" aria-controls="security" role="tab" data-async data-target="tab-content">Security</a>
 			</li>
 			<li role="presentation" class="{{ "active" if activeTab == 'transfer' }}">
-				<a href="/settings/transfer" aria-controls="transfer" role="tab" data-async data-target="tab-content">Transfer</a>
+				<a href="{{ general.baseUrl }}/settings/transfer" aria-controls="transfer" role="tab" data-async data-target="tab-content">Transfer</a>
 			</li>
 			<li role="presentation" class="{{ "active" if activeTab == 'email' }}">
-				<a href="/settings/email" aria-controls="email" role="tab" data-async data-target="tab-content">Email</a>
+				<a href="{{ general.baseUrl }}/settings/email" aria-controls="email" role="tab" data-async data-target="tab-content">Email</a>
 			</li>
 			<li role="presentation" class="{{ "active" if activeTab == 'storage' }}">
-				<a href="/settings/storage" aria-controls="storage" role="tab" data-async data-target="tab-content">Storage</a>
+				<a href="{{ general.baseUrl }}/settings/storage" aria-controls="storage" role="tab" data-async data-target="tab-content">Storage</a>
 			</li>
 			<li role="presentation" class="{{ "active" if activeTab == 'template' }}">
-				<a href="/settings/template" aria-controls="template" role="tab" data-async data-target="tab-content">Templates</a>
+				<a href="{{ general.baseUrl }}/settings/template" aria-controls="template" role="tab" data-async data-target="tab-content">Templates</a>
 			</li>
 		</ul>
 	</div>
@@ -40,7 +40,7 @@
 {% if not isXMLHttpRequest %}
 	</div>
 	<div class="finalise col-md-3">
-		<a class="btn btn-default" href="/settings/finalise" role="tab" data-async data-target="tab-content">Finalise</a>
+		<a class="btn btn-default" href="{{ general.baseUrl }}/settings/finalise" role="tab" data-async data-target="tab-content">Finalise</a>
 	</div>
 </div>
 {% endif %}
