@@ -57,7 +57,7 @@ function Fileupload(element) {
 			paramName: DROPZONE_PARAMETER,
 			dictDefaultMessage: '<span class="glyphicon glyphicon-download-alt" style="font-size: 3em;"></span><br /><br /> Drop files here or click to select',
 			dictFallbackMessage: '',
-
+			timeout: 86400000,
 			previewTemplate: component.previewTemplate,
 			previewsContainer: component.previewContainer,
 			clickable: DROPZONE_ACTIONS_ADD_SELECTOR
