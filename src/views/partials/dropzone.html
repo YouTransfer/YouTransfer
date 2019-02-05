@@ -15,6 +15,7 @@
 	<div class="dz-preview-item">
 		<div class="dz-preview-description {{ "col-md-7" if not isPostback }}">
 			<span data-dz-name>{{ file.name }}</span> (<span data-dz-size>{{ file.filesize }}</span>)
+			<br /><span class="text-success">Right click on the file id and copy the download link</span>
 			<div class="dz-preview-result">
 				<span class="text-success" data-dz-link>{%if isPostback %}<a href="/download/{{ file.id }}/"><span class="glyphicon glyphicon-download-alt"></span> {{ file.id }}</a>{% endif %}</span>
 				<span class="text-danger" data-dz-errormessage></span>

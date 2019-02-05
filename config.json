@@ -2,8 +2,8 @@
 	"PORT": 5000,
 
 	"general": {
-		"title": "YouTransfer",
-		"subtitle": "The self-hosted file sharing solution",
+		"title": "IITP Transfer",
+		"subtitle": "IIT Patna's file sharing portal",
 		"baseUrl": "http://localhost:5000",
 		"cleanupSchedule": "*/1 * * * *",
 		"schedulerEnabled": false,
@@ -17,7 +17,7 @@
 	},
 
 	"email": {
-		"subject": "YouTransfer",
+		"subject": "IITP Transfer",
 		"transporter": "direct",
 		"sendmailPath": "/usr/sbin/sendmail",
 		"region": "eu-west-1",

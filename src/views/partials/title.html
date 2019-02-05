@@ -1,11 +1,12 @@
 <header class="col-md-12">
+	<img id="iitp_logo" src="/assets/iitp_logo.png" alt="IITP Logo">
 	<h1><a href="/">{{ general.title | safe }}</a></h1>
 	<h2>{{ general.subtitle | safe }}</h2>
 </header>
 
 {% if security.accessRights == 'restricted' and user %}
 <div class="profile dropdown" data-dropdown>
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown">	
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 	    <img src="{{ user.picture }}" />
 	</a>
 	<ul class="dropdown-menu" role="menu">
