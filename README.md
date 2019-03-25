@@ -1,3 +1,7 @@
+# Looking for a new maintainer
+
+YouTransfer is looking for contributors who are willing to update out-dated packages, merge pull requests, resolve issues and continue to improve the overal product. If you are interested, please contact me (info at youtransfer dot io).
+
 # YouTransfer
 
 [![GitHub version](https://badge.fury.io/gh/youtransfer%2Fyoutransfer.svg)](http://badge.fury.io/gh/youtransfer%2Fyoutransfer) [![npm version](https://badge.fury.io/js/youtransfer.svg)](http://badge.fury.io/js/youtransfer) [![Build Status](https://travis-ci.org/youtransfer/YouTransfer.svg?branch=master)](https://travis-ci.org/YouTransfer/YouTransfer) [![Maintainability](https://api.codeclimate.com/v1/badges/0af13d9a9eb8107a8417/maintainability)](https://codeclimate.com/github/YouTransfer/YouTransfer/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/0af13d9a9eb8107a8417/test_coverage)](https://codeclimate.com/github/YouTransfer/YouTransfer/test_coverage) [![Dependency Status](https://david-dm.org/youtransfer/youtransfer.svg)](https://david-dm.org/youtransfer/youtransfer) [![devDependency Status](https://david-dm.org/youtransfer/youtransfer/dev-status.svg)](https://david-dm.org/youtransfer/youtransfer#info=devDependencies) [![License](https://img.shields.io/github/license/youtransfer/youtransfer.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/youtransfer/YouTransfer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
