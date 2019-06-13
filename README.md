@@ -28,10 +28,10 @@ If you wish to install YouTransfer in your own environment without any modificat
 You can run the application with the following command:
 
 ````
-docker run -d 
--v [path_to_upload_folder]:/opt/youtransfer/uploads 
--v [path_to_config_folder]:/opt/youtransfer/config 
--p 80:5000 
+docker run -d \
+-v [path_to_upload_folder]:/opt/youtransfer/uploads \
+-v [path_to_config_folder]:/opt/youtransfer/config \
+-p 80:5000 \
 remie/youtransfer:stable
 ````
 
