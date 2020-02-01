@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - 8
 env:
-  - PHANTOMJS_PATH=/usr/local/phantomjs/bin/phantomjs
 after_success:
   - codeclimate-test-reporter < ./test/unit-test-coverage/lcov.info
 addons:

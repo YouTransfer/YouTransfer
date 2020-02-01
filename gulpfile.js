@@ -18,7 +18,7 @@ var less = require('gulp-less');
 var gutil = require('gulp-util');
 var karma = require('gulp-karma');
 var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
+var nyc = require('nyc');
 var webdriver = require('gulp-webdriver');
 var del = require('del');
 var browserify = require('browserify');
@@ -37,18 +37,20 @@ gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
 gulp.task('testComponentsTask', testComponentsTask);
 gulp.task('testModulesTask', testModulesTask);
-gulp.task('testViewsTask', ['testWebdriverTask'], testViewsTask);
-gulp.task('testWebdriverTask', ['build'], testWebdriverTask);
+gulp.task('testViewsTask', testViewsTask);
+
+gulp.task('build', gulp.series('browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask'));
+gulp.task('testWebdriverTask', testWebdriverTask);
+gulp.task('testViewsTasks', gulp.series('build','testWebdriverTask','testViewsTask'));
 gulp.task('testTerminationTask', testTerminationTask);
 
-gulp.task('clean', ['cleanTask']);
-gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
-gulp.task('dist', ['build']);
+gulp.task('clean', gulp.series('cleanTask'));
+gulp.task('dist', gulp.series('build'));
 gulp.task('test', function(callback) {
-	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback);
+	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTasks', 'testTerminationTask', callback);
 });
 
-gulp.task('watch', ['dist'], function() {
+gulp.task('watch', gulp.series('dist'), function() {
 	gulp.watch([paths.src + '/**/js/**', '!**/*.less'], ['browserifyAppTask', 'browserifyVendorTask']);
 	gulp.watch(paths.src + '/**/*.less', ['lessTask']);
 	gulp.watch([paths.src + '/**/*','!**/js/**', '!**/*.less'], ['copyStaticTask']);
@@ -104,12 +106,12 @@ function lessTask() {
 
 function testModulesTask() {
 	return gulp.src(['./lib/*.js'])
-			   .pipe(istanbul({includeUntested: true}))
-			   .pipe(istanbul.hookRequire())
+			   .pipe(nyc({includeUntested: true}))
+			   .pipe(nyc.hookRequire())
 			   .on('finish', function () {
 					gulp.src(['./test/modules/**/*.test.js'])
 						.pipe(mocha({reporter: 'spec'}))
-						.pipe(istanbul.writeReports({ 
+						.pipe(nyc.writeReports({ 
 							dir: './test/unit-test-coverage', 
 							reporters: [ 'lcov' ], 
 							reportOpts: {
