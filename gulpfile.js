@@ -18,7 +18,7 @@ var less = require('gulp-less');
 var gutil = require('gulp-util');
 var karma = require('gulp-karma');
 var mocha = require('gulp-mocha');
-var nyc = require('nyc');
+var istanbul = require('gulp-istanbul');
 var webdriver = require('gulp-webdriver');
 var del = require('del');
 var browserify = require('browserify');
@@ -26,7 +26,7 @@ var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
 var vinylPaths = require('vinyl-paths');
 var selenium = require('selenium-standalone');
-var runSequence = require('run-sequence');
+var runSequence = require('gulp4-run-sequence');
 
 // ------------------------------------------------------------------------------------------ Tasks
 
@@ -47,7 +47,7 @@ gulp.task('testTerminationTask', testTerminationTask);
 gulp.task('clean', gulp.series('cleanTask'));
 gulp.task('dist', gulp.series('build'));
 gulp.task('test', function(callback) {
-	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTasks', 'testTerminationTask', callback);
+	runSequence('testModulesTask', 'testViewsTasks', 'testTerminationTask', callback);
 });
 
 gulp.task('watch', gulp.series('dist'), function() {
@@ -55,7 +55,6 @@ gulp.task('watch', gulp.series('dist'), function() {
 	gulp.watch(paths.src + '/**/*.less', ['lessTask']);
 	gulp.watch([paths.src + '/**/*','!**/js/**', '!**/*.less'], ['copyStaticTask']);
 });
-
 // ------------------------------------------------------------------------------------------ Task Definitions
 
 function cleanTask() {
@@ -106,12 +105,12 @@ function lessTask() {
 
 function testModulesTask() {
 	return gulp.src(['./lib/*.js'])
-			   .pipe(nyc({includeUntested: true}))
-			   .pipe(nyc.hookRequire())
+			   .pipe(istanbul({includeUntested: true}))
+			   .pipe(istanbul.hookRequire())
 			   .on('finish', function () {
 					gulp.src(['./test/modules/**/*.test.js'])
 						.pipe(mocha({reporter: 'spec'}))
-						.pipe(nyc.writeReports({ 
+						.pipe(istanbul.writeReports({ 
 							dir: './test/unit-test-coverage', 
 							reporters: [ 'lcov' ], 
 							reportOpts: {

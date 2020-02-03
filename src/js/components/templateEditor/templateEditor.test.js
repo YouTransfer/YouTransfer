@@ -16,7 +16,7 @@ describe('TemplateEditor component', function() {
 
 	beforeEach(function() {
 		$('body').empty();
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 	});
 
 	afterEach(function() {

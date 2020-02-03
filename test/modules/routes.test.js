@@ -16,7 +16,6 @@ nconf.set('basedir', __dirname);
 
 // ------------------------------------------------------------------------------------------ Mock Dependencies
 
-var nstatic = require('node-static');
 var youtransfer = require('../../lib/youtransfer');
 
 // ------------------------------------------------------------------------------------------ Test Definition
@@ -28,7 +27,7 @@ describe('YouTransfer Router module', function() {
 	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 	});
 
 	afterEach(function() {
@@ -66,7 +65,7 @@ describe('YouTransfer Router module', function() {
 			should.not.exist(instance);
 		} catch(err) {
 			should.exist(err);
-			err.should.equals('Invalid options provided');
+			err.should.equals('Invalid router options(number) provided');
 		}
 	});
 
@@ -1282,7 +1281,6 @@ describe('YouTransfer Router module', function() {
 
 		var serverMock = sandbox.mock(server);
 		serverMock.expects('serveFile').once().withArgs('/' + req.params[1] + '/' + req.params[2], 200, { server: 'youtransfer.io', 'Cache-Control': 'max-age=' + nconf.get('CACHE_MAX_AGE') }, req, res);
-
 		instance.staticFiles()(req, res);
 		serverMock.verify();
 	});

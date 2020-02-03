@@ -16,7 +16,7 @@ describe('Tabs component', function() {
 
 	beforeEach(function() {
 		$('body').empty();
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 		$(document).off('xhr.loaded.tabs');
 	});
 

@@ -23,7 +23,7 @@ describe('YouTransfer Settings module', function() {
 	var title = "My Awesome Title";
 
 	beforeEach(function() {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 	});
 
 	afterEach(function() {

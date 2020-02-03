@@ -26,7 +26,7 @@ describe('YouTransfer Amazon S3 Storage module', function() {
 	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 		provider = s3storage({
 			storage: {
 				S3AccessKeyId: 'AccessKeyId',

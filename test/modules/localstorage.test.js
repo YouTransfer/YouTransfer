@@ -24,7 +24,7 @@ describe('YouTransfer Local Storage module', function() {
 	// -------------------------------------------------------------------------------------- Test Initialization
 
 	beforeEach(function() {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 		provider = localstorage({ 
 			storage: {
 				localstoragepath: __dirname 
@@ -142,7 +142,7 @@ describe('YouTransfer Local Storage module', function() {
 				on: function() {},
 				pipe: function() {}
 			}
-
+			
 		sandbox.stub(fs, 'mkdir').callsFake(function (dir, callback) {
 			dir.should.equals(__dirname);
 			callback();
@@ -222,8 +222,8 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null);
 		});
 
-		var cryptoMock = sandbox.mock(crypto);
-		cryptoMock.expects('createCipher').once().returns(stream);
+		var crcyptoMock = sandbox.mock(crypto);
+		cryptoMock.expects('createCipheriv').once().returns(stream);
 
 		var streamMock = sandbox.mock(stream);
 		streamMock.expects('pipe').twice().returns(stream);
@@ -425,7 +425,7 @@ describe('YouTransfer Local Storage module', function() {
 		});
 
 		var data = "my binary data";
-		var cipher = crypto.createCipher('aes-256-ctr', 'MySecretEncryptionKey');
+		var cipher = crypto.createCipheriv('aes-256-ccm', 'MySecretEncryptionKey');
 		var buffer = Buffer.concat([cipher.update(data) , cipher.final()]);
 
 		var token = 'bundle',
@@ -651,7 +651,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		var zip = {
 			on: function() {},
-		};
+		};		
 		var zipMock = sandbox.mock(zip);
 		zipMock.expects('on').once().withArgs('finish').callsArgAsync(1);
 		sandbox.stub(archiver, 'create').returns(zip);
