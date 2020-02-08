@@ -26,7 +26,7 @@ var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
 var vinylPaths = require('vinyl-paths');
 var selenium = require('selenium-standalone');
-var runSequence = require('run-sequence');
+var runSequence = require('gulp4-run-sequence');
 
 // ------------------------------------------------------------------------------------------ Tasks
 
@@ -37,23 +37,24 @@ gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
 gulp.task('testComponentsTask', testComponentsTask);
 gulp.task('testModulesTask', testModulesTask);
-gulp.task('testViewsTask', ['testWebdriverTask'], testViewsTask);
-gulp.task('testWebdriverTask', ['build'], testWebdriverTask);
+gulp.task('testViewsTask', testViewsTask);
+
+gulp.task('build', gulp.series('browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask'));
+gulp.task('testWebdriverTask', testWebdriverTask);
+gulp.task('testViewsTasks', gulp.series('build','testWebdriverTask','testViewsTask'));
 gulp.task('testTerminationTask', testTerminationTask);
 
-gulp.task('clean', ['cleanTask']);
-gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
-gulp.task('dist', ['build']);
+gulp.task('clean', gulp.series('cleanTask'));
+gulp.task('dist', gulp.series('build'));
 gulp.task('test', function(callback) {
-	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback);
+	runSequence('testModulesTask', 'testViewsTasks', 'testTerminationTask', callback);
 });
 
-gulp.task('watch', ['dist'], function() {
+gulp.task('watch', gulp.series('dist'), function() {
 	gulp.watch([paths.src + '/**/js/**', '!**/*.less'], ['browserifyAppTask', 'browserifyVendorTask']);
 	gulp.watch(paths.src + '/**/*.less', ['lessTask']);
 	gulp.watch([paths.src + '/**/*','!**/js/**', '!**/*.less'], ['copyStaticTask']);
 });
-
 // ------------------------------------------------------------------------------------------ Task Definitions
 
 function cleanTask() {

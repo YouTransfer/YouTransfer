@@ -16,7 +16,7 @@ describe('Anchor component', function() {
 
 	beforeEach(function() {
 		$('body').empty();
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 		$(document).off('xhr.loaded.anchor');
 		$(document).off('component.anchor.success');
 	});

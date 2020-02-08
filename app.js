@@ -56,7 +56,7 @@ var router = routes('./dist');
 app.post('/', router.upload());
 app.post('/upload', router.upload());
 app.post('/upload/bundle', router.uploadBundle());
-app.post(/^\/send/, router.send());
+app.post('/^\/send/', router.send());
 app.get('/download/:token', router.download());
 app.post('/download', router.download());
 app.get('/bundle/:token', router.download());
@@ -68,8 +68,8 @@ app.post('/settings/:name', router.settingsSaveByName());
 app.post('/unlock', router.settingsUnlock());
 app.post('/login', passport.authenticate('local', { successRedirect: '/' }));
 app.get('/signout', router.signout());
-app.get(/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/, router.staticFiles());
-app.get(/^\/(.*)/, router.default());
+app.get('/^(\/v\d*)?\/(js|css|assets|fonts|img|sounds)\/(.*)/', router.staticFiles());
+app.get('/^\/(.*)/', router.default());
 
 // ------------------------------------------------------------------------------------------ App Execution
 

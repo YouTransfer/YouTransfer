@@ -16,7 +16,7 @@ describe('Form component', function() {
 
 	beforeEach(function() {
 		$('body').empty();
-		sandbox = sinon.sandbox.create();
+		sandbox = sinon.createSandbox();
 		$(document).off('component.form.success');
 	});
 
