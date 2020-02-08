@@ -178,13 +178,16 @@ describe('YouTransfer Local Storage module', function() {
 	});
 
 	it('should implement the "upload" method and enable local storage of an encrypted file', function(done) {
+		var iv = Buffer.from(crypto.randomBytes(16));
+		var encryptionKey = 'b2df428b9929d3ace7c598bbf4e496b2';		
 		provider = localstorage({
-			storage: { 
+			storage: {
 				localstoragepath: __dirname
 			},
 			security: {
 				encryptionEnabled: true,
-				encryptionKey: 'MySecretEncryptionKey'
+				encryptionKey: encryptionKey,
+				encryptionIv: iv
 			}
 		});
 
@@ -222,8 +225,8 @@ describe('YouTransfer Local Storage module', function() {
 			callback(null);
 		});
 
-		var crcyptoMock = sandbox.mock(crypto);
-		cryptoMock.expects('createCipheriv').once().returns(stream);
+		var cryptoMock = sandbox.mock(crypto);
+		cryptoMock.expects('createCipheriv').once().returns(stream);		
 
 		var streamMock = sandbox.mock(stream);
 		streamMock.expects('pipe').twice().returns(stream);
@@ -414,22 +417,25 @@ describe('YouTransfer Local Storage module', function() {
 	});
 
 	it('should be possible to download an archive with encrypted files', function(done) {
+		var iv = Buffer.from(crypto.randomBytes(16));
+		var encryptionKey = 'b2df428b9929d3ace7c598bbf4e496b2';
 		provider = localstorage({ 
 			storage: {
 				localstoragepath: __dirname
 			},
 			security: {
 				encryptionEnabled: true,
-				encryptionKey: 'MySecretEncryptionKey'
+				encryptionKey: encryptionKey,
+				encryptionIv: iv
 			}
 		});
 
-		var data = "my binary data";
-		var cipher = crypto.createCipheriv('aes-256-ccm', 'MySecretEncryptionKey');
+		var data = "my binary data";		
+		var cipher = crypto.createCipheriv('aes-256-ctr', encryptionKey, iv);
 		var buffer = Buffer.concat([cipher.update(data) , cipher.final()]);
 
-		var token = 'bundle',
-			bundle = {
+		var token = 'bundle';
+		var	bundle = {
 				expires: Date.tomorrow(),
 				files: [
 					{
@@ -447,8 +453,7 @@ describe('YouTransfer Local Storage module', function() {
 			},
 			res = {
 				setHeader: function() {},
-			}
-
+			};
 
 		sandbox.stub(fs, 'readFile').callsFake(function (file, encoding, callback) {
 			if(file.match(/.json$/)) {
@@ -471,8 +476,8 @@ describe('YouTransfer Local Storage module', function() {
 
 		var resMock = sandbox.mock(res);
 		resMock.expects("setHeader").once().withArgs('Content-disposition', 'attachment; filename="bundle.zip"');
-		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');
-
+		resMock.expects("setHeader").once().withArgs('Content-type', 'application/octet-stream');	
+		
 		provider.archive(token, res, function(err) {
 			should.not.exist(err);
 			resMock.verify();
@@ -717,13 +722,16 @@ describe('YouTransfer Local Storage module', function() {
 	});
 
 	it('should be possible to download an encrypted file', function(done) {
+		var iv = Buffer.from(crypto.randomBytes(16));
+		var encryptionKey = 'b2df428b9929d3ace7c598bbf4e496b2';		
 		provider = localstorage({
 			storage: {
 				localstoragepath: __dirname
 			},
 			security: {
 				encryptionEnabled: true,
-				encryptionKey: 'MySecretEncryptionKey'
+				encryptionKey: encryptionKey,
+				encryptionIv: iv
 			}
 		});
 
@@ -750,7 +758,7 @@ describe('YouTransfer Local Storage module', function() {
 
 		sandbox.stub(mime, 'getType').returns(context.type);
 
-		sandbox.stub(crypto, "createDecipher").returns(stream);
+		sandbox.stub(crypto, "createDecipheriv").returns(stream);
 
 		sandbox.stub(fs, 'createReadStream').returns(stream);
 
