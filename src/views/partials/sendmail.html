@@ -1,6 +1,6 @@
 <div class="dz-upload-complete {{ "hidden" if not (success and isPostback) }}">
 	<h2>Email a friend!</h2>
-	<form class="form form-group-sm" action="/send" method="POST">
+	<form class="form form-group-sm" action="{{ general.baseUrl }}/send" method="POST">
 		{% if isPostback %}
 		<input type="hidden" name="bundle" value="{{ bundle.id }}" />
 		{% endif %}

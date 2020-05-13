@@ -24,7 +24,7 @@
 		</p>
 	</noscript>
 
-	<form class="form-horizontal" method="post" data-select-content data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true" data-js-only>
+	<form class="form-horizontal" method="post" action="{{ general.baseUrl }}/settings/template" data-select-content data-xhrform data-xhrform-target="tab-content" data-xhrform-replace="true" data-js-only>
 
 		<div class="form-group">
 			<label for="template" class="col-sm-3 control-label">Select template</label>
@@ -42,7 +42,7 @@
 
 			<div class="form-group">
 				<div class="col-sm-12">
-					<textarea class="form-control" rows="15" name="body" data-template-editor data-template="/settings/template/message.html"></textarea>
+					<textarea class="form-control" rows="15" name="body" data-template-editor data-template="{{ general.baseUrl }}/settings/template/message.html"></textarea>
 				</div>
 			</div>
 
@@ -80,6 +80,10 @@
 				<dd>The ZIP bundle identifier.</dd>
 				<dt>{% raw %}{{ bundle.link }}{% endraw %}</dt>
 				<dd>The direct download link to retrieve the ZIP bundle.</dd>
+				<dt>{% raw %}{{ storage.retention }}{% endraw %}</dt>
+				<dd>The file retention duration.</dd>
+				<dt>{% raw %}{{ storage.retentionUnit }}{% endraw %}</dt>
+				<dd>The units of the retention duration (ex: weeks, days, hours, ...).</dd>
 			</dl>
 		</div>
 	</form>
