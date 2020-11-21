@@ -37,18 +37,21 @@ gulp.task('copyStaticTask', copyStaticTask);
 gulp.task('lessTask', lessTask);
 gulp.task('testComponentsTask', testComponentsTask);
 gulp.task('testModulesTask', testModulesTask);
-gulp.task('testViewsTask', ['testWebdriverTask'], testViewsTask);
-gulp.task('testWebdriverTask', ['build'], testWebdriverTask);
+
+gulp.task('build', gulp.series('browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask'));
+
+gulp.task('testWebdriverTask', gulp.series('build'), testWebdriverTask);
+gulp.task('testViewsTask', gulp.series('testWebdriverTask'), testViewsTask);
 gulp.task('testTerminationTask', testTerminationTask);
 
-gulp.task('clean', ['cleanTask']);
-gulp.task('build', ['browserifyAppTask', 'browserifyVendorTask', 'copyStaticTask', 'lessTask']);
-gulp.task('dist', ['build']);
+gulp.task('clean', gulp.series('cleanTask'));
+
+gulp.task('dist', gulp.series('build'));
 gulp.task('test', function(callback) {
 	runSequence('testModulesTask', 'testComponentsTask', 'testViewsTask', 'testTerminationTask', callback);
 });
 
-gulp.task('watch', ['dist'], function() {
+gulp.task('watch', gulp.series('dist'), function() {
 	gulp.watch([paths.src + '/**/js/**', '!**/*.less'], ['browserifyAppTask', 'browserifyVendorTask']);
 	gulp.watch(paths.src + '/**/*.less', ['lessTask']);
 	gulp.watch([paths.src + '/**/*','!**/js/**', '!**/*.less'], ['copyStaticTask']);
@@ -75,11 +78,12 @@ function browserifyVendorTask() {
 
 function browserifyTask(bundler, src) {
 	return bundler.bundle()
-				  .on('error', log)
-				  .pipe(source(src))
-				  .pipe(buffer())
-				  .pipe(uglify())
-				  .pipe(gulp.dest(paths.dist + '/js'));
+    .on('error', log)
+    .pipe(source(src))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest(
+      paths.dist + '/js'));
 }
 
 function copyStaticTask() {
