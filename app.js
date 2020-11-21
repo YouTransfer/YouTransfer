@@ -75,7 +75,8 @@ app.get(/^\/(.*)/, router.default());
 
 // Start the server
 var port = Number(nconf.get('PORT'));
-app.listen(port, function() {
+var appHost = nconf.get('APP_HOST')
+app.listen(port, appHost, function() {
 	console.log('%s listening at %s', app.name, app.url);
 	youtransfer.initialize();
 });
