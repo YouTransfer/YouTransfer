@@ -1,5 +1,6 @@
 {
-	"PORT": 5000,
+	"PORT": 5050,
+	"APP_HOST": "localhost",
 
 	"general": {
 		"title": "YouTransfer",
