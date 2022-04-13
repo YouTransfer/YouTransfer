@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "archiver": "^2.1.0",
-    "async": "^2.5.0",
+    "async": "^3.2.2",
     "aws-sdk": "^2.140.0",
     "bunyan": "^1.8.12",
     "bunyan-format": "^0.2.1",
